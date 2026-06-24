@@ -15,12 +15,15 @@ import {
   SCREENS_DIR,
   SKILLS_DIR,
   SKILL_FOLDER_NAME,
+  SYNCFUSION_SKILL_FOLDER_NAME,
   DEFAULT_SYSTEM,
   getDesignsDir,
   getSkillDir,
+  getSyncfusionSkillDir,
 } from "../constants.js";
 import { resolveSystem } from "../systems/index.js";
 import { SKILL_MD_CONTENT } from "../templates/skill.js";
+import { SYNCFUSION_SKILL_MD_CONTENT } from "../templates/syncfusion-skill.js";
 import { logSuccess, logError } from "../utils.js";
 
 export interface InitOptions {
@@ -83,13 +86,22 @@ export async function initCommand(
       spaces: 2,
     });
 
-    // Write SKILL.md into standard Agent Skills folder structure
-    spinner.text = "Writing SKILL.md...";
+    // Write skills into standard Agent Skills folder structure
+    spinner.text = "Writing skills...";
     const skillDir = getSkillDir();
     await fs.ensureDir(skillDir);
     await fs.writeFile(
       path.join(skillDir, SKILL_MD),
       SKILL_MD_CONTENT,
+      "utf-8"
+    );
+
+    // Write Syncfusion component router skill
+    const sfSkillDir = getSyncfusionSkillDir();
+    await fs.ensureDir(sfSkillDir);
+    await fs.writeFile(
+      path.join(sfSkillDir, SKILL_MD),
+      SYNCFUSION_SKILL_MD_CONTENT,
       "utf-8"
     );
 
@@ -103,6 +115,7 @@ export async function initCommand(
     logSuccess(`${DESIGNS_DIR}/${DESIGN_MD}`);
     logSuccess(`${DESIGNS_DIR}/${PROJECT_JSON}`);
     logSuccess(`${SKILLS_DIR}/${SKILL_FOLDER_NAME}/${SKILL_MD}`);
+    logSuccess(`${SKILLS_DIR}/${SYNCFUSION_SKILL_FOLDER_NAME}/${SKILL_MD}`);
     logSuccess(`${DESIGNS_DIR}/${SCREENS_DIR}/`);
     console.log();
     console.log(

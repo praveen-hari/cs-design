@@ -14,3 +14,10 @@ export {
   exportTokensCommand,
   type ExportTokensOptions,
 } from "./export-tokens.js";
+export {
+  skillsAddCommand,
+  skillsListCommand,
+  skillsRemoveCommand,
+  type SkillsAddOptions,
+  type SkillsListOptions,
+} from "./skills.js";

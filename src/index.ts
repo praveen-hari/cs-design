@@ -68,3 +68,16 @@ export {
   systemsCreateCommand,
 } from "./commands/systems.js";
 export { exportTokensCommand } from "./commands/export-tokens.js";
+export {
+  skillsAddCommand,
+  skillsListCommand,
+  skillsRemoveCommand,
+} from "./commands/skills.js";
+
+// Skills registry
+export {
+  getFrameworks,
+  getFramework,
+  getFrameworkIds,
+  getCanonicalSkillsDir,
+} from "./skills-registry.js";

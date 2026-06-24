@@ -9,6 +9,9 @@
  *   cs-design systems install <source>
  *   cs-design systems create <name>
  *   cs-design export tokens --format <css|tailwind|json> [--out <path>]
+ *   cs-design skills add <framework> [--only <components>]
+ *   cs-design skills list [--json]
+ *   cs-design skills remove <framework>
  */
 
 import { Command } from "commander";
@@ -21,6 +24,12 @@ import {
   systemsCreateCommand,
   exportTokensCommand,
 } from "./commands/index.js";
+import {
+  skillsAddCommand,
+  skillsListCommand,
+  skillsRemoveCommand,
+} from "./commands/skills.js";
+import { getFrameworkIds } from "./skills-registry.js";
 import type { TokenFormat } from "./types.js";
 
 const VERSION = "0.1.0";
@@ -131,6 +140,46 @@ exportCmd
       format: options.format as TokenFormat,
       out: options.out,
     });
+  });
+
+// ── skills ──
+
+const skills = program
+  .command("skills")
+  .description("Manage Syncfusion component skills for AI agents");
+
+skills
+  .command("add")
+  .description("Install Syncfusion component skills for a framework")
+  .argument(
+    "<framework>",
+    `Framework: ${getFrameworkIds().join(", ")}`
+  )
+  .option(
+    "--only <components>",
+    "Install only specific components (comma-separated, e.g. grid,scheduler,charts)"
+  )
+  .action(async (framework: string, options: { only?: string }) => {
+    await skillsAddCommand(framework, options);
+  });
+
+skills
+  .command("list")
+  .description("List installed Syncfusion component skills")
+  .option("--json", "Output as JSON", false)
+  .action(async (options: { json: boolean }) => {
+    await skillsListCommand(options);
+  });
+
+skills
+  .command("remove")
+  .description("Remove Syncfusion component skills for a framework")
+  .argument(
+    "<framework>",
+    `Framework: ${getFrameworkIds().join(", ")}`
+  )
+  .action(async (framework: string) => {
+    await skillsRemoveCommand(framework);
   });
 
 // ── Parse and run ──

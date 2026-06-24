@@ -20,6 +20,9 @@ export const SKILL_MD = "SKILL.md";
 /** Skill folder name (must match `name` field in SKILL.md frontmatter) */
 export const SKILL_FOLDER_NAME = "cs-design";
 
+/** Syncfusion router skill folder name */
+export const SYNCFUSION_SKILL_FOLDER_NAME = "syncfusion-components";
+
 /** Standard skill discovery directory */
 export const SKILLS_DIR = ".codestudio/skills";
 
@@ -53,6 +56,11 @@ export function getDesignsDir(basePath: string = process.cwd()): string {
 /** Resolve the skill directory from a base path */
 export function getSkillDir(basePath: string = process.cwd()): string {
   return path.join(basePath, SKILLS_DIR, SKILL_FOLDER_NAME);
+}
+
+/** Resolve the Syncfusion router skill directory from a base path */
+export function getSyncfusionSkillDir(basePath: string = process.cwd()): string {
+  return path.join(basePath, SKILLS_DIR, SYNCFUSION_SKILL_FOLDER_NAME);
 }
 
 /** Canonical markdown sections in DESIGN.md */
