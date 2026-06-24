@@ -38,11 +38,14 @@ export {
   DESIGN_MD,
   PROJECT_JSON,
   SKILL_MD,
+  SKILL_FOLDER_NAME,
+  SKILLS_DIR,
   SCREENS_DIR,
   DEFAULT_SYSTEM,
   getGlobalDir,
   getGlobalSystemsDir,
   getDesignsDir,
+  getSkillDir,
   CANONICAL_SECTIONS,
 } from "./constants.js";
 

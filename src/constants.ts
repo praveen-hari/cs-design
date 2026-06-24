@@ -17,6 +17,12 @@ export const PROJECT_JSON = "project.json";
 /** Name of the agent skill file */
 export const SKILL_MD = "SKILL.md";
 
+/** Skill folder name (must match `name` field in SKILL.md frontmatter) */
+export const SKILL_FOLDER_NAME = "cs-design";
+
+/** Standard skill discovery directory */
+export const SKILLS_DIR = ".codestudio/skills";
+
 /** Name of the screens subdirectory */
 export const SCREENS_DIR = "screens";
 
@@ -42,6 +48,11 @@ export function getGlobalSystemsDir(): string {
 /** Resolve the project designs directory from a base path */
 export function getDesignsDir(basePath: string = process.cwd()): string {
   return path.join(basePath, DESIGNS_DIR);
+}
+
+/** Resolve the skill directory from a base path */
+export function getSkillDir(basePath: string = process.cwd()): string {
+  return path.join(basePath, SKILLS_DIR, SKILL_FOLDER_NAME);
 }
 
 /** Canonical markdown sections in DESIGN.md */

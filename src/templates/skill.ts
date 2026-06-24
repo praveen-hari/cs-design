@@ -29,11 +29,23 @@ This project uses the \`cs-design\` CLI. Verify it is available:
 cs-design --version
 \`\`\`
 
+## Project Layout
+
+\`\`\`
+project-root/
+├── .codestudio/skills/cs-design/
+│   └── SKILL.md               ← This file (Agent Skills spec)
+└── .designs/
+    ├── DESIGN.md              ← Design system tokens + rationale
+    ├── project.json           ← Project metadata + screen registry
+    └── screens/               ← Generated HTML screens
+\`\`\`
+
 ## Procedure
 
 ### Step 1 — Read the design system
 
-Read \`.designs/DESIGN.md\`. It has two layers:
+Read the [DESIGN.md](../../../.designs/DESIGN.md) file. It has two layers:
 
 1. **YAML front matter** (between \`---\` markers) — machine-readable design tokens (colors, typography, spacing, border-radius, components)
 2. **Markdown body** — human-readable rationale: Overview, Colors, Typography, Layout, Components, Do's and Don'ts

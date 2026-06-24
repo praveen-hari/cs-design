@@ -13,8 +13,11 @@ import {
   PROJECT_JSON,
   SKILL_MD,
   SCREENS_DIR,
+  SKILLS_DIR,
+  SKILL_FOLDER_NAME,
   DEFAULT_SYSTEM,
   getDesignsDir,
+  getSkillDir,
 } from "../constants.js";
 import { resolveSystem } from "../systems/index.js";
 import { SKILL_MD_CONTENT } from "../templates/skill.js";
@@ -80,10 +83,12 @@ export async function initCommand(
       spaces: 2,
     });
 
-    // Write SKILL.md
+    // Write SKILL.md into standard Agent Skills folder structure
     spinner.text = "Writing SKILL.md...";
+    const skillDir = getSkillDir();
+    await fs.ensureDir(skillDir);
     await fs.writeFile(
-      path.join(designsDir, SKILL_MD),
+      path.join(skillDir, SKILL_MD),
       SKILL_MD_CONTENT,
       "utf-8"
     );
@@ -97,7 +102,7 @@ export async function initCommand(
     console.log("  Created:");
     logSuccess(`${DESIGNS_DIR}/${DESIGN_MD}`);
     logSuccess(`${DESIGNS_DIR}/${PROJECT_JSON}`);
-    logSuccess(`${DESIGNS_DIR}/${SKILL_MD}`);
+    logSuccess(`${SKILLS_DIR}/${SKILL_FOLDER_NAME}/${SKILL_MD}`);
     logSuccess(`${DESIGNS_DIR}/${SCREENS_DIR}/`);
     console.log();
     console.log(
