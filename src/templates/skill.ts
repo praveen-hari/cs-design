@@ -4,17 +4,30 @@
 
 export const SKILL_MD_CONTENT = `# Design System Agent Skill
 
-> This file teaches AI agents how to use the design system and follow the design workflow.
+> This file teaches AI agents how to use the \`cs-design\` CLI and the design system to produce consistent, brand-aligned UI screens.
 > Read this file first when working on UI screens in this project.
 
-## How to Read DESIGN.md
+---
+
+## Prerequisites
+
+This project was initialized with the \`cs-design\` CLI. The CLI manages design system files, validates tokens, and exports them to CSS/Tailwind/JSON. You should use it throughout the workflow.
+
+\`\`\`bash
+# Verify the CLI is available
+cs-design --version
+\`\`\`
+
+---
+
+## 1. Understand the Design System
+
+### Read DESIGN.md
 
 The \`.designs/DESIGN.md\` file has two layers:
 
 1. **YAML front matter** (between \`---\` markers) — machine-readable design tokens
 2. **Markdown body** — human-readable design rationale and rules
-
-### Reading tokens
 
 \`\`\`yaml
 ---
@@ -29,9 +42,9 @@ typography:
 ---
 \`\`\`
 
-Use these exact values in generated HTML/CSS. Do not invent colors or fonts.
+Use these exact values in generated HTML/CSS. **Do not invent colors or fonts.**
 
-### Reading rationale
+### Read the rationale
 
 The markdown sections describe **why** and **how** to use the tokens:
 - **Overview** — brand personality and mood
@@ -41,7 +54,41 @@ The markdown sections describe **why** and **how** to use the tokens:
 - **Components** — button, card, input styles
 - **Do's and Don'ts** — explicit rules to follow
 
-## How to Generate Screens
+### Validate the design system
+
+Before generating any screens, confirm the design system is valid:
+
+\`\`\`bash
+cs-design validate
+\`\`\`
+
+This checks YAML structure, color hex values, typography fields, and recommended markdown sections. Fix any errors before proceeding.
+
+---
+
+## 2. Export Tokens
+
+Export design tokens to the format your screens or production code needs:
+
+\`\`\`bash
+# CSS custom properties (recommended for HTML screens)
+cs-design export tokens --format css
+
+# Tailwind v4 theme config
+cs-design export tokens --format tailwind
+
+# Flat JSON key-value pairs
+cs-design export tokens --format json
+
+# Custom output path
+cs-design export tokens --format css --out ./src/tokens.css
+\`\`\`
+
+The exported \`.designs/tokens.css\` can be linked directly in generated HTML screens for token consistency, or you can inline the values.
+
+---
+
+## 3. Generate Screens
 
 ### File format
 
@@ -56,7 +103,7 @@ Each screen must:
 
 ### Token usage
 
-- Use exact color hex values from DESIGN.md YAML
+- Use exact color hex values from DESIGN.md YAML (or reference the exported CSS variables)
 - Use exact font families, sizes, and weights
 - Use exact spacing and border-radius values
 - Reference the component styles for buttons, cards, inputs
@@ -73,17 +120,60 @@ Each screen must:
 - Use kebab-case: \`landing-page.html\`, \`user-dashboard.html\`
 - Be descriptive: \`pricing-comparison.html\` not \`page3.html\`
 
-## How to Edit Screens
+---
+
+## 4. Track Screens
+
+After generating screens, use the CLI to see what exists:
+
+\`\`\`bash
+# Human-readable list
+cs-design screens list
+
+# Machine-readable JSON
+cs-design screens list --json
+\`\`\`
+
+This scans \`.designs/screens/\` for HTML files and cross-references with \`project.json\`.
+
+---
+
+## 5. Edit Screens
 
 1. Read the current HTML file from \`.designs/screens/<name>.html\`
 2. Apply the requested changes
 3. Overwrite the file with the updated content
 4. Ensure all design tokens are still correctly applied
+5. Run \`cs-design validate\` to confirm the design system is still intact
 
-## Quality Checklist
+---
+
+## 6. Switch or Explore Design Systems
+
+\`\`\`bash
+# See all available design systems
+cs-design systems list
+
+# Re-initialize with a different system (overwrites .designs/)
+cs-design init "My App" --system bold-creative --force
+
+# Install a system from GitHub
+cs-design systems install github:user/design-system-repo
+
+# Install from a local directory
+cs-design systems install ./path/to/system/
+
+# Create a brand-new empty system
+cs-design systems create "My Brand"
+\`\`\`
+
+---
+
+## 7. Quality Checklist
 
 Before finalizing any screen, verify:
 
+- [ ] \`cs-design validate\` passes with no errors
 - [ ] All colors match DESIGN.md tokens exactly
 - [ ] All fonts match DESIGN.md typography tokens
 - [ ] Spacing follows the defined scale
@@ -95,7 +185,9 @@ Before finalizing any screen, verify:
 - [ ] Interactive states: hover, focus, active, disabled
 - [ ] Self-contained: no external CSS or JS dependencies (except Google Fonts)
 
-## Syncfusion Component Mapping
+---
+
+## 8. Syncfusion Component Mapping
 
 When converting designs to production code with Syncfusion components:
 
@@ -117,5 +209,21 @@ When converting designs to production code with Syncfusion components:
 | TreeView | \`@syncfusion/ej2-react-navigations\` — TreeView |
 | Kanban | \`@syncfusion/ej2-react-kanban\` — Kanban |
 
-Map design tokens to Syncfusion theme variables when building production components.
+Export tokens first (\`cs-design export tokens --format css\`), then map CSS custom properties to Syncfusion theme variables when building production components.
+
+---
+
+## Quick Reference
+
+\`\`\`bash
+cs-design validate                          # Check DESIGN.md is valid
+cs-design export tokens --format css        # Export CSS custom properties
+cs-design export tokens --format tailwind   # Export Tailwind theme
+cs-design export tokens --format json       # Export flat JSON tokens
+cs-design screens list                      # List all screens
+cs-design screens list --json               # List screens as JSON
+cs-design systems list                      # Show available design systems
+cs-design systems install <source>          # Install a design system
+cs-design systems create <name>             # Create a new empty system
+\`\`\`
 `;
