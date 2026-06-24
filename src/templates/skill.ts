@@ -73,45 +73,76 @@ cs-design export tokens --format css --out ./src/tokens.css  # Custom path
 
 ### Step 4 — Generate screens
 
-Save self-contained HTML files to \`.designs/screens/\`.
+Save HTML files to \`.designs/screens/\`.
 
 **Requirements:**
 - Complete HTML document (\`<!DOCTYPE html>\` through \`</html>\`)
-- All CSS inline in a \`<style>\` block — **use CSS variables from tokens.css, not hardcoded hex values**
+- **Link to shared \`tokens.css\`** — do NOT inline a \`:root\` block
+- Component styles in a \`<style>\` block using CSS variables
 - Google Fonts \`<link>\` tags for fonts from DESIGN.md
 - Responsive: mobile-first, works at 375px–1440px
 - Semantic HTML: \`<header>\`, \`<main>\`, \`<nav>\`, \`<section>\`, \`<footer>\`
 - Realistic content — **never use Lorem ipsum**
 - Kebab-case filenames: \`landing-page.html\`, \`user-dashboard.html\`
 
-**IMPORTANT — Use CSS variables, not hardcoded values:**
+**IMPORTANT — Link tokens.css, do NOT inline token values:**
 
-Screens must reference design tokens via CSS custom properties so that changing the design system automatically updates all screens.
+Every screen must link to the shared \`tokens.css\` file and use CSS variables for all design token values. This ensures a single source of truth — when the design system changes, \`cs-design apply\` re-exports \`tokens.css\` and every screen updates automatically.
 
 \`\`\`html
-<style>
-  /* ✅ CORRECT — uses CSS variables from tokens.css */
-  .hero { background: var(--color-background); color: var(--color-primary); }
-  .btn  { background: var(--color-accent); border-radius: var(--radius-md); padding: var(--space-sm) var(--space-lg); }
-  h1    { font-family: var(--font-h1-family); font-size: var(--font-h1-size); font-weight: var(--font-h1-weight); }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Title</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  /* ❌ WRONG — hardcoded values break when design system changes */
-  .hero { background: #FFFFFF; color: #1A1C1E; }
-  .btn  { background: #2563EB; border-radius: 8px; }
+  <!-- ✅ Link to shared tokens — single source of truth -->
+  <link rel="stylesheet" href="../tokens.css" />
+
+  <style>
+    /* ✅ CORRECT — only component styles here, using CSS variables */
+    body { background: var(--color-background); color: var(--color-primary); font-family: var(--font-body-family); }
+    h1   { font-family: var(--font-h1-family); font-size: var(--font-h1-size); font-weight: var(--font-h1-weight); }
+    .btn { background: var(--color-accent); color: #fff; border-radius: var(--radius-md); padding: var(--space-sm) var(--space-lg); }
+    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); }
+  </style>
+</head>
+<body>
+  ...
+</body>
+</html>
+\`\`\`
+
+**Do NOT do this:**
+
+\`\`\`html
+<!-- ❌ WRONG — inlining :root block duplicates tokens in every screen -->
+<style>
+  :root {
+    --color-primary: #1A1C1E;
+    --color-accent: #2563EB;
+  }
+</style>
+
+<!-- ❌ WRONG — hardcoded values break when design system changes -->
+<style>
+  .btn { background: #2563EB; border-radius: 8px; }
 </style>
 \`\`\`
 
-Each screen must include the tokens.css inline at the top of its \`<style>\` block. Copy the contents of \`.designs/tokens.css\` (the \`:root { ... }\` block) into the screen's \`<style>\`.
-
 ### Step 4b — Apply design system changes
 
-When the design system (DESIGN.md) is updated, re-export tokens and all screens update automatically:
+When the design system (DESIGN.md) is updated:
 
 \`\`\`bash
 cs-design apply
 \`\`\`
 
-This re-exports \`tokens.css\` and updates the \`:root\` block in every screen under \`.designs/screens/\`. Because screens use CSS variables, the new token values take effect immediately.
+This re-exports \`tokens.css\` from the updated DESIGN.md. Because all screens link to \`tokens.css\` via \`<link rel="stylesheet" href="../tokens.css" />\`, they pick up the new values automatically — no HTML patching needed.
 
 ### Step 5 — Track screens
 

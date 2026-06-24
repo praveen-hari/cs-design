@@ -1,13 +1,8 @@
 /**
- * `cs-design apply` command — Re-export tokens and update all screens.
+ * `cs-design apply` command — Re-export tokens.css from the updated DESIGN.md.
  *
- * When the design system (DESIGN.md) changes, this command:
- * 1. Re-exports tokens.css from the updated DESIGN.md
- * 2. Finds all HTML screens in .designs/screens/
- * 3. Replaces the :root { ... } block in each screen with the new tokens
- *
- * This works because screens use CSS variables (var(--color-primary), etc.)
- * instead of hardcoded hex values.
+ * Screens link to tokens.css via <link rel="stylesheet" href="../tokens.css" />,
+ * so re-exporting the file is all that's needed — no HTML patching required.
  */
 
 import fs from "fs-extra";
@@ -69,22 +64,6 @@ function generateRootBlock(yaml: DesignYaml): string {
   return lines.join("\n");
 }
 
-/**
- * Replace the :root { ... } block in an HTML file's <style> tag.
- * Returns true if the file was updated, false if no :root block was found.
- */
-function updateRootInHtml(html: string, newRootBlock: string): { updated: boolean; content: string } {
-  // Match :root { ... } block (handles multiline, nested braces not expected in :root)
-  const rootRegex = /:root\s*\{[^}]*\}/s;
-  if (rootRegex.test(html)) {
-    return {
-      updated: true,
-      content: html.replace(rootRegex, newRootBlock),
-    };
-  }
-  return { updated: false, content: html };
-}
-
 export async function applyCommand(): Promise<void> {
   const designsDir = await requireProject();
   const parsed = await readProjectDesignMd(designsDir);
@@ -99,55 +78,30 @@ export async function applyCommand(): Promise<void> {
   const spinner = ora("Applying design system...").start();
 
   try {
-    // 1. Generate new :root block
-    const newRootBlock = generateRootBlock(parsed.yaml);
-
-    // 2. Re-export tokens.css
+    // 1. Generate and write tokens.css
     spinner.text = "Exporting tokens.css...";
+    const newRootBlock = generateRootBlock(parsed.yaml);
     const tokensPath = path.join(designsDir, "tokens.css");
     await fs.writeFile(tokensPath, newRootBlock + "\n", "utf-8");
 
-    // 3. Find and update all HTML screens
-    spinner.text = "Updating screens...";
+    // 2. Count screens that will pick up the change
     const screensDir = path.join(designsDir, SCREENS_DIR);
-    let updatedCount = 0;
-    let skippedCount = 0;
+    let screenCount = 0;
 
     if (await fs.pathExists(screensDir)) {
       const files = await fs.readdir(screensDir);
-      const htmlFiles = files.filter((f) => f.endsWith(".html"));
-
-      for (const file of htmlFiles) {
-        const filePath = path.join(screensDir, file);
-        const html = await fs.readFile(filePath, "utf-8");
-        const result = updateRootInHtml(html, newRootBlock);
-
-        if (result.updated) {
-          await fs.writeFile(filePath, result.content, "utf-8");
-          updatedCount++;
-        } else {
-          skippedCount++;
-        }
-      }
+      screenCount = files.filter((f) => f.endsWith(".html")).length;
     }
 
     spinner.succeed("Design system applied!");
     console.log();
-    logSuccess(`tokens.css exported`);
+    logSuccess(`tokens.css exported → ${tokensPath}`);
 
-    if (updatedCount > 0) {
+    if (screenCount > 0) {
       logSuccess(
-        `${updatedCount} screen${updatedCount !== 1 ? "s" : ""} updated with new tokens`
+        `${screenCount} screen${screenCount !== 1 ? "s" : ""} will use the updated tokens via <link href="../tokens.css" />`
       );
-    }
-
-    if (skippedCount > 0) {
-      logInfo(
-        `${skippedCount} screen${skippedCount !== 1 ? "s" : ""} skipped (no :root block found — use CSS variables for auto-updates)`
-      );
-    }
-
-    if (updatedCount === 0 && skippedCount === 0) {
+    } else {
       logInfo("No screens found yet. Generate screens using the cs-design skill.");
     }
 
