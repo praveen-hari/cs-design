@@ -60,34 +60,55 @@ cs-design validate
 
 Fix any errors before generating screens.
 
-### Step 3 — Export tokens
+### Step 3 — Detect the target platform
 
-Export tokens to CSS custom properties. **This is required before generating screens.**
+Before generating anything, determine what the user needs:
+
+**Check the project for framework indicators:**
+- \`package.json\` with \`react\` → React
+- \`package.json\` with \`@angular/core\` → Angular
+- \`package.json\` with \`vue\` → Vue
+- \`.csproj\` with Blazor SDK → Blazor
+- \`.csproj\` with MAUI/WPF/WinUI/WinForms → .NET desktop
+- No framework detected → ask the user
+
+**If the user explicitly says** "design a page", "show me a mockup", "create a preview" → they want a **design preview** (HTML).
+
+**If the user says** "build this", "create the component", "implement this page" → they want **production code** in their framework.
+
+**Choose the right path:**
+
+| User intent | Target | Path |
+|-------------|--------|------|
+| Design exploration / preview | HTML screens | → **Path A** (below) |
+| Production code (framework detected) | React / Angular / Blazor / Vue / etc. | → **Path B** (below) |
+| Production code (no framework) | Ask the user | → Ask, then Path B |
+
+---
+
+## Path A — Design Previews (HTML screens)
+
+Use this when the user wants to **explore and iterate on designs** before committing to a framework. HTML screens are quick to generate, easy to preview in a browser, and framework-agnostic.
+
+### A1 — Export tokens
 
 \`\`\`bash
-cs-design export tokens --format css        # CSS custom properties → .designs/tokens.css
-cs-design export tokens --format tailwind   # Tailwind theme → .designs/tokens.theme.js
-cs-design export tokens --format json       # Flat JSON → .designs/tokens.json
-cs-design export tokens --format css --out ./src/tokens.css  # Custom path
+cs-design export tokens --format css
 \`\`\`
 
-### Step 4 — Generate screens
+### A2 — Generate HTML screens
 
 Save HTML files to \`.designs/screens/\`.
 
 **Requirements:**
 - Complete HTML document (\`<!DOCTYPE html>\` through \`</html>\`)
-- **Link to shared \`tokens.css\`** — do NOT inline a \`:root\` block
+- **Link to shared \`tokens.css\`** — do NOT inline a \`:root\` block or hardcode token values
 - Component styles in a \`<style>\` block using CSS variables
 - Google Fonts \`<link>\` tags for fonts from DESIGN.md
 - Responsive: mobile-first, works at 375px–1440px
 - Semantic HTML: \`<header>\`, \`<main>\`, \`<nav>\`, \`<section>\`, \`<footer>\`
 - Realistic content — **never use Lorem ipsum**
 - Kebab-case filenames: \`landing-page.html\`, \`user-dashboard.html\`
-
-**IMPORTANT — Link tokens.css, do NOT inline token values:**
-
-Every screen must link to the shared \`tokens.css\` file and use CSS variables for all design token values. This ensures a single source of truth — when the design system changes, \`cs-design apply\` re-exports \`tokens.css\` and every screen updates automatically.
 
 \`\`\`html
 <!DOCTYPE html>
@@ -104,11 +125,10 @@ Every screen must link to the shared \`tokens.css\` file and use CSS variables f
   <link rel="stylesheet" href="../tokens.css" />
 
   <style>
-    /* ✅ CORRECT — only component styles here, using CSS variables */
+    /* Only component styles here — use CSS variables, never hardcoded values */
     body { background: var(--color-background); color: var(--color-primary); font-family: var(--font-body-family); }
     h1   { font-family: var(--font-h1-family); font-size: var(--font-h1-size); font-weight: var(--font-h1-weight); }
     .btn { background: var(--color-accent); color: #fff; border-radius: var(--radius-md); padding: var(--space-sm) var(--space-lg); }
-    .card { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-lg); padding: var(--space-lg); }
   </style>
 </head>
 <body>
@@ -117,48 +137,73 @@ Every screen must link to the shared \`tokens.css\` file and use CSS variables f
 </html>
 \`\`\`
 
-**Do NOT do this:**
+### A3 — Apply design changes
 
-\`\`\`html
-<!-- ❌ WRONG — inlining :root block duplicates tokens in every screen -->
-<style>
-  :root {
-    --color-primary: #1A1C1E;
-    --color-accent: #2563EB;
-  }
-</style>
-
-<!-- ❌ WRONG — hardcoded values break when design system changes -->
-<style>
-  .btn { background: #2563EB; border-radius: 8px; }
-</style>
-\`\`\`
-
-### Step 4b — Apply design system changes
-
-When the design system (DESIGN.md) is updated:
+When DESIGN.md is updated, re-export tokens and all screens update automatically:
 
 \`\`\`bash
 cs-design apply
 \`\`\`
 
-This re-exports \`tokens.css\` from the updated DESIGN.md. Because all screens link to \`tokens.css\` via \`<link rel="stylesheet" href="../tokens.css" />\`, they pick up the new values automatically — no HTML patching needed.
-
-### Step 5 — Track screens
+### A4 — Track and manage screens
 
 \`\`\`bash
 cs-design screens list            # Human-readable
 cs-design screens list --json     # Machine-readable
 \`\`\`
 
-### Step 6 — Edit screens
+---
 
-1. Read the current file from \`.designs/screens/<name>.html\`
-2. Apply changes while preserving all design tokens
-3. Overwrite the file
-4. Run \`cs-design validate\` to confirm integrity
+## Path B — Production Code (framework components)
 
-### Step 7 — Switch design systems (if needed)
+Use this when the user wants to **build the actual application** with Syncfusion components. Skip HTML screens entirely — generate framework code directly from DESIGN.md tokens.
+
+### B1 — Install Syncfusion component skills
+
+\`\`\`bash
+cs-design skills add react          # or angular, blazor, vue, javascript
+\`\`\`
+
+This installs Syncfusion component skills with verified API knowledge. Install only the components you need:
+
+\`\`\`bash
+cs-design skills add react --only grid,scheduler,charts,inputs,buttons
+\`\`\`
+
+### B2 — Export tokens for the framework
+
+\`\`\`bash
+cs-design export tokens --format css          # For CSS-based frameworks (React, Angular, Vue)
+cs-design export tokens --format tailwind     # For Tailwind projects
+cs-design export tokens --format json         # For programmatic token access
+\`\`\`
+
+### B3 — Generate production components
+
+Read the installed Syncfusion component skills (they are now at \`~/.agents/skills/syncfusion-<fw>-*\`) and generate production code directly.
+
+**Map DESIGN.md tokens to the framework's styling approach:**
+
+| Framework | Token mapping |
+|-----------|--------------|
+| React | Import \`tokens.css\`, use CSS variables in JSX/CSS modules |
+| Angular | Import \`tokens.css\` in \`styles.css\`, use variables in component SCSS |
+| Blazor | Import \`tokens.css\` in \`wwwroot/css\`, use variables in component CSS |
+| Vue | Import \`tokens.css\` in \`main.ts\`, use variables in \`<style scoped>\` |
+
+**Use the \`/syncfusion-components\` skill** for the full component catalog and install commands.
+
+### B4 — Apply design changes to production code
+
+\`\`\`bash
+cs-design apply
+\`\`\`
+
+Re-exports \`tokens.css\`. Since production components also reference CSS variables, they update automatically.
+
+---
+
+## Switching Design Systems
 
 \`\`\`bash
 cs-design systems list                                    # See available systems
@@ -170,18 +215,13 @@ cs-design systems create "My Brand"                       # Create empty system
 
 ## Quality Checklist
 
-Before finalizing any screen:
+Before finalizing any output (HTML screens or production components):
 
 - [ ] \`cs-design validate\` passes with no errors
-- [ ] Colors, fonts, spacing, and radii match DESIGN.md tokens exactly
+- [ ] All styling uses CSS variables from tokens.css — no hardcoded token values
+- [ ] Colors, fonts, spacing, and radii match DESIGN.md tokens
 - [ ] Responsive at 375px, 768px, and 1440px
 - [ ] Accessible: heading hierarchy, alt text, sufficient contrast
-- [ ] Semantic HTML with correct landmarks
 - [ ] No Lorem ipsum or placeholder text
 - [ ] Interactive states: hover, focus, active, disabled
-- [ ] Self-contained: no external CSS/JS (except Google Fonts)
-
-## Converting to Production Code
-
-To convert HTML screens to production framework code with Syncfusion components, use the \`/syncfusion-components\` skill. It handles framework detection, component skill installation, and API-correct code generation.
 `;
