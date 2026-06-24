@@ -150,27 +150,7 @@ Before finalizing any screen:
 - [ ] Interactive states: hover, focus, active, disabled
 - [ ] Self-contained: no external CSS/JS (except Google Fonts)
 
-## Syncfusion Component Mapping
+## Converting to Production Code
 
-When converting designs to production React code:
-
-| Design Element | Syncfusion Package | Component |
-|---------------|-------------------|-----------|
-| Data table | \`ej2-react-grids\` | DataGrid |
-| Charts | \`ej2-react-charts\` | Chart |
-| Date picker | \`ej2-react-calendars\` | DatePicker |
-| Dropdown | \`ej2-react-dropdowns\` | DropDownList |
-| Dialog/Modal | \`ej2-react-popups\` | Dialog |
-| Tabs | \`ej2-react-navigations\` | Tab |
-| Sidebar | \`ej2-react-navigations\` | Sidebar |
-| Toolbar | \`ej2-react-navigations\` | Toolbar |
-| Form inputs | \`ej2-react-inputs\` | TextBox, NumericTextBox |
-| Buttons | \`ej2-react-buttons\` | Button |
-| File upload | \`ej2-react-inputs\` | Uploader |
-| Rich text | \`ej2-react-richtexteditor\` | RichTextEditor |
-| Scheduler | \`ej2-react-schedule\` | Schedule |
-| TreeView | \`ej2-react-navigations\` | TreeView |
-| Kanban | \`ej2-react-kanban\` | Kanban |
-
-Export tokens first (\`cs-design export tokens --format css\`), then map CSS custom properties to Syncfusion theme variables.
+To convert HTML screens to production framework code with Syncfusion components, use the \`/syncfusion-components\` skill. It handles framework detection, component skill installation, and API-correct code generation.
 `;
