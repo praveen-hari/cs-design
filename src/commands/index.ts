@@ -14,6 +14,7 @@ export {
   exportTokensCommand,
   type ExportTokensOptions,
 } from "./export-tokens.js";
+export { applyCommand } from "./apply.js";
 export {
   skillsAddCommand,
   skillsListCommand,

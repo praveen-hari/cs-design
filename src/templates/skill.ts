@@ -60,7 +60,9 @@ cs-design validate
 
 Fix any errors before generating screens.
 
-### Step 3 — Export tokens (optional)
+### Step 3 — Export tokens
+
+Export tokens to CSS custom properties. **This is required before generating screens.**
 
 \`\`\`bash
 cs-design export tokens --format css        # CSS custom properties → .designs/tokens.css
@@ -75,13 +77,41 @@ Save self-contained HTML files to \`.designs/screens/\`.
 
 **Requirements:**
 - Complete HTML document (\`<!DOCTYPE html>\` through \`</html>\`)
-- All CSS inline in a \`<style>\` block (no external stylesheets)
+- All CSS inline in a \`<style>\` block — **use CSS variables from tokens.css, not hardcoded hex values**
 - Google Fonts \`<link>\` tags for fonts from DESIGN.md
 - Responsive: mobile-first, works at 375px–1440px
 - Semantic HTML: \`<header>\`, \`<main>\`, \`<nav>\`, \`<section>\`, \`<footer>\`
-- Exact color hex values, font families, sizes, weights, spacing, and border-radius from DESIGN.md
 - Realistic content — **never use Lorem ipsum**
 - Kebab-case filenames: \`landing-page.html\`, \`user-dashboard.html\`
+
+**IMPORTANT — Use CSS variables, not hardcoded values:**
+
+Screens must reference design tokens via CSS custom properties so that changing the design system automatically updates all screens.
+
+\`\`\`html
+<style>
+  /* ✅ CORRECT — uses CSS variables from tokens.css */
+  .hero { background: var(--color-background); color: var(--color-primary); }
+  .btn  { background: var(--color-accent); border-radius: var(--radius-md); padding: var(--space-sm) var(--space-lg); }
+  h1    { font-family: var(--font-h1-family); font-size: var(--font-h1-size); font-weight: var(--font-h1-weight); }
+
+  /* ❌ WRONG — hardcoded values break when design system changes */
+  .hero { background: #FFFFFF; color: #1A1C1E; }
+  .btn  { background: #2563EB; border-radius: 8px; }
+</style>
+\`\`\`
+
+Each screen must include the tokens.css inline at the top of its \`<style>\` block. Copy the contents of \`.designs/tokens.css\` (the \`:root { ... }\` block) into the screen's \`<style>\`.
+
+### Step 4b — Apply design system changes
+
+When the design system (DESIGN.md) is updated, re-export tokens and all screens update automatically:
+
+\`\`\`bash
+cs-design apply
+\`\`\`
+
+This re-exports \`tokens.css\` and updates the \`:root\` block in every screen under \`.designs/screens/\`. Because screens use CSS variables, the new token values take effect immediately.
 
 ### Step 5 — Track screens
 

@@ -16,14 +16,17 @@ import {
   SKILLS_DIR,
   SKILL_FOLDER_NAME,
   SYNCFUSION_SKILL_FOLDER_NAME,
+  CREATE_DESIGN_SKILL_FOLDER_NAME,
   DEFAULT_SYSTEM,
   getDesignsDir,
   getSkillDir,
   getSyncfusionSkillDir,
+  getCreateDesignSkillDir,
 } from "../constants.js";
 import { resolveSystem } from "../systems/index.js";
 import { SKILL_MD_CONTENT } from "../templates/skill.js";
 import { SYNCFUSION_SKILL_MD_CONTENT } from "../templates/syncfusion-skill.js";
+import { CREATE_DESIGN_SKILL_MD_CONTENT } from "../templates/create-design-skill.js";
 import { logSuccess, logError } from "../utils.js";
 
 export interface InitOptions {
@@ -105,6 +108,15 @@ export async function initCommand(
       "utf-8"
     );
 
+    // Write create-design-system skill
+    const createDesignSkillDir = getCreateDesignSkillDir();
+    await fs.ensureDir(createDesignSkillDir);
+    await fs.writeFile(
+      path.join(createDesignSkillDir, SKILL_MD),
+      CREATE_DESIGN_SKILL_MD_CONTENT,
+      "utf-8"
+    );
+
     spinner.succeed("Design project initialized!");
     console.log();
     console.log(`  ${chalk.bold("Project:")}  ${projectName}`);
@@ -116,6 +128,7 @@ export async function initCommand(
     logSuccess(`${DESIGNS_DIR}/${PROJECT_JSON}`);
     logSuccess(`${SKILLS_DIR}/${SKILL_FOLDER_NAME}/${SKILL_MD}`);
     logSuccess(`${SKILLS_DIR}/${SYNCFUSION_SKILL_FOLDER_NAME}/${SKILL_MD}`);
+    logSuccess(`${SKILLS_DIR}/${CREATE_DESIGN_SKILL_FOLDER_NAME}/${SKILL_MD}`);
     logSuccess(`${DESIGNS_DIR}/${SCREENS_DIR}/`);
     console.log();
     console.log(

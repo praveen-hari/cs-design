@@ -23,6 +23,7 @@ import {
   systemsInstallCommand,
   systemsCreateCommand,
   exportTokensCommand,
+  applyCommand,
 } from "./commands/index.js";
 import {
   skillsAddCommand,
@@ -66,6 +67,17 @@ program
   .description("Validate the current project's DESIGN.md against the specification")
   .action(async () => {
     await validateCommand();
+  });
+
+// ── apply ──
+
+program
+  .command("apply")
+  .description(
+    "Re-export tokens and update all screens after DESIGN.md changes"
+  )
+  .action(async () => {
+    await applyCommand();
   });
 
 // ── screens ──

@@ -68,6 +68,7 @@ export {
   systemsCreateCommand,
 } from "./commands/systems.js";
 export { exportTokensCommand } from "./commands/export-tokens.js";
+export { applyCommand } from "./commands/apply.js";
 export {
   skillsAddCommand,
   skillsListCommand,
