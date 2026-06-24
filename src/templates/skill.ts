@@ -4,7 +4,7 @@
 
 export const SKILL_MD_CONTENT = `---
 name: cs-design
-description: "Design and generate UI screens using the cs-design CLI and DESIGN.md tokens. Use when: creating UI screens, generating HTML pages, designing landing pages, building dashboards, applying design systems, exporting design tokens to CSS or Tailwind, validating design files, switching design systems, or converting designs to Syncfusion components."
+description: "Design and generate UI screens using the cs-design CLI and DESIGN.md tokens. Use when: creating UI screens, generating HTML pages, designing landing pages, building dashboards, applying design system changes to screens, updating screens after design changes, re-applying tokens, exporting design tokens to CSS or Tailwind, validating design files, switching design systems, or converting designs to Syncfusion components."
 argument-hint: "Describe the screen or UI task, e.g. 'create a pricing page' or 'export tokens as CSS'"
 ---
 
