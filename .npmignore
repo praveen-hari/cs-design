@@ -1,0 +1,11 @@
+# Only ignore non-essential files — dist/ must be included
+src/
+tests/
+.vscode/
+.github/
+tsconfig.json
+tsup.config.ts
+*.tgz
+.DS_Store
+coverage/
+.tmp/
