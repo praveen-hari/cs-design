@@ -124,6 +124,49 @@ function validateYaml(yamlData: DesignYaml): ValidationFinding[] {
         : "components section not defined (recommended)"),
   );
 
+  // colors-dark section (optional)
+  const darkColors = yamlData["colors-dark"];
+  if (darkColors && typeof darkColors === "object") {
+    const darkKeys = Object.keys(darkColors);
+    results.push(
+      finding("colors-dark section", "info" as "warning", true,
+        `colors-dark: ${darkKeys.length} dark mode overrides defined`),
+    );
+
+    // Validate dark color values
+    for (const [key, value] of Object.entries(darkColors)) {
+      if (typeof value === "string" && !isValidHexColor(value)) {
+        results.push(
+          finding(`colors-dark "${key}"`, "error", false,
+            `Invalid hex color in colors-dark: "${value}" (expected #RRGGBB)`),
+        );
+      }
+    }
+
+    // Check that dark tokens match light token names
+    if (hasColors) {
+      const lightKeys = new Set(Object.keys(yamlData.colors));
+      for (const key of darkKeys) {
+        if (!lightKeys.has(key)) {
+          results.push(
+            finding(`colors-dark "${key}" orphan`, "warning", false,
+              `colors-dark.${key} has no matching colors.${key} in light theme`),
+          );
+        }
+      }
+
+      // Warn about light tokens missing dark overrides
+      const darkKeySet = new Set(darkKeys);
+      const missingDark = [...lightKeys].filter((k) => !darkKeySet.has(k));
+      if (missingDark.length > 0) {
+        results.push(
+          finding("colors-dark completeness", "warning", false,
+            `Light tokens missing dark overrides: ${missingDark.join(", ")}`),
+        );
+      }
+    }
+  }
+
   return results;
 }
 

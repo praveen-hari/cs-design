@@ -48,6 +48,8 @@ export interface DesignYaml {
   name: string;
   description?: string;
   colors: DesignColors;
+  /** Dark mode color overrides. Same token names as `colors`, different values. */
+  "colors-dark"?: DesignColors;
   typography: DesignTypography;
   rounded?: DesignRounded;
   spacing?: DesignSpacing;

@@ -19,6 +19,17 @@ colors:
   warning: "#CA8A04"
   error: "#B91C1C"
 
+colors-dark:
+  primary: "#F1F5F9"
+  secondary: "#94A3B8"
+  accent: "#38BDF8"
+  background: "#0F172A"
+  surface: "#1E293B"
+  border: "#334155"
+  success: "#4ADE80"
+  warning: "#FDE047"
+  error: "#FCA5A5"
+
 typography:
   h1:
     fontFamily: "Source Sans Pro"

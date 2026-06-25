@@ -19,6 +19,17 @@ colors:
   warning: "#EAB308"
   error: "#DC2626"
 
+colors-dark:
+  primary: "#E8EAED"
+  secondary: "#9AA0A6"
+  accent: "#60A5FA"
+  background: "#121212"
+  surface: "#1E1E1E"
+  border: "#333333"
+  success: "#4ADE80"
+  warning: "#FACC15"
+  error: "#F87171"
+
 typography:
   h1:
     fontFamily: "Inter"

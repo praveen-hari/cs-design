@@ -266,6 +266,28 @@ cs-design systems install ./path/to/system/               # Install from local p
 cs-design systems create "My Brand"                       # Create empty system
 \`\`\`
 
+## Dark Mode Support
+
+If the DESIGN.md has a \`colors-dark\` section, the design system supports dark mode.
+
+**How it works:**
+- \`cs-design export tokens --format css\` generates three CSS blocks:
+  1. \`:root { ... }\` — light theme (default)
+  2. \`[data-theme="dark"] { ... }\` — dark theme via attribute
+  3. \`@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { ... } }\` — auto dark via OS preference
+
+**In HTML screens**, add a theme toggle:
+
+\`\`\`html
+<button onclick="document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'">
+  Toggle Dark Mode
+</button>
+\`\`\`
+
+**No extra CSS needed** — the same \`var(--color-background)\`, \`var(--color-primary)\` variables automatically switch values.
+
+**In production code**, use the same \`data-theme\` attribute approach or the framework's theme system.
+
 ## Quality Checklist
 
 Before finalizing any output (HTML screens or production components):
@@ -278,4 +300,5 @@ Before finalizing any output (HTML screens or production components):
 - [ ] Accessible: heading hierarchy, alt text, sufficient contrast (WCAG AA)
 - [ ] No Lorem ipsum or placeholder text
 - [ ] Interactive states: hover, focus, active, disabled
+- [ ] If \`colors-dark\` exists, screens work in both light and dark modes
 `;

@@ -19,6 +19,17 @@ colors:
   warning: "#F59E0B"
   error: "#EF4444"
 
+colors-dark:
+  primary: "#F5F0FF"
+  secondary: "#A8A3B3"
+  accent: "#FF7A5C"
+  background: "#1A0E2E"
+  surface: "#2D1B4E"
+  border: "#3D2B5A"
+  success: "#4ADE80"
+  warning: "#FBBF24"
+  error: "#FB7185"
+
 typography:
   h1:
     fontFamily: "Sora"

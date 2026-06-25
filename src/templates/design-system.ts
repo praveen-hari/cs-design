@@ -16,6 +16,14 @@ colors:
   surface: "#F5F5F5"
   border: "#E0E0E0"
 
+colors-dark:
+  primary: "#FFFFFF"
+  secondary: "#999999"
+  accent: "#4D94FF"
+  background: "#121212"
+  surface: "#1E1E1E"
+  border: "#333333"
+
 typography:
   h1:
     fontFamily: "Inter"

@@ -18,9 +18,11 @@ import { parseDesignMd } from "./parser.js";
 
 /**
  * Generate CSS custom properties (:root block) from design tokens.
+ * If `colors-dark` is defined, also generates a `[data-theme="dark"]` block
+ * and a `@media (prefers-color-scheme: dark)` block.
  */
 export function generateCss(yaml: DesignYaml): string {
-  const lines: string[] = [":root {"];
+  const lines: string[] = ["/* Light theme (default) */", ":root {"];
 
   if (yaml.colors) {
     lines.push("  /* Colors */");
@@ -65,6 +67,28 @@ export function generateCss(yaml: DesignYaml): string {
   }
 
   lines.push("}");
+
+  // ── Dark theme ──
+  const darkColors = yaml["colors-dark"];
+  if (darkColors && Object.keys(darkColors).length > 0) {
+    lines.push("");
+    lines.push("/* Dark theme — activated via data-theme=\"dark\" attribute */");
+    lines.push('[data-theme="dark"] {');
+    for (const [key, value] of Object.entries(darkColors)) {
+      lines.push(`  --color-${key}: ${value};`);
+    }
+    lines.push("}");
+    lines.push("");
+    lines.push("/* Dark theme — auto-activated via OS preference */");
+    lines.push("@media (prefers-color-scheme: dark) {");
+    lines.push("  :root:not([data-theme=\"light\"]) {");
+    for (const [key, value] of Object.entries(darkColors)) {
+      lines.push(`    --color-${key}: ${value};`);
+    }
+    lines.push("  }");
+    lines.push("}");
+  }
+
   return lines.join("\n") + "\n";
 }
 
@@ -77,7 +101,13 @@ export function generateTailwind(yaml: DesignYaml): string {
   const theme: Record<string, unknown> = {};
 
   if (yaml.colors) {
-    theme.colors = { ...yaml.colors };
+    const colors: Record<string, unknown> = { ...yaml.colors };
+    // Nest dark mode colors under a "dark" key
+    const darkColors = yaml["colors-dark"];
+    if (darkColors) {
+      colors.dark = { ...darkColors };
+    }
+    theme.colors = colors;
   }
 
   if (yaml.typography) {
@@ -125,6 +155,14 @@ export function generateJson(yaml: DesignYaml): string {
   if (yaml.colors) {
     for (const [key, value] of Object.entries(yaml.colors)) {
       tokens[`color.${key}`] = value;
+    }
+  }
+
+  // Dark mode colors
+  const darkColors = yaml["colors-dark"];
+  if (darkColors) {
+    for (const [key, value] of Object.entries(darkColors)) {
+      tokens[`color-dark.${key}`] = value;
     }
   }
 

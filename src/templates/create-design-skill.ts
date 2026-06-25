@@ -340,6 +340,37 @@ rm .designs/DESIGN-backup.md
 - Component token references (\`{colors.primary}\`) must resolve to defined tokens
 - Sections should appear in canonical order: Overview → Colors → Typography → Layout → Elevation & Depth → Shapes → Components → Do's and Don'ts
 
+## Dark Mode (colors-dark)
+
+If the design system should support dark mode, add a \`colors-dark\` section in the YAML front matter. It uses the **same token names** as \`colors\` but with dark-appropriate values:
+
+\`\`\`yaml
+colors:
+  primary: "#1A1C1E"
+  background: "#FFFFFF"
+  surface: "#F8FAFC"
+  accent: "#2563EB"
+
+colors-dark:
+  primary: "#E8EAED"
+  background: "#121212"
+  surface: "#1E1E1E"
+  accent: "#60A5FA"
+\`\`\`
+
+**Rules for dark mode colors:**
+- Every token in \`colors-dark\` should have a matching token in \`colors\`
+- Ideally, provide dark overrides for ALL light tokens (the validator warns about missing ones)
+- Dark backgrounds should be dark (\`#121212\`–\`#1E1E1E\`), not pure black (\`#000000\`)
+- Dark text colors should be light but not pure white — use \`#E8EAED\` or similar
+- Accent colors in dark mode should be lighter/more saturated versions of the light accent
+- Ensure WCAG AA contrast (4.5:1) for dark mode text on dark backgrounds
+
+The exported \`tokens.css\` will automatically include:
+- \`:root { ... }\` — light theme
+- \`[data-theme="dark"] { ... }\` — dark theme via attribute
+- \`@media (prefers-color-scheme: dark) { ... }\` — auto dark via OS preference
+
 ## Common Font Pairings
 
 | Style | Heading Font | Body Font |
