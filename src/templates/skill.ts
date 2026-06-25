@@ -301,4 +301,114 @@ Before finalizing any output (HTML screens or production components):
 - [ ] No Lorem ipsum or placeholder text
 - [ ] Interactive states: hover, focus, active, disabled
 - [ ] If \`colors-dark\` exists, screens work in both light and dark modes
+- [ ] Cross-page consistency: header, nav, footer identical across all screens
+
+## Cross-Page Consistency Rules
+
+When generating multiple screens, the #1 risk is **drift** — pages looking slightly different. Follow these rules strictly:
+
+| Element | Rule |
+|---------|------|
+| **Header / Nav** | Copy the exact HTML from the most recent existing screen. **Never regenerate** shared navigation — always reuse verbatim. |
+| **Footer** | Same — copy verbatim from an existing screen. Only change the active page indicator if applicable. |
+| **Font imports** | Use the same Google Fonts \`<link>\` tag across all screens. Copy from an existing screen or from DESIGN.md typography tokens. |
+| **tokens.css link** | Every screen must use \`<link rel="stylesheet" href="../tokens.css" />\` — never inline a \`:root\` block. |
+| **Color values** | Always use CSS variables (\`var(--color-primary)\`). Never hardcode hex values, even if you know them. |
+| **Spacing scale** | Use spacing variables (\`var(--space-sm)\`, \`var(--space-md)\`, etc.). Never use arbitrary pixel values for spacing that has a token. |
+| **Border radius** | Use radius variables (\`var(--radius-md)\`). Never hardcode \`border-radius\` values. |
+| **Dark mode toggle** | If one screen has a dark mode toggle, all screens must have the same toggle in the same position. |
+
+### Consistency Procedure (Multi-Screen Projects)
+
+When generating a new screen in a project that already has screens:
+
+1. **Read the most recent screen** in \`.designs/screens/\` to extract:
+   - The exact \`<head>\` block (meta tags, font imports, tokens.css link)
+   - The exact \`<header>\` / \`<nav>\` markup
+   - The exact \`<footer>\` markup
+   - Any shared \`<style>\` rules (body, typography, button base styles)
+2. **Copy those shared elements verbatim** into the new screen
+3. **Only write new markup** for the \`<main>\` content area
+4. **Update navigation** — add the new page to the nav menu in ALL existing screens
+5. **Verify internal links** — all \`href\` attributes must point to real screen files (no \`href="#"\` placeholders)
+
+### Navigation Link Rules
+
+- Use relative paths: \`href="dashboard.html"\`, not absolute paths
+- Mark the current page as active: add an \`aria-current="page"\` attribute and an \`.active\` CSS class
+- Every page listed in \`project.json\` should appear in the navigation
+- Planned but unbuilt pages can use \`href="#"\` with a \`title="Coming soon"\` attribute — but minimize these
+
+## Design Mappings
+
+Use these tables to translate vague user requests into precise design instructions.
+
+### UI Element Refinement
+
+When the user says something vague, interpret it as the professional equivalent:
+
+| User says | Generate as |
+|-----------|-------------|
+| "menu at the top" | Sticky navigation bar with logo, menu items, and mobile hamburger |
+| "big photo" | Full-width hero section with focal-point imagery and overlay text |
+| "list of things" | Responsive card grid with hover states and subtle elevation |
+| "button" | Primary call-to-action button with hover/focus/active transitions |
+| "form" | Form with labelled inputs, validation states, error messages, and submit button |
+| "picture area" | Hero section with background image or video and content overlay |
+| "sidebar" | Collapsible side navigation with icon-label pairings |
+| "popup" | Modal dialog with backdrop overlay and smooth entry animation |
+| "footer stuff" | Footer with sitemap links, contact info, social icons, and legal notices |
+| "cards" | Content cards with consistent padding, rounded corners, and shadow |
+| "tabs" | Tabbed interface with active indicator and smooth content transition |
+| "search" | Search input with icon, placeholder text, and results dropdown |
+| "pricing" | Pricing comparison cards with highlighted recommended tier |
+| "testimonials" | Testimonial carousel or grid with avatar, quote, and attribution |
+| "stats" | Metric cards or counters with icon, number, label, and trend indicator |
+| "timeline" | Vertical or horizontal timeline with connected nodes and descriptions |
+| "gallery" | Responsive image grid with lightbox or modal preview |
+| "FAQ" | Accordion with expand/collapse, smooth animation, and search filter |
+
+### Atmosphere & Vibe Translation
+
+When the user describes a mood or aesthetic, map it to concrete design decisions:
+
+| User says | Translate to |
+|-----------|-------------|
+| "Modern" | Clean lines, generous whitespace, high-contrast typography, minimal decoration |
+| "Professional" | Sophisticated palette, subtle shadows, structured grid, serif or clean sans-serif headers |
+| "Fun / Playful" | Vibrant accent colors, rounded corners (\`var(--radius-lg)\`+), bouncy hover animations, bold typography |
+| "Dark mode" | High-contrast accents on deep slate or near-black backgrounds, reduced image brightness |
+| "Luxury" | Spacious layout, fine hairline borders, serif headers, high-fidelity photography, muted palette |
+| "Tech / Cyber" | Futuristic feel, neon accents, glassmorphism effects, monospaced typography accents |
+| "Warm / Friendly" | Soft warm colors, rounded shapes, handwritten font accents, inviting imagery |
+| "Bold / Industrial" | Strong heavy typography, high contrast, geometric shapes, dark backgrounds |
+| "Organic / Natural" | Earth tones, soft textures, organic flowing shapes, nature photography |
+| "Editorial" | Magazine-like layouts, strong typographic hierarchy, generous leading, pull quotes |
+| "Minimal" | Maximum whitespace, limited color palette (2-3 colors), thin borders, light typography |
+| "Corporate" | Structured grid, blue/grey palette, data-dense layouts, clear hierarchy |
+
+### Geometry & Depth Mapping
+
+Map visual descriptions to concrete CSS values using design tokens:
+
+| Description | CSS approach | Use for |
+|-------------|-------------|---------|
+| Pill-shaped | \`border-radius: 9999px\` or \`var(--radius-full)\` | Buttons, tags, badges, avatars |
+| Softly rounded | \`var(--radius-lg)\` | Cards, containers, modals |
+| Gently rounded | \`var(--radius-md)\` | Inputs, smaller interactive elements |
+| Sharp / precise | \`var(--radius-sm)\` or \`0\` | Technical UI, brutalist aesthetic, tables |
+| Flat (no shadow) | \`box-shadow: none\` | Minimal aesthetic, color-block design |
+| Subtle lift | \`box-shadow: 0 1px 3px rgba(0,0,0,0.1)\` | Cards, hover states |
+| Floating | \`box-shadow: 0 10px 25px rgba(0,0,0,0.1)\` | Modals, dropdowns, popovers |
+| Dramatic | \`box-shadow: 0 20px 50px rgba(0,0,0,0.15)\` | Hero elements, featured cards |
+| Glassmorphism | \`backdrop-filter: blur(12px); background: rgba(255,255,255,0.1)\` | Overlays, nav bars on images |
+
+### Section Spacing
+
+| Density | Padding | Best for |
+|---------|---------|----------|
+| Tight | \`var(--space-md)\` top/bottom | Data-dense dashboards, admin panels |
+| Balanced | \`var(--space-lg)\` to \`var(--space-xl)\` top/bottom | Standard content pages |
+| Generous | \`calc(var(--space-xl) * 2)\` top/bottom | Landing pages, marketing, premium feel |
+| Dramatic | \`calc(var(--space-xl) * 3)\` top/bottom | Hero sections, luxury/editorial layouts |
 `;
