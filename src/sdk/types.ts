@@ -188,6 +188,8 @@ export interface SpecInfo {
   };
   specUrl: string;
   rules: LintRuleInfo[];
+  /** The full DESIGN.md format specification as markdown text. */
+  fullSpec: string;
 }
 
 // ── SDK Result wrapper ──

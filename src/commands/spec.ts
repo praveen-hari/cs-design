@@ -1,5 +1,8 @@
 /**
  * `cs-design spec` — CLI wrapper over SDK getSpec().
+ *
+ * Outputs the full DESIGN.md format specification so agents can
+ * create or edit DESIGN.md files correctly.
  */
 
 import chalk from "chalk";
@@ -20,6 +23,7 @@ export async function specCommand(options: SpecOptions): Promise<void> {
     if (options.rulesOnly) {
       output.rules = spec.rules;
     } else {
+      output.spec = spec.fullSpec;
       output.format = spec.format;
       output.specUrl = spec.specUrl;
       if (options.rules) output.rules = spec.rules;
@@ -34,39 +38,10 @@ export async function specCommand(options: SpecOptions): Promise<void> {
     return;
   }
 
-  console.log();
-  console.log(chalk.bold("DESIGN.md Format Specification"));
-  console.log(chalk.dim("═".repeat(50)));
-  console.log();
-  console.log("A DESIGN.md file has two layers:");
-  console.log();
-  console.log("  1. " + chalk.cyan("YAML front matter") + " — Machine-readable design tokens");
-  console.log("     Delimited by --- fences at the top of the file.");
-  console.log();
-  console.log("  2. " + chalk.cyan("Markdown body") + " — Human-readable design rationale");
-  console.log("     Organized into ## sections.");
-  console.log();
-  console.log(chalk.bold("Token Schema:"));
-  console.log(chalk.dim("  version, name, description, colors, typography,"));
-  console.log(chalk.dim("  rounded, spacing, components"));
-  console.log();
-  console.log(chalk.bold("Section Order (canonical):"));
-  console.log(chalk.dim("  Overview → Colors → Typography → Layout →"));
-  console.log(chalk.dim("  Elevation & Depth → Shapes → Components → Do's and Don'ts"));
-  console.log();
-  console.log(chalk.bold("Token Types:"));
-  console.log(`  ${chalk.cyan("Color")}       Any CSS color (hex, rgb(), oklch(), named)`);
-  console.log(`  ${chalk.cyan("Dimension")}   number + unit (px, em, rem)`);
-  console.log(`  ${chalk.cyan("Reference")}   {path.to.token}`);
-  console.log(`  ${chalk.cyan("Typography")}  fontFamily, fontSize, fontWeight, lineHeight, etc.`);
-  console.log();
+  // Output the full specification text
+  console.log(spec.fullSpec);
 
   if (options.rules) printRulesTable(spec.rules);
-
-  console.log(chalk.dim("Full specification:"));
-  console.log(chalk.cyan("  " + spec.specUrl));
-  console.log(chalk.dim("  Or run: npx @google/design.md spec"));
-  console.log();
 }
 
 function printRulesTable(rules: LintRuleInfo[]): void {

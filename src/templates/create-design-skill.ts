@@ -5,22 +5,35 @@
 
 export const CREATE_DESIGN_SKILL_MD_CONTENT = `---
 name: create-design-system
-description: "Create a DESIGN.md design system file from any source. Use when: user provides a screenshot, mockup, image, CSS file, HTML file, website URL, brand description, color palette, or asks to create, extract, or generate a design system. Handles brand extraction, color analysis, typography detection, design token generation, and WCAG contrast validation."
-argument-hint: "Source: image, URL, CSS file, or text description, e.g. 'from this screenshot' or 'inspired by Linear'"
+description: "Create or edit a DESIGN.md design system file. Use when: user provides a screenshot, mockup, image, CSS file, HTML file, website URL, brand description, color palette, or asks to create, extract, edit, update, or modify a design system. Also use when user asks to change colors, fonts, spacing, add tokens, remove tokens, or tweak the design system. Handles brand extraction, color analysis, typography detection, design token generation, and WCAG contrast validation."
+argument-hint: "Describe the change, e.g. 'from this screenshot', 'change accent to blue', 'add a dark mode palette'"
 ---
 
-# Create Design System
+# Create or Edit Design System
 
-Generate a valid DESIGN.md file from any source — images, CSS, HTML, URLs, text descriptions, or brand briefs.
+Create a new DESIGN.md from any source, or edit an existing one. Handles both full creation and targeted edits (change a color, add a token, update typography, etc.).
 
 ## When to Use
 
+**Creating a new design system:**
 - User provides a screenshot, mockup, or design image
 - User provides a CSS or HTML file to extract tokens from
 - User provides a website URL to analyze
 - User asks to create a design system from a text description ("modern SaaS", "like Stripe")
 - User asks to extract or generate a design system
-- User wants to update or replace the current DESIGN.md
+
+**Editing an existing design system:**
+- User asks to change a color ("make the accent blue", "darken the background")
+- User asks to change typography ("switch to Poppins", "make headings larger")
+- User asks to add tokens ("add a warning color", "add an xl spacing")
+- User asks to remove tokens ("remove the caption typography")
+- User asks to update components ("make buttons more rounded")
+- User asks to update the prose/rationale sections
+- User asks to fix lint warnings or errors
+
+**Determine which flow to use:**
+- If \`.designs/DESIGN.md\` exists and user wants changes → **Edit flow** (below)
+- If \`.designs/DESIGN.md\` doesn't exist or user wants a fresh start → **Create flow** (below)
 
 ## Output Location
 
@@ -29,6 +42,23 @@ Save the generated file to \`.designs/DESIGN.md\` (project-local).
 If \`.designs/\` doesn't exist yet, run \`cs-design init "Project Name"\` first, then overwrite the DESIGN.md.
 
 ## Procedure
+
+### Step 0 — Get the specification
+
+Before creating a DESIGN.md, get the full format specification:
+
+\`\`\`bash
+# Full specification as markdown (human-readable)
+cs-design spec
+
+# Full specification as JSON (machine-readable — includes spec text, format rules, and lint rules)
+cs-design spec --format json
+
+# Just the lint rules
+cs-design spec --rules-only
+\`\`\`
+
+The specification defines the exact YAML schema, token types, section order, and validation rules. **Always follow it.**
 
 ### Step 1 — Analyze the source
 
@@ -225,19 +255,77 @@ cs-design validate
 # Deep lint only — more detailed findings
 cs-design lint
 cs-design lint --json    # Machine-readable output
+\`\`\`
 
-# If updating an existing DESIGN.md, compare before/after
+---
+
+## Edit Flow — Modifying an Existing DESIGN.md
+
+When the user wants to **change** the existing design system (not create from scratch):
+
+### Edit Step 1 — Read the current DESIGN.md
+
+Always read the existing \`.designs/DESIGN.md\` first. Understand:
+- Current token values (colors, typography, spacing, rounded, components)
+- Current markdown rationale sections
+- The overall design intent
+
+### Edit Step 2 — Back up before editing
+
+\`\`\`bash
+cp .designs/DESIGN.md .designs/DESIGN-backup.md
+\`\`\`
+
+### Edit Step 3 — Make targeted changes
+
+**Only modify what the user asked for.** Preserve everything else.
+
+| User request | What to change | What to preserve |
+|-------------|----------------|------------------|
+| "Change accent to blue" | \`colors.accent\` value | All other colors, typography, spacing, components, prose |
+| "Switch to Poppins font" | \`fontFamily\` in all typography entries | Font sizes, weights, line heights, colors, spacing |
+| "Make buttons more rounded" | \`components.button.rounded\` | All other component tokens |
+| "Add a warning color" | Add \`colors.warning\` entry | All existing tokens |
+| "Make headings larger" | \`fontSize\` in h1, h2, h3 | Font families, weights, body text |
+| "Update the overview section" | \`## Overview\` markdown content | YAML front matter, other sections |
+
+**Rules for editing:**
+- Keep the \`---\` YAML delimiters intact
+- Keep the \`version\` and \`name\` fields
+- When changing a color, update the \`## Colors\` prose section to match
+- When changing typography, update the \`## Typography\` prose section to match
+- When adding component tokens, use \`{token.references}\` where possible (e.g., \`"{colors.accent}"\`)
+- Maintain canonical section order
+
+### Edit Step 4 — Validate and diff
+
+\`\`\`bash
+# Validate the edited file
+cs-design validate
+
+# Deep lint
+cs-design lint
+
+# Compare before/after to verify only intended changes were made
 cs-design diff .designs/DESIGN-backup.md .designs/DESIGN.md
 \`\`\`
 
-### Step 5 — Get the spec (optional)
+The diff shows exactly which tokens were added, removed, or modified. Verify:
+- ✅ Only the requested tokens changed
+- ✅ No unintended regressions (new errors or warnings)
+- ✅ No tokens were accidentally removed
 
-If you need to review the DESIGN.md format specification or lint rules:
+### Edit Step 5 — Apply changes
 
 \`\`\`bash
-cs-design spec                  # Format specification
-cs-design spec --rules          # Include lint rules table
-cs-design spec --format json    # Machine-readable spec
+# Re-export tokens.css — all screens update automatically
+cs-design apply
+\`\`\`
+
+Clean up the backup if everything looks good:
+
+\`\`\`bash
+rm .designs/DESIGN-backup.md
 \`\`\`
 
 ## Quality Rules

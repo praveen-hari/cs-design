@@ -121,7 +121,7 @@ export {
 } from "./exporter.js";
 
 // ── Spec ──
-export { getSpec, LINT_RULES } from "./spec.js";
+export { getSpec, getFullSpec, LINT_RULES } from "./spec.js";
 
 // ── Systems ──
 export {
