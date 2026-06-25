@@ -50,9 +50,20 @@ cs-design skills add react --only grid,scheduler,charts
 
 # List installed skills
 cs-design skills list
+cs-design skills list --json    # Machine-readable
 
 # Remove skills for a framework
 cs-design skills remove react
+\`\`\`
+
+### Step 2b — Export tokens for the framework
+
+\`\`\`bash
+cs-design export tokens --format css            # CSS custom properties (React, Angular, Vue)
+cs-design export tokens --format tailwind       # Tailwind v3 theme.extend config
+cs-design export tokens --format css-tailwind   # Tailwind v4 CSS @theme block
+cs-design export tokens --format json           # Flat JSON key-value pairs
+cs-design export tokens --format dtcg           # W3C Design Tokens (DTCG) format
 \`\`\`
 
 ### Step 3 — Read the installed component skills

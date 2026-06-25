@@ -4,11 +4,14 @@
  * Usage:
  *   cs-design init <project-name> [--system <id>] [--force]
  *   cs-design validate
+ *   cs-design lint [file] [--json]
+ *   cs-design diff <before> <after> [--json]
+ *   cs-design spec [--rules] [--rules-only] [--format <markdown|json>]
  *   cs-design screens list [--json]
  *   cs-design systems list
  *   cs-design systems install <source>
  *   cs-design systems create <name>
- *   cs-design export tokens --format <css|tailwind|json> [--out <path>]
+ *   cs-design export tokens --format <css|tailwind|json|css-tailwind|dtcg> [--out <path>]
  *   cs-design skills add <framework> [--only <components>]
  *   cs-design skills list [--json]
  *   cs-design skills remove <framework>
@@ -18,6 +21,9 @@ import { Command } from "commander";
 import {
   initCommand,
   validateCommand,
+  lintCommand,
+  diffCommand,
+  specCommand,
   screensListCommand,
   systemsListCommand,
   systemsInstallCommand,
@@ -64,10 +70,51 @@ program
 
 program
   .command("validate")
-  .description("Validate the current project's DESIGN.md against the specification")
+  .description("Validate the current project's DESIGN.md (structural + deep lint)")
   .action(async () => {
     await validateCommand();
   });
+
+// ── lint ──
+
+program
+  .command("lint")
+  .description(
+    "Deep lint a DESIGN.md file (WCAG contrast, broken refs, orphaned tokens, etc.)"
+  )
+  .argument("[file]", "Path to DESIGN.md (defaults to .designs/DESIGN.md)")
+  .option("--json", "Output as JSON", false)
+  .action(async (file: string | undefined, options: { json: boolean }) => {
+    await lintCommand({ file, json: options.json });
+  });
+
+// ── diff ──
+
+program
+  .command("diff")
+  .description("Compare two DESIGN.md files and detect token-level regressions")
+  .argument("<before>", 'Path to the "before" DESIGN.md')
+  .argument("<after>", 'Path to the "after" DESIGN.md')
+  .option("--json", "Output as JSON", false)
+  .action(async (before: string, after: string, options: { json: boolean }) => {
+    await diffCommand(before, after, options);
+  });
+
+// ── spec ──
+
+program
+  .command("spec")
+  .description(
+    "Output the DESIGN.md format specification (useful for agent prompts)"
+  )
+  .option("--rules", "Append the active linting rules table", false)
+  .option("--rules-only", "Output only the linting rules table", false)
+  .option("--format <format>", "Output format: markdown or json", "markdown")
+  .action(
+    async (options: { rules: boolean; rulesOnly: boolean; format: string }) => {
+      await specCommand(options);
+    }
+  );
 
 // ── apply ──
 
@@ -137,11 +184,17 @@ exportCmd
   .description("Export design tokens from DESIGN.md to other formats")
   .requiredOption(
     "--format <format>",
-    "Output format: css, tailwind, or json"
+    "Output format: css, tailwind, json, css-tailwind, or dtcg"
   )
   .option("--out <path>", "Output file path (default: .designs/tokens.<ext>)")
   .action(async (options: { format: string; out?: string }) => {
-    const validFormats: TokenFormat[] = ["css", "tailwind", "json"];
+    const validFormats: TokenFormat[] = [
+      "css",
+      "tailwind",
+      "json",
+      "css-tailwind",
+      "dtcg",
+    ];
     if (!validFormats.includes(options.format as TokenFormat)) {
       console.error(
         `Invalid format "${options.format}". Supported: ${validFormats.join(", ")}`

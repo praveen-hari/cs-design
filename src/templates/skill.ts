@@ -4,7 +4,7 @@
 
 export const SKILL_MD_CONTENT = `---
 name: cs-design
-description: "Design and generate UI screens using the cs-design CLI and DESIGN.md tokens. Use when: creating UI screens, generating HTML pages, designing landing pages, building dashboards, applying design system changes to screens, updating screens after design changes, re-applying tokens, exporting design tokens to CSS or Tailwind, validating design files, switching design systems, or converting designs to Syncfusion components."
+description: "Design and generate UI screens using the cs-design CLI and DESIGN.md tokens. Use when: creating UI screens, generating HTML pages, designing landing pages, building dashboards, applying design system changes to screens, updating screens after design changes, re-applying tokens, exporting design tokens to CSS or Tailwind, validating design files, linting for WCAG contrast issues, comparing design versions, switching design systems, or converting designs to Syncfusion components."
 argument-hint: "Describe the screen or UI task, e.g. 'create a pricing page' or 'export tokens as CSS'"
 ---
 
@@ -16,8 +16,9 @@ Generate consistent, brand-aligned UI screens using the \`cs-design\` CLI and th
 
 - User asks to create, design, or generate a UI screen or HTML page
 - User asks to apply or switch a design system
-- User asks to export design tokens (CSS, Tailwind, JSON)
-- User asks to validate a DESIGN.md file
+- User asks to export design tokens (CSS, Tailwind, JSON, DTCG)
+- User asks to validate or lint a DESIGN.md file
+- User asks to compare two design system versions
 - User asks to list or manage screens
 - User asks to convert designs to Syncfusion production components
 
@@ -38,8 +39,28 @@ project-root/
 └── .designs/
     ├── DESIGN.md              ← Design system tokens + rationale
     ├── project.json           ← Project metadata + screen registry
+    ├── tokens.css             ← Exported CSS custom properties
     └── screens/               ← Generated HTML screens
 \`\`\`
+
+## CLI Reference
+
+| Command | Purpose |
+|---------|---------|
+| \`cs-design init <name> [--system <id>]\` | Initialize a new design project |
+| \`cs-design validate\` | Structural validation + deep lint |
+| \`cs-design lint [file] [--json]\` | Deep lint (WCAG contrast, broken refs, orphaned tokens, section order) |
+| \`cs-design diff <before> <after> [--json]\` | Compare two DESIGN.md files for token-level regressions |
+| \`cs-design spec [--rules] [--format json]\` | Output the DESIGN.md format specification |
+| \`cs-design apply\` | Re-export tokens.css — all screens update automatically |
+| \`cs-design export tokens --format <fmt>\` | Export tokens: \`css\`, \`tailwind\`, \`json\`, \`css-tailwind\`, \`dtcg\` |
+| \`cs-design screens list [--json]\` | List all screens in the project |
+| \`cs-design systems list\` | List available design systems |
+| \`cs-design systems install <source>\` | Install from GitHub or local path |
+| \`cs-design systems create <name>\` | Scaffold a new empty design system |
+| \`cs-design skills add <framework>\` | Install Syncfusion component skills |
+| \`cs-design skills list [--json]\` | List installed Syncfusion skills |
+| \`cs-design skills remove <framework>\` | Remove skills for a framework |
 
 ## Procedure
 
@@ -52,11 +73,26 @@ Read the [DESIGN.md](../../../.designs/DESIGN.md) file. It has two layers:
 
 Use the exact token values from YAML. **Never invent colors or fonts.**
 
-### Step 2 — Validate
+### Step 2 — Validate and lint
+
+Run both structural validation and deep lint:
 
 \`\`\`bash
+# Full validation (structural + deep lint in one command)
 cs-design validate
+
+# Or deep lint only (WCAG contrast, broken refs, orphaned tokens, etc.)
+cs-design lint
+cs-design lint --json    # Machine-readable output for programmatic use
 \`\`\`
+
+The deep linter checks:
+- **broken-ref** — Token references like \`{colors.primary}\` that don't resolve
+- **contrast-ratio** — WCAG AA contrast failures (4.5:1 minimum)
+- **orphaned-tokens** — Color tokens never referenced by any component
+- **missing-primary** — No primary color defined
+- **section-order** — Sections out of canonical order
+- **unknown-key** — Likely YAML key typos (e.g. \`colours:\` → \`colors:\`)
 
 Fix any errors before generating screens.
 
@@ -145,7 +181,22 @@ When DESIGN.md is updated, re-export tokens and all screens update automatically
 cs-design apply
 \`\`\`
 
-### A4 — Track and manage screens
+### A4 — Compare design versions
+
+When iterating on the design system, compare before and after:
+
+\`\`\`bash
+# Save a copy before editing
+cp .designs/DESIGN.md .designs/DESIGN-backup.md
+
+# After editing, check for regressions
+cs-design diff .designs/DESIGN-backup.md .designs/DESIGN.md
+
+# JSON output for programmatic use
+cs-design diff .designs/DESIGN-backup.md .designs/DESIGN.md --json
+\`\`\`
+
+### A5 — Track and manage screens
 
 \`\`\`bash
 cs-design screens list            # Human-readable
@@ -173,9 +224,11 @@ cs-design skills add react --only grid,scheduler,charts,inputs,buttons
 ### B2 — Export tokens for the framework
 
 \`\`\`bash
-cs-design export tokens --format css          # For CSS-based frameworks (React, Angular, Vue)
-cs-design export tokens --format tailwind     # For Tailwind projects
-cs-design export tokens --format json         # For programmatic token access
+cs-design export tokens --format css            # CSS custom properties (React, Angular, Vue)
+cs-design export tokens --format tailwind       # Tailwind v3 theme.extend config
+cs-design export tokens --format css-tailwind   # Tailwind v4 CSS @theme block
+cs-design export tokens --format json           # Flat JSON key-value pairs
+cs-design export tokens --format dtcg           # W3C Design Tokens (DTCG) format
 \`\`\`
 
 ### B3 — Generate production components
@@ -218,10 +271,11 @@ cs-design systems create "My Brand"                       # Create empty system
 Before finalizing any output (HTML screens or production components):
 
 - [ ] \`cs-design validate\` passes with no errors
+- [ ] \`cs-design lint\` reports no errors (warnings are acceptable)
 - [ ] All styling uses CSS variables from tokens.css — no hardcoded token values
 - [ ] Colors, fonts, spacing, and radii match DESIGN.md tokens
 - [ ] Responsive at 375px, 768px, and 1440px
-- [ ] Accessible: heading hierarchy, alt text, sufficient contrast
+- [ ] Accessible: heading hierarchy, alt text, sufficient contrast (WCAG AA)
 - [ ] No Lorem ipsum or placeholder text
 - [ ] Interactive states: hover, focus, active, disabled
 `;

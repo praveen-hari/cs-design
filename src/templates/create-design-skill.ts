@@ -5,7 +5,7 @@
 
 export const CREATE_DESIGN_SKILL_MD_CONTENT = `---
 name: create-design-system
-description: "Create a DESIGN.md design system file from any source. Use when: user provides a screenshot, mockup, image, CSS file, HTML file, website URL, brand description, color palette, or asks to create, extract, or generate a design system. Handles brand extraction, color analysis, typography detection, and design token generation."
+description: "Create a DESIGN.md design system file from any source. Use when: user provides a screenshot, mockup, image, CSS file, HTML file, website URL, brand description, color palette, or asks to create, extract, or generate a design system. Handles brand extraction, color analysis, typography detection, design token generation, and WCAG contrast validation."
 argument-hint: "Source: image, URL, CSS file, or text description, e.g. 'from this screenshot' or 'inspired by Linear'"
 ---
 
@@ -210,12 +210,35 @@ Button, card, input, table, and navigation component styles.
 Explicit design rules — what to do and what to avoid.
 \`\`\`
 
-### Step 4 — Save and validate
+### Step 4 — Save, validate, and lint
 
 1. Write the file to \`.designs/DESIGN.md\`
-2. Run \`cs-design validate\` to confirm it passes
-3. Fix any errors reported by the validator
-4. Confirm the result with the user
+2. Run \`cs-design validate\` to confirm structural validity + deep lint
+3. Run \`cs-design lint\` for detailed findings (WCAG contrast, broken refs, orphaned tokens)
+4. Fix any errors reported — warnings are acceptable but should be reviewed
+5. Confirm the result with the user
+
+\`\`\`bash
+# Full validation (structural + deep lint)
+cs-design validate
+
+# Deep lint only — more detailed findings
+cs-design lint
+cs-design lint --json    # Machine-readable output
+
+# If updating an existing DESIGN.md, compare before/after
+cs-design diff .designs/DESIGN-backup.md .designs/DESIGN.md
+\`\`\`
+
+### Step 5 — Get the spec (optional)
+
+If you need to review the DESIGN.md format specification or lint rules:
+
+\`\`\`bash
+cs-design spec                  # Format specification
+cs-design spec --rules          # Include lint rules table
+cs-design spec --format json    # Machine-readable spec
+\`\`\`
 
 ## Quality Rules
 
@@ -224,8 +247,10 @@ Explicit design rules — what to do and what to avoid.
 - No duplicate \`##\` section headings
 - The markdown body should have substantive content in each section, not just placeholders
 - Choose fonts available on Google Fonts for web compatibility
-- Ensure sufficient contrast between text colors and backgrounds (WCAG AA minimum)
+- Ensure sufficient contrast between text colors and backgrounds (WCAG AA minimum — 4.5:1 ratio)
 - The design system should feel cohesive — colors, typography, and spacing should work together
+- Component token references (\`{colors.primary}\`) must resolve to defined tokens
+- Sections should appear in canonical order: Overview → Colors → Typography → Layout → Elevation & Depth → Shapes → Components → Do's and Don'ts
 
 ## Common Font Pairings
 

@@ -1,99 +1,37 @@
 /**
- * Core type definitions for cs-design CLI.
+ * Legacy type definitions — re-exported from SDK for backward compatibility.
+ *
+ * New code should import from "@syncfusion/cs-design/sdk" or "../sdk/types.js".
  */
 
-// ── DESIGN.md YAML front matter types ──
+// Re-export all SDK types
+export type {
+  DesignYaml,
+  DesignColors,
+  DesignTypography,
+  DesignRounded,
+  DesignSpacing,
+  DesignComponents,
+  TypographyToken,
+  ComponentToken,
+  ProjectJson,
+  ScreenEntry,
+  DesignSystemMeta,
+  TokenFormat,
+} from "./sdk/types.js";
 
-export interface DesignColors {
-  [tokenName: string]: string;
-}
+// Legacy aliases — these existed before the SDK refactor.
+// The SDK uses different names for some types.
+export type { ValidationFinding as ValidationResult } from "./sdk/types.js";
+export type { Severity as ValidationSeverity } from "./sdk/types.js";
 
-export interface TypographyToken {
-  fontFamily: string;
-  fontSize: string;
-  fontWeight?: number;
-  lineHeight?: number | string;
-  letterSpacing?: string;
-}
-
-export interface DesignTypography {
-  [tokenName: string]: TypographyToken;
-}
-
-export interface DesignRounded {
-  [scaleLevel: string]: string;
-}
-
-export interface DesignSpacing {
-  [scaleLevel: string]: string;
-}
-
-export interface ComponentToken {
-  backgroundColor?: string;
-  textColor?: string;
-  rounded?: string;
-  padding?: string;
-  [key: string]: string | undefined;
-}
-
-export interface DesignComponents {
-  [componentName: string]: ComponentToken;
-}
-
-export interface DesignYaml {
-  version?: string;
-  name: string;
-  description?: string;
-  colors: DesignColors;
-  typography: DesignTypography;
-  rounded?: DesignRounded;
-  spacing?: DesignSpacing;
-  components?: DesignComponents;
-}
-
-// ── Project types ──
-
-export interface ScreenEntry {
-  name: string;
-  file: string;
-  description: string;
-}
-
-export interface ProjectJson {
-  name: string;
-  system: string;
-  createdAt: string;
-  screens: Record<string, ScreenEntry>;
-}
-
-// ── Validation types ──
-
-export type ValidationSeverity = "error" | "warning";
-
-export interface ValidationResult {
-  check: string;
-  severity: ValidationSeverity;
-  passed: boolean;
-  message: string;
-}
-
+/**
+ * @deprecated Use ValidationReport from SDK instead.
+ * This legacy type has `results` instead of `findings`.
+ */
 export interface ValidationReport {
-  results: ValidationResult[];
+  results: import("./sdk/types.js").ValidationFinding[];
   valid: boolean;
   errorCount: number;
   warningCount: number;
 }
-
-// ── Design system registry types ──
-
-export interface DesignSystemMeta {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  builtin: boolean;
-}
-
-// ── Token export types ──
-
-export type TokenFormat = "css" | "tailwind" | "json";

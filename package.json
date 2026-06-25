@@ -1,7 +1,7 @@
 {
   "name": "@syncfusion/cs-design",
   "version": "0.1.0",
-  "description": "A CLI tool that provides design system context for AI coding agents",
+  "description": "CLI + SDK for design system context for AI coding agents",
   "license": "MIT",
   "author": "Syncfusion",
   "type": "module",
@@ -10,6 +10,16 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./sdk": {
+      "import": "./dist/sdk.js",
+      "types": "./dist/sdk.d.ts"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -26,11 +36,12 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "commander": "^13.1.0",
-    "js-yaml": "^4.1.0",
+    "@google/design.md": "^0.3.0",
     "chalk": "^5.4.1",
-    "ora": "^8.2.0",
-    "fs-extra": "^11.3.0"
+    "commander": "^13.1.0",
+    "fs-extra": "^11.3.0",
+    "js-yaml": "^4.1.0",
+    "ora": "^8.2.0"
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
@@ -48,10 +59,13 @@
     "design-system",
     "ai",
     "cli",
+    "sdk",
     "design-tokens",
     "ui-design",
     "agent",
-    "syncfusion"
+    "syncfusion",
+    "design.md",
+    "linter"
   ],
   "repository": {
     "type": "git",

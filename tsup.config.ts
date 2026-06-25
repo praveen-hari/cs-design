@@ -16,7 +16,7 @@ export default defineConfig([
       js: "#!/usr/bin/env node",
     },
   },
-  // Library entry — no shebang
+  // Library entry — no shebang (includes SDK + CLI utilities)
   {
     entry: { index: "src/index.ts" },
     format: ["esm"],
@@ -24,7 +24,19 @@ export default defineConfig([
     platform: "node",
     dts: true,
     sourcemap: true,
-    clean: false, // don't clean again, CLI build already did
+    clean: false,
+    splitting: false,
+    shims: true,
+  },
+  // SDK entry — pure functions, no CLI deps (chalk, ora, commander)
+  {
+    entry: { sdk: "src/sdk/index.ts" },
+    format: ["esm"],
+    target: "node18",
+    platform: "node",
+    dts: true,
+    sourcemap: true,
+    clean: false,
     splitting: false,
     shims: true,
   },
