@@ -40,15 +40,11 @@ export {
   DESIGNS_DIR,
   DESIGN_MD,
   PROJECT_JSON,
-  SKILL_MD,
-  SKILL_FOLDER_NAME,
-  SKILLS_DIR,
   SCREENS_DIR,
   DEFAULT_SYSTEM,
   getGlobalDir,
   getGlobalSystemsDir,
   getDesignsDir,
-  getSkillDir,
 } from "./constants.js";
 
 // ── File-system utilities (CLI-only, not in SDK) ──

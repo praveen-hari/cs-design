@@ -1,0 +1,10 @@
+{
+  "name": "syncfusion-ui-designer",
+  "description": "Design system workflow skills for AI agents. Provides brand-aligned UI screen generation, design token management, and Syncfusion component code generation — powered by the cs-design CLI.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Syncfusion",
+    "url": "https://www.syncfusion.com"
+  },
+  "skills": "skills/"
+}

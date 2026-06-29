@@ -1,9 +1,4 @@
-/**
- * syncfusion-components SKILL.md — Router skill that teaches agents
- * how to install and use Syncfusion component skills on demand.
- */
-
-export const SYNCFUSION_SKILL_MD_CONTENT = `---
+---
 name: syncfusion-components
 description: "Install and use Syncfusion UI component skills for production code generation. Use when: converting HTML designs to React, Angular, Blazor, Vue, or JavaScript production code with Syncfusion components, adding data grids, charts, schedulers, forms, editors, navigation, kanban boards, or any Syncfusion UI component to a project."
 argument-hint: "Framework and components, e.g. 'react grid and charts' or 'angular scheduler'"
@@ -15,25 +10,51 @@ Install Syncfusion component skills on demand so AI agents can generate accurate
 
 ## When to Use
 
-- Converting HTML screen designs (.designs/screens/) to production framework code
+- Converting HTML screen designs (`.designs/screens/`) to production framework code
 - Adding Syncfusion UI components (grid, chart, scheduler, etc.) to a project
 - Need accurate Syncfusion API usage, imports, and configuration
+
+## Prerequisites
+
+### 1. Check CLI is installed
+
+```bash
+cs-design --version
+```
+
+If the command is not found, install it:
+
+```bash
+npm install -g @syncfusion/cs-design
+```
+
+### 2. Check design project is initialized
+
+```bash
+ls .designs/DESIGN.md
+```
+
+If `.designs/` does not exist, the design system must be created first. Use the **design-system** skill to create a `DESIGN.md`, or initialize a project with a built-in system:
+
+```bash
+cs-design init "My Project"
+```
 
 ## Procedure
 
 ### Step 1 — Detect the framework
 
 Check the project for framework indicators:
-- \`package.json\` with \`react\`, \`@angular/core\`, \`vue\` → web framework
-- \`.csproj\` with \`Microsoft.NET.Sdk.BlazorWebAssembly\` → blazor
-- \`.csproj\` with \`Microsoft.Maui\` → maui
-- \`.csproj\` with WPF/WinUI/WinForms references → desktop framework
+- `package.json` with `react`, `@angular/core`, `vue` → web framework
+- `.csproj` with `Microsoft.NET.Sdk.BlazorWebAssembly` → blazor
+- `.csproj` with `Microsoft.Maui` → maui
+- `.csproj` with WPF/WinUI/WinForms references → desktop framework
 
 ### Step 2 — Install component skills
 
-Run \`cs-design skills add <framework>\` to install all Syncfusion component skills for that framework. This is **non-interactive** and safe for agents to run.
+Run `cs-design skills add <framework>` to install all Syncfusion component skills for that framework. This is **non-interactive** and safe for agents to run.
 
-\`\`\`bash
+```bash
 # Install all skills for a framework
 cs-design skills add react
 cs-design skills add angular
@@ -50,33 +71,33 @@ cs-design skills add react --only grid,scheduler,charts
 
 # List installed skills
 cs-design skills list
-cs-design skills list --json    # Machine-readable
+cs-design skills list --json
 
 # Remove skills for a framework
 cs-design skills remove react
-\`\`\`
+```
 
 ### Step 2b — Export tokens for the framework
 
-\`\`\`bash
+```bash
 cs-design export tokens --format css            # CSS custom properties (React, Angular, Vue)
 cs-design export tokens --format tailwind       # Tailwind v3 theme.extend config
 cs-design export tokens --format css-tailwind   # Tailwind v4 CSS @theme block
 cs-design export tokens --format json           # Flat JSON key-value pairs
 cs-design export tokens --format dtcg           # W3C Design Tokens (DTCG) format
-\`\`\`
+```
 
 ### Step 3 — Read the installed component skills
 
-After installation, component skills are available at \`~/.agents/skills/\`. Each skill has:
-- \`SKILL.md\` — Setup, imports, configuration, key APIs
-- \`references/\` — Detailed feature docs (loaded on demand)
+After installation, component skills are available at `~/.agents/skills/`. Each skill has:
+- `SKILL.md` — Setup, imports, configuration, key APIs
+- `references/` — Detailed feature docs (loaded on demand)
 
 Read only the skills you need for the current screen.
 
 ### Step 4 — Generate production code
 
-Use the design tokens from [DESIGN.md](../../../.designs/DESIGN.md) for styling, and the component skill instructions for Syncfusion API usage.
+Use the design tokens from `.designs/DESIGN.md` for styling, and the component skill instructions for Syncfusion API usage.
 
 ## Component Catalog
 
@@ -96,11 +117,8 @@ Use the design tokens from [DESIGN.md](../../../.designs/DESIGN.md) for styling,
 |------------|-------------|---------------|
 | Bar/line/area chart | syncfusion-react-charts | syncfusion-angular-charts |
 | Pie/donut chart | syncfusion-react-accumulation-chart | syncfusion-angular-accumulation-chart |
-| 3D chart | syncfusion-react-3d-chart | syncfusion-angular-3d-chart |
 | Heatmap | syncfusion-react-heatmap | syncfusion-angular-heatmap |
-| Sparkline | syncfusion-react-sparkline | syncfusion-angular-sparkline |
 | Maps | syncfusion-react-maps | syncfusion-angular-maps |
-| Bullet chart | syncfusion-react-bullet-chart | syncfusion-angular-bullet-chart |
 | Gauges | syncfusion-react-circular-gauge | syncfusion-angular-circular-gauge |
 
 ### Scheduling & Calendar
@@ -118,8 +136,6 @@ Use the design tokens from [DESIGN.md](../../../.designs/DESIGN.md) for styling,
 | Buttons / toggles | syncfusion-react-buttons | syncfusion-angular-buttons |
 | Dropdowns / select | syncfusion-react-dropdowns | syncfusion-angular-dropdowns |
 | Date/time pickers | syncfusion-react-calendars | syncfusion-angular-calendars |
-| File upload | syncfusion-react-inputs | syncfusion-angular-inputs |
-| Query builder | syncfusion-react-query-builder | syncfusion-angular-query-builder |
 
 ### Navigation
 
@@ -140,7 +156,6 @@ Use the design tokens from [DESIGN.md](../../../.designs/DESIGN.md) for styling,
 |------------|-------------|---------------|
 | Dashboard layout | syncfusion-react-dashboard-layout | syncfusion-angular-dashboard-layout |
 | Splitter | syncfusion-react-splitter | syncfusion-angular-splitter |
-| Cards | syncfusion-react-cards | syncfusion-angular-cards |
 
 ### Editors
 
@@ -167,17 +182,14 @@ Use the design tokens from [DESIGN.md](../../../.designs/DESIGN.md) for styling,
 
 ### Always Install (Base Skills)
 
-These should always be installed alongside component skills:
-
 | Skill | Purpose |
 |-------|---------|
-| \`syncfusion-<fw>-common\` | Shared setup, data manager, service patterns |
-| \`syncfusion-<fw>-themes\` | Theme CSS, styling, design token mapping |
-| \`syncfusion-<fw>-license\` | License key registration |
+| `syncfusion-<fw>-common` | Shared setup, data manager, service patterns |
+| `syncfusion-<fw>-themes` | Theme CSS, styling, design token mapping |
+| `syncfusion-<fw>-license` | License key registration |
 
 ## Skill Naming Convention
 
-All Syncfusion skills follow the pattern: \`syncfusion-<framework>-<component>\`
+All Syncfusion skills follow the pattern: `syncfusion-<framework>-<component>`
 
-Replace \`<framework>\` with: \`react\`, \`angular\`, \`blazor\`, \`vue\`, \`javascript\`, \`maui\`, \`wpf\`, \`winui\`, \`winforms\`
-`;
+Replace `<framework>` with: `react`, `angular`, `blazor`, `vue`, `javascript`, `maui`, `wpf`, `winui`, `winforms`

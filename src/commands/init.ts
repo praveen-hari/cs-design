@@ -11,22 +11,11 @@ import {
   DESIGNS_DIR,
   DESIGN_MD,
   PROJECT_JSON,
-  SKILL_MD,
   SCREENS_DIR,
-  SKILLS_DIR,
-  SKILL_FOLDER_NAME,
-  SYNCFUSION_SKILL_FOLDER_NAME,
-  CREATE_DESIGN_SKILL_FOLDER_NAME,
   DEFAULT_SYSTEM,
   getDesignsDir,
-  getSkillDir,
-  getSyncfusionSkillDir,
-  getCreateDesignSkillDir,
 } from "../constants.js";
 import { resolveSystem } from "../systems/index.js";
-import { SKILL_MD_CONTENT } from "../templates/skill.js";
-import { SYNCFUSION_SKILL_MD_CONTENT } from "../templates/syncfusion-skill.js";
-import { CREATE_DESIGN_SKILL_MD_CONTENT } from "../templates/create-design-skill.js";
 import { logSuccess, logError } from "../utils.js";
 
 export interface InitOptions {
@@ -89,34 +78,6 @@ export async function initCommand(
       spaces: 2,
     });
 
-    // Write skills into standard Agent Skills folder structure
-    spinner.text = "Writing skills...";
-    const skillDir = getSkillDir();
-    await fs.ensureDir(skillDir);
-    await fs.writeFile(
-      path.join(skillDir, SKILL_MD),
-      SKILL_MD_CONTENT,
-      "utf-8"
-    );
-
-    // Write Syncfusion component router skill
-    const sfSkillDir = getSyncfusionSkillDir();
-    await fs.ensureDir(sfSkillDir);
-    await fs.writeFile(
-      path.join(sfSkillDir, SKILL_MD),
-      SYNCFUSION_SKILL_MD_CONTENT,
-      "utf-8"
-    );
-
-    // Write create-design-system skill
-    const createDesignSkillDir = getCreateDesignSkillDir();
-    await fs.ensureDir(createDesignSkillDir);
-    await fs.writeFile(
-      path.join(createDesignSkillDir, SKILL_MD),
-      CREATE_DESIGN_SKILL_MD_CONTENT,
-      "utf-8"
-    );
-
     spinner.succeed("Design project initialized!");
     console.log();
     console.log(`  ${chalk.bold("Project:")}  ${projectName}`);
@@ -126,14 +87,7 @@ export async function initCommand(
     console.log("  Created:");
     logSuccess(`${DESIGNS_DIR}/${DESIGN_MD}`);
     logSuccess(`${DESIGNS_DIR}/${PROJECT_JSON}`);
-    logSuccess(`${SKILLS_DIR}/${SKILL_FOLDER_NAME}/${SKILL_MD}`);
-    logSuccess(`${SKILLS_DIR}/${SYNCFUSION_SKILL_FOLDER_NAME}/${SKILL_MD}`);
-    logSuccess(`${SKILLS_DIR}/${CREATE_DESIGN_SKILL_FOLDER_NAME}/${SKILL_MD}`);
     logSuccess(`${DESIGNS_DIR}/${SCREENS_DIR}/`);
-    console.log();
-    console.log(
-      `  ${chalk.dim("Your AI agent can now read SKILL.md and DESIGN.md to generate screens.")}`
-    );
   } catch (error) {
     spinner.fail("Failed to initialize project.");
     const message = error instanceof Error ? error.message : String(error);
