@@ -66,15 +66,13 @@ This creates:
 
 ```
 my-app/
-├── .codestudio/skills/
-│   ├── cs-design/SKILL.md              ← Design workflow instructions for AI agents
-│   ├── create-design-system/SKILL.md   ← How to create/edit DESIGN.md
-│   └── syncfusion-components/SKILL.md  ← Syncfusion component catalog
 ├── .designs/
 │   ├── DESIGN.md                       ← Your design system (tokens + rationale)
 │   ├── project.json                    ← Project metadata
 │   └── screens/                        ← Generated HTML screens go here
 ```
+
+> **Note:** Agent skills are no longer generated per-project. They ship as part of the `syncfusion-ui-designer` plugin. See the [Agent Skills Guide](./agent-skills-guide.md) for installation.
 
 ### Choose a specific design system
 
@@ -246,7 +244,7 @@ Open your AI agent (Code Studio, Copilot, etc.) and ask:
 
 > "Create a design system for a modern fintech dashboard — dark-friendly, professional, with blue accents"
 
-The agent reads the `create-design-system` skill and:
+The agent reads the `design-system` skill (from the `syncfusion-ui-designer` plugin) and:
 1. Runs `cs-design spec --format json` to get the specification
 2. Generates a complete DESIGN.md with tokens + rationale
 3. Saves it to `.designs/DESIGN.md`

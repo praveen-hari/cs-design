@@ -1,12 +1,12 @@
 # Agent Skills Guide
 
-`cs-design` ships three **Agent Skills** — structured instruction files that teach AI coding agents how to work with your design system. Skills are the bridge between your design tokens and the AI agent's output.
+`cs-design` ships as the **`syncfusion-ui-designer`** agent plugin — a bundle of three skills that teach AI coding agents how to work with your design system. Skills are the bridge between your design tokens and the AI agent's output.
 
 ---
 
 ## What Are Agent Skills?
 
-Agent Skills are `.md` files placed in `.codestudio/skills/` (or `.github/copilot/skills/`, `~/.agents/skills/`, etc.) that AI agents automatically discover and read. They follow the [Agent Skills open standard](https://code.visualstudio.com/docs/agent-customization/agent-skills) and work with:
+Agent Skills are `.md` files bundled inside **agent plugins** that AI agents automatically discover and read. They follow the [Agent Skills open standard](https://code.visualstudio.com/docs/agent-customization/agent-skills) and work with:
 
 - **Code Studio** (Syncfusion)
 - **VS Code Copilot** (GitHub)
@@ -20,22 +20,46 @@ Each skill has:
 
 ---
 
+## Plugin Architecture
+
+Skills are **not** generated per-project. They ship as static files inside the `syncfusion-ui-designer` plugin:
+
+```
+plugin/
+├── plugin.json                          ← Plugin manifest
+└── skills/
+    ├── design-screens/SKILL.md          ← Generate HTML screens from DESIGN.md
+    ├── design-system/SKILL.md           ← Create or edit DESIGN.md
+    └── syncfusion-components/SKILL.md   ← Production code with Syncfusion
+```
+
+The plugin is installed once — all projects benefit automatically. No files are written into your project's `.codestudio/skills/` folder.
+
+### Installing the Plugin
+
+**Local testing:**
+
+Add the plugin path to Code Studio settings:
+
+```json
+"chat.pluginLocations": [
+  "/path/to/syncfusion-ui-designer/plugin"
+]
+```
+
+**Public distribution:**
+
+The plugin will be available via the [awesome-copilot](https://github.com/github/awesome-copilot) registry or npm (`@syncfusion/ui-designer-plugin`).
+
+---
+
 ## The Three Skills
-
-When you run `cs-design init`, three skills are installed:
-
-```
-.codestudio/skills/
-├── cs-design/SKILL.md              ← Design workflow
-├── create-design-system/SKILL.md   ← Create or edit DESIGN.md
-└── syncfusion-components/SKILL.md  ← Production code with Syncfusion
-```
 
 ```mermaid
 graph TD
     User["User Request"] --> Agent["AI Agent"]
-    Agent --> |"design a page"| S1["cs-design skill"]
-    Agent --> |"create a design system"| S2["create-design-system skill"]
+    Agent --> |"design a page"| S1["design-screens skill"]
+    Agent --> |"create a design system"| S2["design-system skill"]
     Agent --> |"build with Syncfusion"| S3["syncfusion-components skill"]
 
     S1 --> |reads| DM[".designs/DESIGN.md"]
@@ -56,9 +80,9 @@ graph TD
 
 ---
 
-## Skill 1: `cs-design` — Design Workflow
+## Skill 1: `design-screens` — Design Workflow
 
-**Location:** `.codestudio/skills/cs-design/SKILL.md`
+**Location:** `plugin/skills/design-screens/SKILL.md` (shipped with the plugin)
 
 ### When the Agent Uses This Skill
 
@@ -105,9 +129,9 @@ The agent activates this skill when the user asks to:
 
 ---
 
-## Skill 2: `create-design-system` — Create or Edit DESIGN.md
+## Skill 2: `design-system` — Create or Edit DESIGN.md
 
-**Location:** `.codestudio/skills/create-design-system/SKILL.md`
+**Location:** `plugin/skills/design-system/SKILL.md` (shipped with the plugin)
 
 ### When the Agent Uses This Skill
 
@@ -163,7 +187,7 @@ Does .designs/DESIGN.md exist?
 
 **User:** "Create a design system from this screenshot" *(attaches image)*
 
-**Agent (following create-design-system skill):**
+**Agent (following design-system skill):**
 1. Runs `cs-design spec --format json` → gets the format rules
 2. Analyzes the image:
    - Dominant colors: dark navy, white, blue accent
@@ -179,7 +203,7 @@ Does .designs/DESIGN.md exist?
 
 **User:** "Change the accent color to purple and make buttons more rounded"
 
-**Agent (following create-design-system skill):**
+**Agent (following design-system skill):**
 1. Reads `.designs/DESIGN.md`
 2. Backs up: `cp .designs/DESIGN.md .designs/DESIGN-backup.md`
 3. Changes:
@@ -202,7 +226,7 @@ Does .designs/DESIGN.md exist?
 
 ## Skill 3: `syncfusion-components` — Production Code Generation
 
-**Location:** `.codestudio/skills/syncfusion-components/SKILL.md`
+**Location:** `plugin/skills/syncfusion-components/SKILL.md` (shipped with the plugin)
 
 ### When the Agent Uses This Skill
 
@@ -289,12 +313,12 @@ The three skills form a pipeline:
 ┌──────────────────────────────────────────────────────────────────┐
 │                                                                  │
 │  1. CREATE THE DESIGN SYSTEM                                     │
-│     Skill: create-design-system                                  │
+│     Skill: design-system                                         │
 │     "Create a design system inspired by Linear"                  │
 │     → .designs/DESIGN.md (tokens + rationale)                    │
 │                                                                  │
 │  2. DESIGN SCREENS                                               │
-│     Skill: cs-design                                             │
+│     Skill: design-screens                                        │
 │     "Design a dashboard, pricing page, and settings page"        │
 │     → .designs/screens/dashboard.html                            │
 │     → .designs/screens/pricing-page.html                         │
@@ -306,7 +330,7 @@ The three skills form a pipeline:
 │     → src/pages/Dashboard.tsx (production React code)            │
 │                                                                  │
 │  4. ITERATE                                                      │
-│     Skill: create-design-system (edit flow)                      │
+│     Skill: design-system (edit flow)                             │
 │     "Change the accent color to purple"                          │
 │     → DESIGN.md updated → cs-design apply → everything updates   │
 │                                                                  │
@@ -319,17 +343,17 @@ The three skills form a pipeline:
 User request arrives
 │
 ├── About the DESIGN SYSTEM itself?
-│   ├── "Create a design system from..." → create-design-system
-│   ├── "Change the accent color..." → create-design-system (edit flow)
-│   ├── "Add dark mode..." → create-design-system (edit flow)
-│   └── "Extract design from this CSS..." → create-design-system
+│   ├── "Create a design system from..." → design-system
+│   ├── "Change the accent color..." → design-system (edit flow)
+│   ├── "Add dark mode..." → design-system (edit flow)
+│   └── "Extract design from this CSS..." → design-system
 │
 ├── About DESIGNING screens or pages?
-│   ├── "Design a landing page" → cs-design
-│   ├── "Show me a mockup of..." → cs-design
-│   ├── "Export tokens as CSS" → cs-design
-│   ├── "Validate the design" → cs-design
-│   └── "Apply design changes" → cs-design
+│   ├── "Design a landing page" → design-screens
+│   ├── "Show me a mockup of..." → design-screens
+│   ├── "Export tokens as CSS" → design-screens
+│   ├── "Validate the design" → design-screens
+│   └── "Apply design changes" → design-screens
 │
 ├── About BUILDING with Syncfusion?
 │   ├── "Build this with React" → syncfusion-components
@@ -343,16 +367,20 @@ User request arrives
 
 ---
 
-## Customizing Skills
+## Customizing Agent Behavior
 
-Skills are plain `.md` files — you can edit them to customize agent behavior.
+Plugin skills are **read-only** — they ship with the plugin and are the single source of truth. To add project-specific rules, use **project-level instruction files** instead:
 
 ### Add project-specific rules
 
-Edit `.codestudio/skills/cs-design/SKILL.md` and add:
+Create `.codestudio/instructions/design-rules.instructions.md` in your project:
 
 ```markdown
-## Project-Specific Rules
+---
+applyTo: "**/*.html"
+---
+
+## Project-Specific Design Rules
 
 - Always use the `Inter` font — never substitute
 - Maximum 3 colors per screen (primary, accent, background)
@@ -362,9 +390,13 @@ Edit `.codestudio/skills/cs-design/SKILL.md` and add:
 
 ### Add custom component patterns
 
-Edit `.codestudio/skills/syncfusion-components/SKILL.md` and add:
+Create `.codestudio/instructions/component-patterns.instructions.md`:
 
 ```markdown
+---
+applyTo: "src/**/*.{tsx,jsx,vue,ts}"
+---
+
 ## Our Component Patterns
 
 - DataGrid: always enable sorting, filtering, and pagination
@@ -372,22 +404,7 @@ Edit `.codestudio/skills/syncfusion-components/SKILL.md` and add:
 - Sidebar: always collapsible, default width 280px
 ```
 
-### Create your own skills
-
-Create a new skill at `.codestudio/skills/my-custom-skill/SKILL.md`:
-
-```markdown
----
-name: my-custom-skill
-description: "Custom rules for our project. Use when generating any UI code."
----
-
-# Our Design Rules
-
-- All pages must have a breadcrumb navigation
-- Forms must have inline validation
-- Tables must support CSV export
-```
+These instruction files are automatically picked up by the agent alongside the plugin skills.
 
 ---
 
@@ -395,13 +412,13 @@ description: "Custom rules for our project. Use when generating any UI code."
 
 ### Agent doesn't follow the design system
 
-1. Check that `.codestudio/skills/cs-design/SKILL.md` exists
+1. Check that the `syncfusion-ui-designer` plugin is installed (verify `chat.pluginLocations` in settings)
 2. Run `cs-design validate` — fix any errors
 3. Make sure `.designs/DESIGN.md` has valid YAML front matter
 
 ### Agent generates wrong Syncfusion API
 
-1. Run `cs-design skills list` — check skills are installed
+1. Run `cs-design skills list` — check component skills are installed
 2. Run `cs-design skills remove react && cs-design skills add react` — reinstall
 3. Check `~/.agents/skills/syncfusion-react-*/SKILL.md` exists
 
@@ -413,7 +430,7 @@ description: "Custom rules for our project. Use when generating any UI code."
 
 ### Skills not detected by the agent
 
-1. Skills must be in `.codestudio/skills/<name>/SKILL.md` (exact path)
-2. The YAML frontmatter must have `name` and `description` fields
-3. Restart the AI agent / editor after adding skills
-4. Run `cs-design init "My App" --force` to regenerate skills
+1. Verify the plugin path is in `chat.pluginLocations` in Code Studio settings
+2. Check that `plugin.json` exists at the root of the plugin folder
+3. Ensure each skill folder name matches the `name` field in its SKILL.md frontmatter
+4. Restart the AI agent / editor after installing the plugin
