@@ -141,7 +141,10 @@ export function activate(context: vscode.ExtensionContext) {
   // New Screen (opens chat)
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.newScreen, () => {
-      vscode.commands.executeCommand("workbench.action.chat.open");
+      vscode.commands.executeCommand("workbench.action.chat.open", {
+        query: "Design a new UI screen for this project. What kind of screen would you like? (e.g., dashboard, landing page, settings, form, data table)",
+        isPartialQuery: true,
+      });
     })
   );
 
