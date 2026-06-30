@@ -30,32 +30,11 @@ Check the project for framework indicators:
 - `.csproj` with `Microsoft.Maui` → maui
 - `.csproj` with WPF/WinUI/WinForms references → desktop framework
 
-### Step 2 — Install component skills
+### Step 2 — Use Syncfusion component skills
 
-Run `cs-design skills add <framework>` to install all Syncfusion component skills for that framework. This is **non-interactive** and safe for agents to run.
+Syncfusion component skills are available at `~/.agents/skills/`. Each skill provides verified setup, imports, configuration, and usage patterns for a specific component.
 
-```bash
-# Install all skills for a framework
-cs-design skills add react
-cs-design skills add angular
-cs-design skills add blazor
-cs-design skills add vue
-cs-design skills add javascript
-cs-design skills add maui
-cs-design skills add wpf
-cs-design skills add winui
-cs-design skills add winforms
-
-# Install only specific components
-cs-design skills add react --only grid,scheduler,charts
-
-# List installed skills
-cs-design skills list
-cs-design skills list --json
-
-# Remove skills for a framework
-cs-design skills remove react
-```
+Read only the skills you need for the current screen.
 
 ### Step 2b — Export tokens for the framework
 

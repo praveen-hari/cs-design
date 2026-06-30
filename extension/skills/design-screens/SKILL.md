@@ -1,12 +1,12 @@
 ---
 name: design-screens
-description: "Generate and manage UI screens using the cs-design CLI and DESIGN.md tokens. Use when: creating UI screens, generating HTML pages, designing landing pages, building dashboards, applying design system changes to screens, updating screens after design changes, re-applying tokens, exporting design tokens to CSS or Tailwind, validating design files, linting for WCAG contrast issues, comparing design versions, or switching design systems."
+description: "Generate and manage UI screens using DESIGN.md tokens and cs-design tools. Use when: creating UI screens, generating HTML pages, designing landing pages, building dashboards, applying design system changes to screens, updating screens after design changes, re-applying tokens, exporting design tokens to CSS or Tailwind, validating design files, linting for WCAG contrast issues, comparing design versions, or switching design systems."
 argument-hint: "Describe the screen or UI task, e.g. 'create a pricing page', 'export tokens as CSS', or 'lint the design'"
 ---
 
 # design-screens — AI Screen Generation Workflow
 
-Generate consistent, brand-aligned UI screens using the `cs-design` CLI and the project's design system.
+Generate consistent, brand-aligned UI screens using the cs-design tools and the project's design system.
 
 ## When to Use
 
@@ -188,12 +188,9 @@ file:///absolute/path/to/.designs/screens/<screen-name>.html
 
 Use this when the user wants to **build the actual application** with Syncfusion components. Skip HTML screens entirely — generate framework code directly from DESIGN.md tokens.
 
-### B1 — Install Syncfusion component skills
+### B1 — Use Syncfusion component skills
 
-```bash
-cs-design skills add react          # or angular, blazor, vue, javascript
-cs-design skills add react --only grid,scheduler,charts,inputs,buttons
-```
+The Syncfusion component skills (syncfusion-react-grid, syncfusion-react-charts, etc.) provide API knowledge for generating production code. Refer to the **syncfusion-components** skill for the full component catalog.
 
 ### B2 — Export tokens for the framework
 
@@ -235,7 +232,7 @@ file:///absolute/path/to/.designs/screens/<screen-name>.html
 
 If the DESIGN.md has a `colors-dark` section, the design system supports dark mode.
 
-`cs-design export tokens --format css` generates three CSS blocks:
+The `cs-design_exportTokens` tool with format `css` generates three CSS blocks:
 1. `:root { ... }` — light theme (default)
 2. `[data-theme="dark"] { ... }` — dark theme via attribute
 3. `@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { ... } }` — auto dark via OS preference
@@ -248,8 +245,7 @@ If the DESIGN.md has a `colors-dark` section, the design system supports dark mo
 
 ## Quality Checklist
 
-- [ ] `cs-design validate` passes with no errors
-- [ ] `cs-design lint` reports no errors (warnings are acceptable)
+- [ ] `cs-design_lint` tool reports no errors (warnings are acceptable)
 - [ ] All styling uses CSS variables from tokens.css — no hardcoded token values
 - [ ] Colors, fonts, spacing, and radii match DESIGN.md tokens
 - [ ] Responsive at 375px, 768px, and 1440px
