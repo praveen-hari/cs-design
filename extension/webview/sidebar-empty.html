@@ -372,14 +372,14 @@
 
     <!-- Primary Actions -->
     <div class="button-group">
-      <button class="btn-primary" aria-label="Create Design System" onclick="send('openChat')">
+      <button class="btn-primary" aria-label="Create Design System" onclick="send('openChat','@cs-design /create Describe your brand style and the agent will create a complete design system.')">
         <svg viewBox="0 0 16 16" fill="currentColor">
           <path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z"/>
         </svg>
         Create Design System
       </button>
 
-      <button class="btn-secondary" aria-label="Import from Workspace" onclick="send('openChat')">
+      <button class="btn-secondary" aria-label="Import from Workspace" onclick="send('openChat','@cs-design /scan Scan this workspace and extract a design system from existing CSS, config files, and theme settings.')">
         <svg viewBox="0 0 16 16" fill="currentColor">
           <path d="M11.06 7.354L8 10.414l-3.06-3.06.706-.708L7.5 8.5V1h1v7.5l1.854-1.854.706.708zM3.5 13h9v-3h1v3.5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V10h1v3z"/>
         </svg>
@@ -462,6 +462,7 @@
     function send(command, value) {
       const msg = { command };
       if (command === 'initSystem') msg.system = value;
+      if (command === 'openChat') msg.prompt = value;
       vscode.postMessage(msg);
     }
   </script>

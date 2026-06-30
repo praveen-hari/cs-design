@@ -27,7 +27,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     this.refresh();
 
     // Handle messages from the webview
-    webviewView.webview.onDidReceiveMessage((message: { command: string; section?: string; screen?: string; system?: string }) => {
+    webviewView.webview.onDidReceiveMessage((message: { command: string; section?: string; screen?: string; system?: string; prompt?: string }) => {
       switch (message.command) {
         case "openWelcome":
           vscode.commands.executeCommand(CMD.openWelcome);
@@ -39,7 +39,10 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           vscode.commands.executeCommand(CMD.previewScreen, message.screen);
           break;
         case "openChat":
-          vscode.commands.executeCommand("workbench.action.chat.open");
+          vscode.commands.executeCommand("workbench.action.chat.open", {
+            query: message.prompt || "@cs-design ",
+            isPartialQuery: !message.prompt,
+          });
           break;
         case "initSystem":
           vscode.commands.executeCommand(CMD.switchSystem, message.system);
@@ -304,7 +307,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-file"></i></div>
           <span class="tree-item__label">Open DESIGN.md</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openChat')">
+        <div class="tree-item" role="button" tabindex="0" onclick="send('openChat','@cs-design Convert the design screens to production code using Syncfusion components')">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-code"></i></div>
           <span class="tree-item__label">Generate Production Code</span>
         </div>
@@ -319,6 +322,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
       if (command === 'openTokenEditor') msg.section = value;
       else if (command === 'previewScreen') msg.screen = value;
       else if (command === 'initSystem') msg.system = value;
+      else if (command === 'openChat') msg.prompt = value;
       vscode.postMessage(msg);
     }
   </script>
