@@ -124,7 +124,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     const screenItems = (project.screens ?? [])
       .map(
         (s) => `
-        <div class="tree-item" role="button" tabindex="0" title="Preview ${s} in browser" data-cmd="previewScreen" data-value="${s}">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="previewScreen" data-value="${s}">
           <div class="tree-item__icon icon--warning"><i class="codicon codicon-browser"></i></div>
           <span class="tree-item__label">${s}</span>
         </div>`
@@ -235,22 +235,22 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     </div>
     <div class="section-body">
       <div class="tree">
-        <div class="tree-item" role="button" tabindex="0" title="View color tokens" data-cmd="openTokenEditor" data-value="colors">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="colors">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-symbol-color"></i></div>
           <span class="tree-item__label">Colors</span>
           <span class="tree-item__detail tree-item__detail--hide">${colorCount}</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" title="View typography scales" data-cmd="openTokenEditor" data-value="typography">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="typography">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-text-size"></i></div>
           <span class="tree-item__label">Typography</span>
           <span class="tree-item__detail tree-item__detail--hide">${typographyCount}</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" title="View spacing scale" data-cmd="openTokenEditor" data-value="spacing">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="spacing">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-symbol-ruler"></i></div>
           <span class="tree-item__label">Spacing</span>
           <span class="tree-item__detail tree-item__detail--hide">${spacingCount}</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" title="View border radius values" data-cmd="openTokenEditor" data-value="rounded">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="rounded">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-primitive-square"></i></div>
           <span class="tree-item__label">Rounded</span>
           <span class="tree-item__detail tree-item__detail--hide">${roundedCount}</span>
@@ -287,19 +287,19 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     </div>
     <div class="section-body">
       <div class="tree">
-        <div class="tree-item" role="button" tabindex="0" title="Export tokens as CSS, Tailwind, JSON, or DTCG" data-cmd="exportTokens">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="exportTokens">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-export"></i></div>
           <span class="tree-item__label">Export Tokens</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" title="Switch to a different built-in design system" data-cmd="initSystem">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="initSystem">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-arrow-swap"></i></div>
           <span class="tree-item__label">Switch Design System</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" title="Open the raw DESIGN.md file in the editor" data-cmd="openDesignMd">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openDesignMd">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-file"></i></div>
           <span class="tree-item__label">Open DESIGN.md</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" title="Ask the agent to convert screens to React, Angular, or Vue code" data-cmd="openChat" data-value="Convert the HTML design screens to production code using Syncfusion UI components. Install Syncfusion component skills and generate framework code.">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openChat" data-value="Convert the HTML design screens to production code using Syncfusion UI components. Install Syncfusion component skills and generate framework code.">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-code"></i></div>
           <span class="tree-item__label">Generate Production Code</span>
         </div>
