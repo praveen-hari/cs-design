@@ -39,10 +39,14 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           vscode.commands.executeCommand(CMD.previewScreen, message.screen);
           break;
         case "openChat":
-          vscode.commands.executeCommand("workbench.action.chat.open", {
-            query: message.prompt || "@cs-design ",
-            isPartialQuery: !message.prompt,
-          });
+          if (message.prompt) {
+            vscode.commands.executeCommand("workbench.action.chat.open", {
+              query: message.prompt,
+              isPartialQuery: true,
+            });
+          } else {
+            vscode.commands.executeCommand("workbench.action.chat.open");
+          }
           break;
         case "initSystem":
           vscode.commands.executeCommand(CMD.switchSystem, message.system);
@@ -307,7 +311,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-file"></i></div>
           <span class="tree-item__label">Open DESIGN.md</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openChat','@cs-design Convert the design screens to production code using Syncfusion components')">
+        <div class="tree-item" role="button" tabindex="0" onclick="send('openChat','Convert the design screens in .designs/screens/ to production code using Syncfusion components')">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-code"></i></div>
           <span class="tree-item__label">Generate Production Code</span>
         </div>

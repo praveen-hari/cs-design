@@ -36,33 +36,6 @@
         }
       ]
     },
-    "chatParticipants": [
-      {
-        "id": "cs-design.participant",
-        "name": "cs-design",
-        "fullName": "CS Design",
-        "description": "Design systems, screens, and production code",
-        "isSticky": true,
-        "commands": [
-          {
-            "name": "create",
-            "description": "Create a new design system"
-          },
-          {
-            "name": "screen",
-            "description": "Generate a UI screen"
-          },
-          {
-            "name": "scan",
-            "description": "Scan workspace for design tokens"
-          },
-          {
-            "name": "edit",
-            "description": "Edit the design system"
-          }
-        ]
-      }
-    ],
     "commands": [
       {
         "command": "csDesign.openWelcome",
