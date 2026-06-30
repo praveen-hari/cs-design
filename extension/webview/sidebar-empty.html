@@ -3,400 +3,223 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CS Design — Sidebar Empty State</title>
-
-  <!-- Shared design tokens -->
-  <link rel="stylesheet" href="../tokens.css" />
-
+  <title>CS Design — Empty</title>
   <style>
-    /* ── Reset ── */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Sidebar Container ── */
     body {
-      background: var(--color-sidebarBackground);
-      color: var(--color-primary);
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-      font-size: var(--font-body-size);
-      line-height: var(--font-body-line-height);
-      width: 300px;
-      min-height: 100vh;
+      background: var(--vscode-sideBar-background);
+      color: var(--vscode-foreground);
+      font-family: var(--vscode-font-family);
+      font-size: var(--vscode-font-size);
+      line-height: 1.4;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── View Header (mimics VS Code section header) ── */
-    .view-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 var(--space-2xl) 0 var(--space-2xl);
-      height: 35px;
-      background: var(--color-sidebarBackground);
-      border-bottom: 1px solid var(--color-border);
-      user-select: none;
-    }
-
-    .view-header__title {
-      font-size: var(--font-caption-size);
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--color-primary);
-    }
-
-    .view-header__actions {
-      display: flex;
-      gap: var(--space-xs);
-    }
-
-    .view-header__action {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 22px;
-      height: 22px;
-      border: none;
-      background: transparent;
-      color: var(--color-primary);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      font-size: 14px;
-      opacity: 0.7;
-    }
-
-    .view-header__action:hover {
-      background: var(--color-listHoverBackground);
-      opacity: 1;
-    }
-
-    .view-header__action:focus-visible {
-      outline: 1px solid var(--color-focusBorder);
-      outline-offset: -1px;
-      opacity: 1;
-    }
-
-    /* ── Empty State Content ── */
+    /* ── Empty State ── */
     .empty-state {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: var(--space-3xl) var(--space-2xl);
+      padding: 24px 20px;
     }
 
-    /* ── Logo / Icon ── */
     .empty-state__icon {
       width: 48px;
       height: 48px;
-      margin-bottom: var(--space-xl);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      margin-bottom: 16px;
     }
 
-    .empty-state__icon svg {
-      width: 48px;
-      height: 48px;
-    }
-
-    /* ── Title & Description ── */
     .empty-state__title {
-      font-size: var(--font-body-size);
+      font-size: 13px;
       font-weight: 600;
-      color: var(--color-primary);
       text-align: center;
-      margin-bottom: var(--space-md);
+      margin-bottom: 8px;
     }
 
     .empty-state__description {
-      font-size: var(--font-small-size);
-      color: var(--color-descriptionForeground);
+      font-size: 12px;
+      color: var(--vscode-descriptionForeground);
       text-align: center;
       line-height: 1.5;
-      margin-bottom: var(--space-2xl);
+      margin-bottom: 20px;
       max-width: 240px;
     }
 
-    /* ── Primary Button ── */
+    /* ── Buttons ── */
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+      max-width: 260px;
+      margin-bottom: 24px;
+    }
+
     .btn-primary {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: var(--space-md);
+      gap: 8px;
       width: 100%;
-      max-width: 260px;
       height: 30px;
-      padding: 0 var(--space-xl);
-      background: var(--color-buttonBackground);
-      color: #FFFFFF;
+      padding: 0 16px;
+      background: var(--vscode-button-background);
+      color: var(--vscode-button-foreground);
       border: none;
-      border-radius: var(--radius-md);
+      border-radius: 4px;
       font-family: inherit;
-      font-size: var(--font-body-size);
-      font-weight: 400;
+      font-size: var(--vscode-font-size);
       cursor: pointer;
-      transition: background 0.1s ease;
+      transition: background 0.1s;
       white-space: nowrap;
     }
 
     .btn-primary:hover {
-      background: var(--color-buttonHoverBackground);
+      background: var(--vscode-button-hoverBackground);
     }
 
     .btn-primary:focus-visible {
-      outline: 1px solid var(--color-focusBorder);
+      outline: 1px solid var(--vscode-focusBorder);
       outline-offset: 1px;
     }
 
-    .btn-primary:active {
-      background: var(--color-accent);
-    }
+    .btn-primary svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-    .btn-primary svg {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-    }
-
-    /* ── Secondary Button ── */
     .btn-secondary {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: var(--space-md);
+      gap: 8px;
       width: 100%;
-      max-width: 260px;
       height: 30px;
-      padding: 0 var(--space-xl);
+      padding: 0 16px;
       background: transparent;
-      color: var(--color-primary);
-      border: 1px solid var(--color-border);
-      border-radius: var(--radius-md);
+      color: var(--vscode-foreground);
+      border: 1px solid var(--vscode-panel-border);
+      border-radius: 4px;
       font-family: inherit;
-      font-size: var(--font-body-size);
-      font-weight: 400;
+      font-size: var(--vscode-font-size);
       cursor: pointer;
-      transition: background 0.1s ease, border-color 0.1s ease;
+      transition: background 0.1s, border-color 0.1s;
       white-space: nowrap;
     }
 
     .btn-secondary:hover {
-      background: var(--color-listHoverBackground);
-      border-color: var(--color-secondary);
+      background: var(--vscode-list-hoverBackground);
+      border-color: var(--vscode-foreground);
     }
 
     .btn-secondary:focus-visible {
-      outline: 1px solid var(--color-focusBorder);
+      outline: 1px solid var(--vscode-focusBorder);
       outline-offset: 1px;
     }
 
-    .btn-secondary svg {
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-    }
-
-    /* ── Button Group ── */
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-md);
-      width: 100%;
-      align-items: center;
-      margin-bottom: var(--space-3xl);
-    }
+    .btn-secondary svg { width: 14px; height: 14px; flex-shrink: 0; }
 
     /* ── Divider ── */
     .divider {
       display: flex;
       align-items: center;
-      gap: var(--space-lg);
+      gap: 12px;
       width: 100%;
       max-width: 260px;
-      margin-bottom: var(--space-2xl);
+      margin-bottom: 20px;
     }
 
-    .divider__line {
-      flex: 1;
-      height: 1px;
-      background: var(--color-border);
-    }
+    .divider__line { flex: 1; height: 1px; background: var(--vscode-panel-border); }
+    .divider__text { font-size: 11px; color: var(--vscode-descriptionForeground); white-space: nowrap; }
 
-    .divider__text {
-      font-size: var(--font-caption-size);
-      color: var(--color-descriptionForeground);
-      white-space: nowrap;
-    }
-
-    /* ── Built-in Systems ── */
-    .systems {
-      width: 100%;
-      max-width: 260px;
-    }
-
-    .systems__list {
-      display: flex;
-      flex-direction: column;
-      gap: var(--space-xs);
-    }
+    /* ── System Items ── */
+    .systems { width: 100%; max-width: 260px; }
+    .systems__list { display: flex; flex-direction: column; gap: 2px; }
 
     .system-item {
       display: flex;
       align-items: center;
-      gap: var(--space-lg);
-      padding: var(--space-sm) var(--space-md);
-      border-radius: var(--radius-md);
+      gap: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background 0.1s ease;
+      transition: background 0.1s;
       border: none;
       background: transparent;
       width: 100%;
       text-align: left;
       font-family: inherit;
+      color: inherit;
     }
 
-    .system-item:hover {
-      background: var(--color-listHoverBackground);
-    }
+    .system-item:hover { background: var(--vscode-list-hoverBackground); }
+    .system-item:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: -1px; }
 
-    .system-item:focus-visible {
-      outline: 1px solid var(--color-focusBorder);
-      outline-offset: -1px;
-    }
-
-    .system-item__swatches {
-      display: flex;
-      gap: 3px;
-      flex-shrink: 0;
-    }
-
+    .system-item__swatches { display: flex; gap: 3px; flex-shrink: 0; }
     .system-item__swatch {
-      width: 10px;
-      height: 10px;
-      border-radius: var(--radius-sm);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      width: 10px; height: 10px; border-radius: 2px;
+      border: 1px solid rgba(128, 128, 128, 0.2);
     }
 
-    .system-item__info {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      min-width: 0;
-    }
+    .system-item__info { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+    .system-item__name { font-size: 12px; font-weight: 400; line-height: 1.3; }
+    .system-item__desc { font-size: 11px; color: var(--vscode-descriptionForeground); line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .system-item__name {
-      font-size: var(--font-small-size);
-      color: var(--color-primary);
-      font-weight: 400;
-      line-height: 1.3;
-    }
-
-    .system-item__desc {
-      font-size: var(--font-caption-size);
-      color: var(--color-descriptionForeground);
-      line-height: 1.3;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* ── Footer Links ── */
+    /* ── Footer ── */
     .footer {
-      margin-top: var(--space-3xl);
+      margin-top: 24px;
       display: flex;
       justify-content: center;
-      gap: var(--space-md);
+      gap: 8px;
       width: 100%;
       max-width: 260px;
     }
 
-    .footer__link {
-      font-size: var(--font-caption-size);
-      color: var(--color-linkForeground);
-      text-decoration: none;
-      cursor: pointer;
-      padding: var(--space-xs) 0;
-    }
-
-    .footer__link:hover {
-      text-decoration: underline;
-    }
-
-    .footer__link:focus-visible {
-      outline: 1px solid var(--color-focusBorder);
-      outline-offset: 2px;
-      border-radius: var(--radius-sm);
-    }
-
-    .footer__separator {
-      font-size: var(--font-caption-size);
-      color: var(--color-border);
-      line-height: 1.4;
-      padding: var(--space-xs) 0;
-    }
+    .footer__link { font-size: 11px; color: var(--vscode-textLink-foreground); text-decoration: none; cursor: pointer; padding: 2px 0; }
+    .footer__link:hover { text-decoration: underline; }
+    .footer__link:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: 2px; border-radius: 2px; }
+    .footer__separator { font-size: 11px; color: var(--vscode-panel-border); padding: 2px 0; }
   </style>
 </head>
 <body>
 
-  <!-- Empty State -->
   <div class="empty-state">
 
     <!-- Icon -->
     <div class="empty-state__icon">
       <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- Diamond shape with palette accent -->
-        <path d="M24 4L44 24L24 44L4 24L24 4Z" stroke="#858585" stroke-width="1.5" fill="none" opacity="0.3"/>
-        <path d="M24 10L38 24L24 38L10 24L24 10Z" stroke="#858585" stroke-width="1" fill="none" opacity="0.15"/>
-        <!-- Color dots inside -->
-        <circle cx="18" cy="22" r="3" fill="#0078D4" opacity="0.9"/>
-        <circle cx="26" cy="18" r="2.5" fill="#4EC9B0" opacity="0.8"/>
-        <circle cx="30" cy="26" r="2" fill="#CCA700" opacity="0.7"/>
-        <circle cx="22" cy="29" r="2.5" fill="#F14C4C" opacity="0.7"/>
-        <!-- Pen/brush stroke -->
-        <path d="M32 14L36 10" stroke="#CCCCCC" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
-        <path d="M36 10L38 8" stroke="#0078D4" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <path d="M24 4L44 24L24 44L4 24L24 4Z" stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.3"/>
+        <path d="M24 10L38 24L24 38L10 24L24 10Z" stroke="currentColor" stroke-width="1" fill="none" opacity="0.15"/>
+        <circle cx="18" cy="22" r="3" fill="var(--vscode-textLink-foreground)" opacity="0.9"/>
+        <circle cx="26" cy="18" r="2.5" fill="var(--vscode-testing-iconPassed)" opacity="0.8"/>
+        <circle cx="30" cy="26" r="2" fill="var(--vscode-editorWarning-foreground)" opacity="0.7"/>
+        <circle cx="22" cy="29" r="2.5" fill="var(--vscode-errorForeground)" opacity="0.7"/>
+        <path d="M32 14L36 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <path d="M36 10L38 8" stroke="var(--vscode-textLink-foreground)" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
       </svg>
     </div>
 
-    <!-- Title -->
     <h2 class="empty-state__title">No design project found</h2>
+    <p class="empty-state__description">Create a design system to start designing screens, generating production code, and previewing in the browser.</p>
 
-    <!-- Description -->
-    <p class="empty-state__description">
-      Create a design system to start designing screens, generating production code, and previewing in the browser.
-    </p>
-
-    <!-- Primary Actions -->
+    <!-- Buttons -->
     <div class="button-group">
       <button class="btn-primary" aria-label="Create Design System" data-cmd="openChat" data-value="Create a design system for this workspace. Ask me about my brand style, colors, and typography preferences.">
-        <svg viewBox="0 0 16 16" fill="currentColor">
-          <path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z"/>
-        </svg>
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z"/></svg>
         Create Design System
       </button>
 
       <button class="btn-secondary" aria-label="Import from Workspace" data-cmd="openChat" data-value="Scan this workspace and extract a design system from existing CSS files, config files, and theme settings.">
-        <svg viewBox="0 0 16 16" fill="currentColor">
-          <path d="M11.06 7.354L8 10.414l-3.06-3.06.706-.708L7.5 8.5V1h1v7.5l1.854-1.854.706.708zM3.5 13h9v-3h1v3.5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V10h1v3z"/>
-        </svg>
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.06 7.354L8 10.414l-3.06-3.06.706-.708L7.5 8.5V1h1v7.5l1.854-1.854.706.708zM3.5 13h9v-3h1v3.5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V10h1v3z"/></svg>
         Import from Workspace
       </button>
 
       <button class="btn-secondary" aria-label="Design from Screenshot" data-cmd="openChat" data-value="Create a design system from a screenshot or mockup image. I will attach the image.">
-        <svg viewBox="0 0 16 16" fill="currentColor">
-          <path d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm0 13H2V2h12v12zM4 11l2.5-3 1.5 2 2.5-3L13 11H4z"/>
-        </svg>
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm0 13H2V2h12v12zM4 11l2.5-3 1.5 2 2.5-3L13 11H4z"/></svg>
         Design from Screenshot
       </button>
 
       <button class="btn-secondary" aria-label="Design from URL" data-cmd="openChat" data-value="Extract a design system from a website URL. I will provide the URL.">
-        <svg viewBox="0 0 16 16" fill="currentColor">
-          <path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13A6 6 0 1 1 8 2a6 6 0 0 1 0 12zm-.5-3h1V7h-1v4zm0-5h1V5h-1v1z"/>
-        </svg>
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13A6 6 0 1 1 8 2a6 6 0 0 1 0 12zM7 4h2v1H7V4zm0 2h2v5H7V6z"/></svg>
         Design from URL
       </button>
     </div>
@@ -411,8 +234,6 @@
     <!-- Built-in Systems -->
     <div class="systems">
       <div class="systems__list">
-
-        <!-- Modern Minimal -->
         <button class="system-item" aria-label="Use Modern Minimal design system" data-cmd="initSystem" data-value="modern-minimal">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1A1C1E;"></div>
@@ -427,7 +248,6 @@
           </div>
         </button>
 
-        <!-- Corporate Clean -->
         <button class="system-item" aria-label="Use Corporate Clean design system" data-cmd="initSystem" data-value="corporate-clean">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1B2A4A;"></div>
@@ -442,7 +262,6 @@
           </div>
         </button>
 
-        <!-- Bold Creative -->
         <button class="system-item" aria-label="Use Bold Creative design system" data-cmd="initSystem" data-value="bold-creative">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1E1033;"></div>
@@ -456,11 +275,10 @@
             <span class="system-item__desc">Vibrant · Poppins · Playful</span>
           </div>
         </button>
-
       </div>
     </div>
 
-    <!-- Footer Links -->
+    <!-- Footer -->
     <div class="footer">
       <a class="footer__link" href="#" aria-label="Open documentation">Docs</a>
       <span class="footer__separator">·</span>
