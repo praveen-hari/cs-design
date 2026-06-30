@@ -23,7 +23,7 @@ export function openWelcomeTab(extensionUri: vscode.Uri): void {
   );
 
   // Handle messages from the welcome tab
-  panel.webview.onDidReceiveMessage((message) => {
+  panel.webview.onDidReceiveMessage((message: { command: string; system?: string }) => {
     switch (message.command) {
       case "openChat":
         vscode.commands.executeCommand("workbench.action.chat.open");

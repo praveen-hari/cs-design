@@ -19,24 +19,31 @@ export function getWebviewContent(
 
   let html = fs.readFileSync(htmlPath, "utf-8");
 
-  // Replace relative paths with webview URIs
-  const webviewUri = webview.asWebviewUri(
+  // Convert all relative paths to webview URIs
+  const webviewBaseUri = webview.asWebviewUri(
     vscode.Uri.joinPath(extensionUri, "webview")
   );
 
   // Replace href="../tokens.css" with webview URI
   html = html.replace(
     /href="\.\.\/tokens\.css"/g,
-    `href="${webviewUri}/tokens.css"`
+    `href="${webviewBaseUri}/tokens.css"`
   );
 
-  // Replace codicon CDN with local bundled version if available
-  const codiconUri = webview.asWebviewUri(
-    vscode.Uri.joinPath(extensionUri, "webview", "shared", "codicon.css")
+  // Replace href="shared/codicon.css" with webview URI
+  html = html.replace(
+    /href="shared\/codicon\.css"/g,
+    `href="${webviewBaseUri}/shared/codicon.css"`
+  );
+
+  // Fix codicon font path inside CSS — the @font-face src url needs to be absolute
+  // We inject a <style> override to point the font to the correct webview URI
+  const codiconFontUri = webview.asWebviewUri(
+    vscode.Uri.joinPath(extensionUri, "webview", "shared", "codicon.ttf")
   );
   html = html.replace(
-    /href="https:\/\/microsoft\.github\.io\/vscode-codicons\/dist\/codicon\.css"/g,
-    `href="${codiconUri}"`
+    "</head>",
+    `<style>@font-face { font-family: "codicon"; font-display: block; src: url("${codiconFontUri}") format("truetype"); }</style>\n</head>`
   );
 
   return html;

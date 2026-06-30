@@ -18,17 +18,17 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
-    "viewContainers": {
+    "viewsContainers": {
       "activitybar": [
         {
-          "id": "csDesign",
+          "id": "cs-design",
           "title": "CS Design",
           "icon": "media/icon.svg"
         }
       ]
     },
     "views": {
-      "csDesign": [
+      "cs-design": [
         {
           "id": "csDesign.explorer",
           "name": "CS Design",
@@ -105,6 +105,37 @@
         "icon": "$(refresh)"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "csDesign.newScreen",
+          "when": "view == csDesign.explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "csDesign.validate",
+          "when": "view == csDesign.explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "csDesign.refresh",
+          "when": "view == csDesign.explorer",
+          "group": "navigation"
+        },
+        {
+          "command": "csDesign.exportTokens",
+          "when": "view == csDesign.explorer"
+        },
+        {
+          "command": "csDesign.switchSystem",
+          "when": "view == csDesign.explorer"
+        },
+        {
+          "command": "csDesign.openWelcome",
+          "when": "view == csDesign.explorer"
+        }
+      ]
+    },
     "configuration": {
       "title": "CS Design",
       "properties": {
@@ -119,7 +150,18 @@
           "description": "Automatically validate the design system when DESIGN.md changes"
         }
       }
-    }
+    },
+    "chatSkills": [
+      {
+        "path": "./node_modules/@syncfusion/cs-design/plugin/skills/design-system/SKILL.md"
+      },
+      {
+        "path": "./node_modules/@syncfusion/cs-design/plugin/skills/design-screens/SKILL.md"
+      },
+      {
+        "path": "./node_modules/@syncfusion/cs-design/plugin/skills/syncfusion-components/SKILL.md"
+      }
+    ]
   },
   "dependencies": {
     "@syncfusion/cs-design": "file:.."
