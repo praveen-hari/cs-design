@@ -1,0 +1,138 @@
+{
+  "name": "cs-design",
+  "displayName": "CS Design",
+  "description": "Design systems, screens, and production code — all from your editor",
+  "version": "0.1.0",
+  "publisher": "syncfusion",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other",
+    "Visualization"
+  ],
+  "activationEvents": [
+    "workspaceContains:.designs/DESIGN.md",
+    "onView:csDesign.explorer"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewContainers": {
+      "activitybar": [
+        {
+          "id": "csDesign",
+          "title": "CS Design",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "csDesign": [
+        {
+          "id": "csDesign.explorer",
+          "name": "CS Design",
+          "type": "webview"
+        }
+      ]
+    },
+    "chatParticipants": [
+      {
+        "id": "cs-design.participant",
+        "name": "cs-design",
+        "fullName": "CS Design",
+        "description": "Design systems, screens, and production code",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "create",
+            "description": "Create a new design system"
+          },
+          {
+            "name": "screen",
+            "description": "Generate a UI screen"
+          },
+          {
+            "name": "scan",
+            "description": "Scan workspace for design tokens"
+          },
+          {
+            "name": "edit",
+            "description": "Edit the design system"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "csDesign.openWelcome",
+        "title": "CS Design: Welcome",
+        "icon": "$(home)"
+      },
+      {
+        "command": "csDesign.openTokenEditor",
+        "title": "CS Design: Open Design System",
+        "icon": "$(symbol-color)"
+      },
+      {
+        "command": "csDesign.validate",
+        "title": "CS Design: Validate",
+        "icon": "$(check)"
+      },
+      {
+        "command": "csDesign.exportTokens",
+        "title": "CS Design: Export Tokens",
+        "icon": "$(export)"
+      },
+      {
+        "command": "csDesign.previewScreen",
+        "title": "CS Design: Preview Screen",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "csDesign.newScreen",
+        "title": "CS Design: New Screen",
+        "icon": "$(add)"
+      },
+      {
+        "command": "csDesign.switchSystem",
+        "title": "CS Design: Switch Design System",
+        "icon": "$(arrow-swap)"
+      },
+      {
+        "command": "csDesign.refresh",
+        "title": "CS Design: Refresh",
+        "icon": "$(refresh)"
+      }
+    ],
+    "configuration": {
+      "title": "CS Design",
+      "properties": {
+        "csDesign.autoPreview": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically preview screens in the integrated browser when opened"
+        },
+        "csDesign.autoValidate": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically validate the design system when DESIGN.md changes"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "@syncfusion/cs-design": "file:.."
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.0"
+  },
+  "scripts": {
+    "build": "tsup",
+    "watch": "tsup --watch",
+    "package": "npx @vscode/vsce package",
+    "typecheck": "tsc --noEmit"
+  }
+}

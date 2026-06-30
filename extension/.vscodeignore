@@ -1,0 +1,8 @@
+src/**
+node_modules/**
+!node_modules/@syncfusion/cs-design/dist/**
+!node_modules/@syncfusion/cs-design/plugin/**
+tsconfig.json
+tsup.config.ts
+*.ts
+.gitignore
