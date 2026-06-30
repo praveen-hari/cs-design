@@ -119,13 +119,13 @@
     },
     "chatSkills": [
       {
-        "path": "./node_modules/@syncfusion/cs-design/plugin/skills/design-system/SKILL.md"
+        "path": "./skills/design-system/SKILL.md"
       },
       {
-        "path": "./node_modules/@syncfusion/cs-design/plugin/skills/design-screens/SKILL.md"
+        "path": "./skills/design-screens/SKILL.md"
       },
       {
-        "path": "./node_modules/@syncfusion/cs-design/plugin/skills/syncfusion-components/SKILL.md"
+        "path": "./skills/syncfusion-components/SKILL.md"
       }
     ],
     "languageModelTools": [
