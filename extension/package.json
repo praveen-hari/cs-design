@@ -87,12 +87,12 @@
       "view/title": [
         {
           "command": "csDesign.newScreen",
-          "when": "view == csDesign.explorer",
+          "when": "view == csDesign.explorer && csDesign.projectExists",
           "group": "navigation"
         },
         {
           "command": "csDesign.validate",
-          "when": "view == csDesign.explorer",
+          "when": "view == csDesign.explorer && csDesign.projectExists",
           "group": "navigation"
         },
         {
