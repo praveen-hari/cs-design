@@ -203,22 +203,22 @@
 
     <!-- Buttons -->
     <div class="button-group">
-      <button class="btn-primary" aria-label="Create Design System" data-cmd="openChat" data-value="Create a DESIGN.md design system for this workspace. Ask me about my brand style, colors, typography, and spacing preferences.">
+      <button class="btn-primary" aria-label="Create Design System" title="Describe your brand and the agent creates a design system" data-cmd="openChat" data-value="Create a DESIGN.md design system for this workspace. Ask me about my brand style, colors, typography, and spacing preferences.">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z"/></svg>
         Create Design System
       </button>
 
-      <button class="btn-secondary" aria-label="Import from Workspace" data-cmd="openChat" data-value="Extract a DESIGN.md design system from existing CSS files, config files, and theme settings in this workspace.">
+      <button class="btn-secondary" aria-label="Import from Workspace" title="Scan existing CSS and config files to extract design tokens" data-cmd="openChat" data-value="Extract a DESIGN.md design system from existing CSS files, config files, and theme settings in this workspace.">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M11.06 7.354L8 10.414l-3.06-3.06.706-.708L7.5 8.5V1h1v7.5l1.854-1.854.706.708zM3.5 13h9v-3h1v3.5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V10h1v3z"/></svg>
         Import from Workspace
       </button>
 
-      <button class="btn-secondary" aria-label="Design from Screenshot" data-cmd="openChat" data-value="Create a DESIGN.md design system from a screenshot or mockup image. Extract colors, typography, and spacing from the attached image.">
+      <button class="btn-secondary" aria-label="Design from Screenshot" title="Upload a mockup and the agent extracts colors, fonts, and spacing" data-cmd="openChat" data-value="Create a DESIGN.md design system from a screenshot or mockup image. Extract colors, typography, and spacing from the attached image.">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M14 1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1zm0 13H2V2h12v12zM4 11l2.5-3 1.5 2 2.5-3L13 11H4z"/></svg>
         Design from Screenshot
       </button>
 
-      <button class="btn-secondary" aria-label="Design from URL" data-cmd="openChat" data-value="Extract a DESIGN.md design system from a website URL. Analyze the site's colors, typography, and spacing.">
+      <button class="btn-secondary" aria-label="Design from URL" title="Paste a URL and the agent extracts the site's design tokens" data-cmd="openChat" data-value="Extract a DESIGN.md design system from a website URL. Analyze the site's colors, typography, and spacing.">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 13A6 6 0 1 1 8 2a6 6 0 0 1 0 12zM7 4h2v1H7V4zm0 2h2v5H7V6z"/></svg>
         Design from URL
       </button>
@@ -234,7 +234,7 @@
     <!-- Built-in Systems -->
     <div class="systems">
       <div class="systems__list">
-        <button class="system-item" aria-label="Use Modern Minimal design system" data-cmd="initSystem" data-value="modern-minimal">
+        <button class="system-item" aria-label="Use Modern Minimal design system" title="Initialize project with Modern Minimal — clean SaaS aesthetic" data-cmd="initSystem" data-value="modern-minimal">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1A1C1E;"></div>
             <div class="system-item__swatch" style="background: #6C7278;"></div>
@@ -248,7 +248,7 @@
           </div>
         </button>
 
-        <button class="system-item" aria-label="Use Corporate Clean design system" data-cmd="initSystem" data-value="corporate-clean">
+        <button class="system-item" aria-label="Use Corporate Clean design system" title="Initialize project with Corporate Clean — professional enterprise look" data-cmd="initSystem" data-value="corporate-clean">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1B2A4A;"></div>
             <div class="system-item__swatch" style="background: #64748B;"></div>
@@ -262,7 +262,7 @@
           </div>
         </button>
 
-        <button class="system-item" aria-label="Use Bold Creative design system" data-cmd="initSystem" data-value="bold-creative">
+        <button class="system-item" aria-label="Use Bold Creative design system" title="Initialize project with Bold Creative — vibrant and playful" data-cmd="initSystem" data-value="bold-creative">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1E1033;"></div>
             <div class="system-item__swatch" style="background: #7C6F9B;"></div>
