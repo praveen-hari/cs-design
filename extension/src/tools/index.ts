@@ -48,7 +48,7 @@ export function registerTools(context: vscode.ExtensionContext): void {
           const sdk = await getSDK();
           const systemId = system || "modern-minimal";
           const content = sdk.getBuiltinSystemContent(systemId);
-          if (!content.ok) {
+          if (!content) {
             return new vscode.LanguageModelToolResult([
               new vscode.LanguageModelTextPart(`Unknown system: ${systemId}. Available: modern-minimal, corporate-clean, bold-creative`)
             ]);
@@ -61,7 +61,7 @@ export function registerTools(context: vscode.ExtensionContext): void {
           fs.mkdirSync(screensDir, { recursive: true });
 
           // Write DESIGN.md
-          fs.writeFileSync(path.join(ws, PATHS.designMd), content.data, "utf-8");
+          fs.writeFileSync(path.join(ws, PATHS.designMd), content, "utf-8");
 
           // Write project.json
           const projectJson = {
@@ -73,7 +73,7 @@ export function registerTools(context: vscode.ExtensionContext): void {
           fs.writeFileSync(path.join(ws, PATHS.projectJson), JSON.stringify(projectJson, null, 2), "utf-8");
 
           // Export tokens.css
-          const exportResult = sdk.exportTokens(content.data, "css");
+          const exportResult = sdk.exportTokens(content, "css");
           if (exportResult.ok) {
             fs.writeFileSync(path.join(ws, PATHS.tokensCss), exportResult.data.output, "utf-8");
           }
