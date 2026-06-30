@@ -2,7 +2,7 @@ import * as vscode from "vscode";
 import { SidebarViewProvider } from "./providers/sidebar-view.js";
 
 import { openTokenEditor } from "./providers/token-editor.js";
-import { CliBridge } from "./services/cli-bridge.js";
+import { registerTools } from "./tools/index.js";
 import { createDesignWatcher } from "./services/file-watcher.js";
 import { previewScreen, openDesignMd } from "./services/preview.js";
 import { getDesignProject } from "./services/design-project.js";
@@ -36,10 +36,8 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(watcher);
   }
 
-  // ── CLI Bridge (uses bundled CLI from node_modules) ──
-  const cli = workspaceFolder
-    ? new CliBridge(workspaceFolder.uri.fsPath, extensionUri.fsPath)
-    : undefined;
+  // ── Register Language Model Tools ──
+  registerTools(context);
 
   // ── Status Bar ──
   const statusBarItem = vscode.window.createStatusBarItem(
@@ -75,45 +73,47 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  // Validate
+  // Validate — invokes the registered tool directly
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.validate, async () => {
-      if (!cli) return;
-      const result = await cli.validate();
-      if (result.success) {
-        vscode.window.showInformationMessage("✅ Design system is valid");
-        statusBarItem.text = "$(pass-filled) CS Design";
-        statusBarItem.backgroundColor = undefined;
-      } else {
-        vscode.window.showWarningMessage("⚠️ Validation issues found");
-        statusBarItem.text = "$(warning) CS Design";
-        statusBarItem.backgroundColor = new vscode.ThemeColor(
-          "statusBarItem.warningBackground"
-        );
+      try {
+        const result = await vscode.lm.invokeTool("cs-design_validate", { input: {} });
+        const text = (result as any).content?.[0]?.value ?? "Validation complete";
+        if (text.includes("✅")) {
+          vscode.window.showInformationMessage(text.split("\n")[0]);
+          statusBarItem.text = "$(pass-filled) CS Design";
+          statusBarItem.backgroundColor = undefined;
+        } else {
+          vscode.window.showWarningMessage(text.split("\n")[0]);
+          statusBarItem.text = "$(warning) CS Design";
+          statusBarItem.backgroundColor = new vscode.ThemeColor("statusBarItem.warningBackground");
+        }
+      } catch {
+        vscode.window.showErrorMessage("Validation failed");
       }
     })
   );
 
-  // Export Tokens
+  // Export Tokens — invokes the registered tool
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.exportTokens, async () => {
-      if (!cli) return;
       const format = await vscode.window.showQuickPick(
         [
-          { label: "CSS", description: "CSS custom properties", value: "css" },
-          { label: "Tailwind v3", description: "theme.extend config", value: "tailwind" },
-          { label: "Tailwind v4", description: "CSS @theme block", value: "css-tailwind" },
-          { label: "JSON", description: "Flat key-value pairs", value: "json" },
-          { label: "DTCG", description: "W3C Design Tokens format", value: "dtcg" },
+          { label: "CSS", description: "CSS custom properties", detail: "css" },
+          { label: "Tailwind v3", description: "theme.extend config", detail: "tailwind" },
+          { label: "Tailwind v4", description: "CSS @theme block", detail: "css-tailwind" },
+          { label: "JSON", description: "Flat key-value pairs", detail: "json" },
+          { label: "DTCG", description: "W3C Design Tokens format", detail: "dtcg" },
         ],
         { placeHolder: "Choose export format" }
       );
       if (!format) return;
-      const result = await cli.exportTokens(format.value as any);
-      if (result.success) {
-        vscode.window.showInformationMessage(`✅ Tokens exported as ${format.label}`);
-      } else {
-        vscode.window.showErrorMessage(`❌ Export failed: ${result.output}`);
+      try {
+        const result = await vscode.lm.invokeTool("cs-design_exportTokens", { input: { format: format.detail } });
+        const text = (result as any).content?.[0]?.value ?? "Export complete";
+        vscode.window.showInformationMessage(text);
+      } catch {
+        vscode.window.showErrorMessage("Export failed");
       }
     })
   );
@@ -148,10 +148,9 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  // Switch Design System
+  // Switch Design System — invokes the registered tool
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.switchSystem, async (system?: string) => {
-      if (!cli) return;
       if (!system) {
         system = await vscode.window.showQuickPick(
           ["modern-minimal", "corporate-clean", "bold-creative"],
@@ -160,11 +159,13 @@ export function activate(context: vscode.ExtensionContext) {
       }
       if (!system) return;
       const name = workspaceFolder?.name || "My Project";
-      const result = await cli.init(name, system);
-      if (result.success) {
-        await cli.exportTokens("css");
-        vscode.window.showInformationMessage(`✅ Switched to ${system}`);
+      try {
+        const result = await vscode.lm.invokeTool("cs-design_init", { input: { name, system } });
+        const text = (result as any).content?.[0]?.value ?? "Done";
+        vscode.window.showInformationMessage(text.split("\n")[0]);
         sidebarProvider.refresh();
+      } catch {
+        vscode.window.showErrorMessage("Failed to switch design system");
       }
     })
   );

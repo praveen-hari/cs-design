@@ -127,6 +127,87 @@
       {
         "path": "./node_modules/@syncfusion/cs-design/plugin/skills/syncfusion-components/SKILL.md"
       }
+    ],
+    "languageModelTools": [
+      {
+        "name": "cs-design_init",
+        "displayName": "Initialize Design Project",
+        "modelDescription": "Creates a new .designs/ folder with DESIGN.md, project.json, tokens.css, and screens/ directory. Use when the user wants to create or initialize a new design system project.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cs-design-init",
+        "icon": "$(add)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "description": "Project name" },
+            "system": { "type": "string", "description": "Built-in system ID: modern-minimal, corporate-clean, or bold-creative. Defaults to modern-minimal." }
+          },
+          "required": ["name"]
+        }
+      },
+      {
+        "name": "cs-design_validate",
+        "displayName": "Validate Design System",
+        "modelDescription": "Validates the .designs/DESIGN.md file for structural correctness, YAML schema compliance, and reports errors and warnings. Use after creating or editing a design system.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cs-design-validate",
+        "icon": "$(check)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "cs-design_exportTokens",
+        "displayName": "Export Design Tokens",
+        "modelDescription": "Exports design tokens from .designs/DESIGN.md to a file. Supports formats: css (CSS custom properties), tailwind (Tailwind v3 config), json (flat key-value), css-tailwind (Tailwind v4 CSS @theme), dtcg (W3C Design Tokens). Writes the output file to .designs/.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cs-design-export",
+        "icon": "$(export)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "format": { "type": "string", "enum": ["css", "tailwind", "json", "css-tailwind", "dtcg"], "description": "Export format" }
+          },
+          "required": ["format"]
+        }
+      },
+      {
+        "name": "cs-design_lint",
+        "displayName": "Lint Design System",
+        "modelDescription": "Deep lints the .designs/DESIGN.md file for WCAG contrast failures, broken token references, orphaned tokens, missing primary color, section order issues, and unknown keys. Use to check design quality.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cs-design-lint",
+        "icon": "$(warning)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "cs-design_listSystems",
+        "displayName": "List Built-in Design Systems",
+        "modelDescription": "Lists all available built-in design systems with their names and descriptions. Use when the user asks what design systems are available.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cs-design-systems",
+        "icon": "$(library)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "cs-design_getSpec",
+        "displayName": "Get DESIGN.md Specification",
+        "modelDescription": "Returns the full DESIGN.md format specification including YAML schema, required sections, token types, and validation rules. Use before creating or editing a DESIGN.md file to understand the correct format.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cs-design-spec",
+        "icon": "$(book)",
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      }
     ]
   },
   "dependencies": {
