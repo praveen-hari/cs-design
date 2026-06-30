@@ -99,18 +99,6 @@
           "command": "csDesign.refresh",
           "when": "view == csDesign.explorer",
           "group": "navigation"
-        },
-        {
-          "command": "csDesign.exportTokens",
-          "when": "view == csDesign.explorer"
-        },
-        {
-          "command": "csDesign.switchSystem",
-          "when": "view == csDesign.explorer"
-        },
-        {
-          "command": "csDesign.openWelcome",
-          "when": "view == csDesign.explorer"
         }
       ]
     },
