@@ -1,34 +1,31 @@
-import * as vscode from "vscode";
 import { exec } from "child_process";
 import { promisify } from "util";
+import * as path from "path";
 
 const execAsync = promisify(exec);
 
 /**
  * Bridge to the cs-design CLI.
- * Runs CLI commands in the workspace folder and returns results.
+ * Uses the bundled CLI from node_modules — no global installation needed.
  */
 export class CliBridge {
-  constructor(private workspacePath: string) {}
+  private cliBin: string;
 
-  /**
-   * Check if cs-design CLI is available.
-   */
-  async isInstalled(): Promise<boolean> {
-    try {
-      await execAsync("cs-design --version", { cwd: this.workspacePath });
-      return true;
-    } catch {
-      return false;
-    }
+  constructor(private workspacePath: string, extensionPath: string) {
+    // Use the bundled CLI from node_modules
+    this.cliBin = path.join(
+      extensionPath,
+      "node_modules",
+      "@syncfusion",
+      "cs-design",
+      "dist",
+      "cli.js"
+    );
   }
 
-  /**
-   * Run cs-design validate.
-   */
-  async validate(): Promise<{ success: boolean; output: string }> {
+  private async run(args: string): Promise<{ success: boolean; output: string }> {
     try {
-      const { stdout } = await execAsync("cs-design validate", {
+      const { stdout } = await execAsync(`node "${this.cliBin}" ${args}`, {
         cwd: this.workspacePath,
       });
       return { success: true, output: stdout };
@@ -37,53 +34,25 @@ export class CliBridge {
     }
   }
 
-  /**
-   * Run cs-design export tokens.
-   */
+  async validate(): Promise<{ success: boolean; output: string }> {
+    return this.run("validate");
+  }
+
   async exportTokens(
     format: "css" | "tailwind" | "json" | "css-tailwind" | "dtcg"
   ): Promise<{ success: boolean; output: string }> {
-    try {
-      const { stdout } = await execAsync(
-        `cs-design export tokens --format ${format}`,
-        { cwd: this.workspacePath }
-      );
-      return { success: true, output: stdout };
-    } catch (error: any) {
-      return { success: false, output: error.stdout || error.message };
-    }
+    return this.run(`export tokens --format ${format}`);
   }
 
-  /**
-   * Run cs-design init.
-   */
   async init(
     name: string,
     system?: string
   ): Promise<{ success: boolean; output: string }> {
-    try {
-      const systemFlag = system ? ` --system ${system}` : "";
-      const { stdout } = await execAsync(
-        `cs-design init "${name}"${systemFlag}`,
-        { cwd: this.workspacePath }
-      );
-      return { success: true, output: stdout };
-    } catch (error: any) {
-      return { success: false, output: error.stdout || error.message };
-    }
+    const systemFlag = system ? ` --system ${system}` : "";
+    return this.run(`init "${name}"${systemFlag}`);
   }
 
-  /**
-   * Run cs-design apply.
-   */
   async apply(): Promise<{ success: boolean; output: string }> {
-    try {
-      const { stdout } = await execAsync("cs-design apply", {
-        cwd: this.workspacePath,
-      });
-      return { success: true, output: stdout };
-    } catch (error: any) {
-      return { success: false, output: error.stdout || error.message };
-    }
+    return this.run("apply");
   }
 }

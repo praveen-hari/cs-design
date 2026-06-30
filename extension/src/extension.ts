@@ -36,9 +36,9 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(watcher);
   }
 
-  // ── CLI Bridge ──
+  // ── CLI Bridge (uses bundled CLI from node_modules) ──
   const cli = workspaceFolder
-    ? new CliBridge(workspaceFolder.uri.fsPath)
+    ? new CliBridge(workspaceFolder.uri.fsPath, extensionUri.fsPath)
     : undefined;
 
   // ── Status Bar ──
