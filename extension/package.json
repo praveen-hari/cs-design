@@ -75,6 +75,11 @@
         "icon": "$(symbol-color)"
       },
       {
+        "command": "csDesign.openDesignMd",
+        "title": "CS Design: Open DESIGN.md",
+        "icon": "$(file)"
+      },
+      {
         "command": "csDesign.validate",
         "title": "CS Design: Validate",
         "icon": "$(check)"

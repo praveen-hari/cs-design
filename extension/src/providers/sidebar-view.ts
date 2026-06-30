@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { getDesignProject, countTokens, DesignProject } from "../services/design-project.js";
-import { getWebviewContent } from "../utils/webview-utils.js";
+import { getWebviewContent, getNonce } from "../utils/webview-utils.js";
 import { CMD, CTX } from "../utils/constants.js";
 
 /**
@@ -54,7 +54,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           vscode.commands.executeCommand(CMD.newScreen);
           break;
         case "openDesignMd":
-          vscode.commands.executeCommand(CMD.openTokenEditor);
+          vscode.commands.executeCommand(CMD.openDesignMd);
           break;
       }
     });
@@ -132,20 +132,24 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
         ? `<div class="empty-hint">No screens yet. Ask the agent to design one.</div>`
         : "";
 
+    const nonce = getNonce();
+    const cspSource = webview.cspSource;
+
     return /* html */ `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline'; font-src ${cspSource}; script-src 'nonce-${nonce}';" />
   <link rel="stylesheet" href="${codiconCssUri}" />
   <style>
     @font-face { font-family: "codicon"; font-display: block; src: url("${codiconFontUri}") format("truetype"); }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--vscode-sideBar-background, #252526);
-      color: var(--vscode-foreground, #CCCCCC);
-      font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif);
-      font-size: var(--vscode-font-size, 13px);
+      background: var(--vscode-sideBar-background);
+      color: var(--vscode-foreground);
+      font-family: var(--vscode-font-family);
+      font-size: var(--vscode-font-size);
       line-height: 1.4;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -155,16 +159,16 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     .validation-bar {
       display: flex; align-items: center; gap: 8px;
       padding: 4px 12px;
-      background: var(--vscode-editor-background, #1E1E1E);
-      border-bottom: 1px solid var(--vscode-panel-border, #3C3C3C);
+      background: var(--vscode-editor-background);
+      border-bottom: 1px solid var(--vscode-panel-border);
       font-size: 11px;
     }
-    .validation-bar__status { display: flex; align-items: center; gap: 5px; color: var(--vscode-testing-iconPassed, #4EC9B0); }
+    .validation-bar__status { display: flex; align-items: center; gap: 5px; color: var(--vscode-testing-iconPassed); }
     .validation-bar__status .codicon { font-size: 14px; }
-    .validation-bar__system { margin-left: auto; color: var(--vscode-descriptionForeground, #858585); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .validation-bar__system { margin-left: auto; color: var(--vscode-descriptionForeground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* Section */
-    .section { border-bottom: 1px solid var(--vscode-panel-border, #3C3C3C); }
+    .section { border-bottom: 1px solid var(--vscode-panel-border); }
     .section:last-child { border-bottom: none; }
 
     .section-header {
@@ -172,11 +176,11 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
       height: 22px; padding: 0 10px 0 0; cursor: pointer; user-select: none;
       transition: background 0.1s;
     }
-    .section-header:hover { background: var(--vscode-list-hoverBackground, #2A2D2E); }
+    .section-header:hover { background: var(--vscode-list-hoverBackground); }
     .section-header__left { display: flex; align-items: center; gap: 4px; min-width: 0; flex: 1; }
     .section-header__chevron { width: 20px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
     .section-header__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
-    .section-header__badge { font-size: 10px; font-weight: 600; color: #fff; background: var(--vscode-badge-background, #4D4D4D); border-radius: 9999px; padding: 0 5px; height: 16px; line-height: 16px; flex-shrink: 0; margin-left: 6px; }
+    .section-header__badge { font-size: 10px; font-weight: 600; color: var(--vscode-badge-foreground); background: var(--vscode-badge-background); border-radius: 9999px; padding: 0 5px; height: 16px; line-height: 16px; flex-shrink: 0; margin-left: 6px; }
 
     /* Tree Items */
     .tree { padding: 2px 0; }
@@ -184,11 +188,11 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
       display: flex; align-items: center; height: 22px; padding: 0 10px 0 20px;
       cursor: pointer; user-select: none; transition: background 0.1s; gap: 6px;
     }
-    .tree-item:hover { background: var(--vscode-list-hoverBackground, #2A2D2E); }
-    .tree-item:focus-visible { outline: 1px solid var(--vscode-focusBorder, #007FD4); outline-offset: -1px; }
+    .tree-item:hover { background: var(--vscode-list-hoverBackground); }
+    .tree-item:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: -1px; }
     .tree-item__icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
-    .tree-item__label { font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
-    .tree-item__detail { font-size: 11px; color: var(--vscode-descriptionForeground, #858585); flex-shrink: 0; margin-left: auto; }
+    .tree-item__label { font-size: var(--vscode-font-size); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+    .tree-item__detail { font-size: 11px; color: var(--vscode-descriptionForeground); flex-shrink: 0; margin-left: auto; }
     .tree-item__actions { display: none; gap: 2px; flex-shrink: 0; margin-left: auto; }
     .tree-item:hover .tree-item__actions { display: flex; }
     .tree-item:hover .tree-item__detail--hide { display: none; }
@@ -196,15 +200,15 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     .icon-btn {
       display: flex; align-items: center; justify-content: center;
       width: 18px; height: 18px; border: none; background: transparent;
-      color: var(--vscode-foreground, #CCCCCC); border-radius: 2px; cursor: pointer; opacity: 0.7; font-size: 14px;
+      color: var(--vscode-foreground); border-radius: 2px; cursor: pointer; opacity: 0.7; font-size: 14px;
     }
-    .icon-btn:hover { background: var(--vscode-list-hoverBackground, #2A2D2E); opacity: 1; }
+    .icon-btn:hover { background: var(--vscode-list-hoverBackground); opacity: 1; }
 
-    .icon--accent { color: var(--vscode-textLink-foreground, #0078D4); }
-    .icon--warning { color: var(--vscode-editorWarning-foreground, #CCA700); }
-    .icon--secondary { color: var(--vscode-descriptionForeground, #858585); }
+    .icon--accent { color: var(--vscode-textLink-foreground); }
+    .icon--warning { color: var(--vscode-editorWarning-foreground); }
+    .icon--secondary { color: var(--vscode-descriptionForeground); }
 
-    .empty-hint { padding: 6px 20px; font-size: 11px; color: var(--vscode-descriptionForeground, #858585); font-style: italic; }
+    .empty-hint { padding: 6px 20px; font-size: 11px; color: var(--vscode-descriptionForeground); font-style: italic; }
   </style>
 </head>
 <body>
@@ -308,7 +312,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     </div>
   </div>
 
-  <script>
+  <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
     function send(command, value) {
       const msg = { command };

@@ -66,6 +66,15 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
+  // Open DESIGN.md in editor
+  context.subscriptions.push(
+    vscode.commands.registerCommand(CMD.openDesignMd, () => {
+      if (workspaceFolder) {
+        openDesignMd(workspaceFolder);
+      }
+    })
+  );
+
   // Validate
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.validate, async () => {

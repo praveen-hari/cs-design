@@ -5,6 +5,7 @@ export const VIEW_ID = "csDesign.explorer";
 export const CMD = {
   openWelcome: "csDesign.openWelcome",
   openTokenEditor: "csDesign.openTokenEditor",
+  openDesignMd: "csDesign.openDesignMd",
   validate: "csDesign.validate",
   exportTokens: "csDesign.exportTokens",
   previewScreen: "csDesign.previewScreen",

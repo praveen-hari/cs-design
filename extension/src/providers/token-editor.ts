@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getWebviewContent } from "../utils/webview-utils.js";
+import { getWebviewContent, getNonce } from "../utils/webview-utils.js";
 
 /**
  * Opens the Token Editor as a webview panel in the editor area.
@@ -10,11 +10,10 @@ export function openTokenEditor(
   scrollToSection?: string
 ): void {
   // Check if panel already exists — reuse it
-  const existingPanel = tokenEditorPanel;
-  if (existingPanel) {
-    existingPanel.reveal(vscode.ViewColumn.One);
+  if (tokenEditorPanel) {
+    tokenEditorPanel.reveal(vscode.ViewColumn.One);
     if (scrollToSection) {
-      existingPanel.webview.postMessage({
+      tokenEditorPanel.webview.postMessage({
         command: "scrollTo",
         section: scrollToSection,
       });
@@ -35,21 +34,39 @@ export function openTokenEditor(
 
   tokenEditorPanel = panel;
 
-  panel.webview.html = getWebviewContent(
+  // Get the base HTML and inject scroll-to script
+  let html = getWebviewContent(
     extensionUri,
     panel.webview,
     "token-editor.html"
   );
 
+  // Inject message handler script for scrollTo
+  const scrollScript = `
+<script>
+  window.addEventListener('message', event => {
+    const message = event.data;
+    if (message.command === 'scrollTo' && message.section) {
+      const el = document.getElementById(message.section);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  });
+</script>`;
+
+  html = html.replace("</body>", `${scrollScript}\n</body>`);
+
+  panel.webview.html = html;
+
   // Scroll to section if specified
   if (scrollToSection) {
-    // Small delay to let the webview load
     setTimeout(() => {
       panel.webview.postMessage({
         command: "scrollTo",
         section: scrollToSection,
       });
-    }, 300);
+    }, 500);
   }
 
   panel.onDidDispose(() => {
