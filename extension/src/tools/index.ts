@@ -75,7 +75,7 @@ export function registerTools(context: vscode.ExtensionContext): void {
           // Export tokens.css
           const exportResult = sdk.exportTokens(content, "css");
           if (exportResult.ok) {
-            fs.writeFileSync(path.join(ws, PATHS.tokensCss), exportResult.data.output, "utf-8");
+            fs.writeFileSync(path.join(ws, PATHS.tokensCss), exportResult.data.content, "utf-8");
           }
 
           return new vscode.LanguageModelToolResult([
@@ -151,8 +151,9 @@ export function registerTools(context: vscode.ExtensionContext): void {
           const sdk = await getSDK();
           const result = sdk.exportTokens(content, format);
           if (result.ok) {
-            const outputPath = format === "css" ? PATHS.tokensCss : `.designs/tokens.${format}`;
-            fs.writeFileSync(path.join(ws, outputPath), result.data.output, "utf-8");
+            const ext = result.data.extension || format;
+            const outputPath = format === "css" ? PATHS.tokensCss : `.designs/tokens.${ext}`;
+            fs.writeFileSync(path.join(ws, outputPath), result.data.content, "utf-8");
             return new vscode.LanguageModelToolResult([
               new vscode.LanguageModelTextPart(`✅ Tokens exported as ${format} to ${outputPath}`)
             ]);
