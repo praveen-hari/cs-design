@@ -342,19 +342,6 @@
 </head>
 <body>
 
-  <!-- View Header -->
-  <div class="view-header">
-    <span class="view-header__title">CS Design</span>
-    <div class="view-header__actions">
-      <button class="view-header__action" aria-label="Refresh" title="Refresh">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M5.563 2.516A5.001 5.001 0 0 1 13 8h-1.5l2.5 3 2.5-3H15a7.002 7.002 0 0 0-9.437-6.484l.001 1zM10.437 13.484A5.001 5.001 0 0 1 3 8h1.5L2 5 -.5 8H1a7.002 7.002 0 0 0 9.437 6.484v-1z"/></svg>
-      </button>
-      <button class="view-header__action" aria-label="More Actions" title="More Actions">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="3" r="1.5"/><circle cx="8" cy="8" r="1.5"/><circle cx="8" cy="13" r="1.5"/></svg>
-      </button>
-    </div>
-  </div>
-
   <!-- Empty State -->
   <div class="empty-state">
 
@@ -385,14 +372,14 @@
 
     <!-- Primary Actions -->
     <div class="button-group">
-      <button class="btn-primary" aria-label="Create Design System">
+      <button class="btn-primary" aria-label="Create Design System" onclick="send('openChat')">
         <svg viewBox="0 0 16 16" fill="currentColor">
           <path d="M14 7v1H8v6H7V8H1V7h6V1h1v6h6z"/>
         </svg>
         Create Design System
       </button>
 
-      <button class="btn-secondary" aria-label="Import from Workspace">
+      <button class="btn-secondary" aria-label="Import from Workspace" onclick="send('openChat')">
         <svg viewBox="0 0 16 16" fill="currentColor">
           <path d="M11.06 7.354L8 10.414l-3.06-3.06.706-.708L7.5 8.5V1h1v7.5l1.854-1.854.706.708zM3.5 13h9v-3h1v3.5a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V10h1v3z"/>
         </svg>
@@ -412,7 +399,7 @@
       <div class="systems__list">
 
         <!-- Modern Minimal -->
-        <button class="system-item" aria-label="Use Modern Minimal design system">
+        <button class="system-item" aria-label="Use Modern Minimal design system" onclick="send('initSystem','modern-minimal')">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1A1C1E;"></div>
             <div class="system-item__swatch" style="background: #6C7278;"></div>
@@ -427,7 +414,7 @@
         </button>
 
         <!-- Corporate Clean -->
-        <button class="system-item" aria-label="Use Corporate Clean design system">
+        <button class="system-item" aria-label="Use Corporate Clean design system" onclick="send('initSystem','corporate-clean')">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1B2A4A;"></div>
             <div class="system-item__swatch" style="background: #64748B;"></div>
@@ -442,7 +429,7 @@
         </button>
 
         <!-- Bold Creative -->
-        <button class="system-item" aria-label="Use Bold Creative design system">
+        <button class="system-item" aria-label="Use Bold Creative design system" onclick="send('initSystem','bold-creative')">
           <div class="system-item__swatches">
             <div class="system-item__swatch" style="background: #1E1033;"></div>
             <div class="system-item__swatch" style="background: #7C6F9B;"></div>
@@ -469,6 +456,15 @@
     </div>
 
   </div>
+
+  <script>
+    const vscode = acquireVsCodeApi();
+    function send(command, value) {
+      const msg = { command };
+      if (command === 'initSystem') msg.system = value;
+      vscode.postMessage(msg);
+    }
+  </script>
 
 </body>
 </html>
