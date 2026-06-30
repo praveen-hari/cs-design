@@ -124,12 +124,9 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     const screenItems = (project.screens ?? [])
       .map(
         (s) => `
-        <div class="tree-item" role="button" tabindex="0" onclick="send('previewScreen','${s}')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="previewScreen" data-value="${s}">
           <div class="tree-item__icon icon--warning"><i class="codicon codicon-browser"></i></div>
           <span class="tree-item__label">${s}</span>
-          <div class="tree-item__actions">
-            <button class="icon-btn" title="Preview in Browser" onclick="event.stopPropagation(); send('previewScreen','${s}')"><i class="codicon codicon-open-preview"></i></button>
-          </div>
         </div>`
       )
       .join("\n");
@@ -238,35 +235,30 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     </div>
     <div class="section-body">
       <div class="tree">
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openTokenEditor','colors')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="colors">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-symbol-color"></i></div>
           <span class="tree-item__label">Colors</span>
           <span class="tree-item__detail tree-item__detail--hide">${colorCount}</span>
-          <div class="tree-item__actions"><button class="icon-btn" onclick="event.stopPropagation(); send('openTokenEditor','colors')"><i class="codicon codicon-go-to-file"></i></button></div>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openTokenEditor','typography')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="typography">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-text-size"></i></div>
           <span class="tree-item__label">Typography</span>
           <span class="tree-item__detail tree-item__detail--hide">${typographyCount}</span>
-          <div class="tree-item__actions"><button class="icon-btn" onclick="event.stopPropagation(); send('openTokenEditor','typography')"><i class="codicon codicon-go-to-file"></i></button></div>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openTokenEditor','spacing')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="spacing">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-symbol-ruler"></i></div>
           <span class="tree-item__label">Spacing</span>
           <span class="tree-item__detail tree-item__detail--hide">${spacingCount}</span>
-          <div class="tree-item__actions"><button class="icon-btn" onclick="event.stopPropagation(); send('openTokenEditor','spacing')"><i class="codicon codicon-go-to-file"></i></button></div>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openTokenEditor','rounded')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="rounded">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-primitive-square"></i></div>
           <span class="tree-item__label">Rounded</span>
           <span class="tree-item__detail tree-item__detail--hide">${roundedCount}</span>
-          <div class="tree-item__actions"><button class="icon-btn" onclick="event.stopPropagation(); send('openTokenEditor','rounded')"><i class="codicon codicon-go-to-file"></i></button></div>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openTokenEditor','components')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="components">
           <div class="tree-item__icon icon--accent"><i class="codicon codicon-symbol-class"></i></div>
           <span class="tree-item__label">Components</span>
           <span class="tree-item__detail tree-item__detail--hide">${componentCount}</span>
-          <div class="tree-item__actions"><button class="icon-btn" onclick="event.stopPropagation(); send('openTokenEditor','components')"><i class="codicon codicon-go-to-file"></i></button></div>
         </div>
       </div>
     </div>
@@ -299,19 +291,19 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     </div>
     <div class="section-body">
       <div class="tree">
-        <div class="tree-item" role="button" tabindex="0" onclick="send('exportTokens')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="exportTokens">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-export"></i></div>
           <span class="tree-item__label">Export Tokens</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('initSystem')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="initSystem">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-arrow-swap"></i></div>
           <span class="tree-item__label">Switch Design System</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openDesignMd')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openDesignMd">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-file"></i></div>
           <span class="tree-item__label">Open DESIGN.md</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" onclick="send('openChat','Convert the design screens in .designs/screens/ to production code using Syncfusion components')">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openChat" data-value="Convert the design screens in .designs/screens/ to production code using Syncfusion components">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-code"></i></div>
           <span class="tree-item__label">Generate Production Code</span>
         </div>
@@ -321,14 +313,18 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
 
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
-    function send(command, value) {
-      const msg = { command };
-      if (command === 'openTokenEditor') msg.section = value;
-      else if (command === 'previewScreen') msg.screen = value;
-      else if (command === 'initSystem') msg.system = value;
-      else if (command === 'openChat') msg.prompt = value;
+    document.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-cmd]');
+      if (!item) return;
+      const cmd = item.dataset.cmd;
+      const value = item.dataset.value;
+      const msg = { command: cmd };
+      if (cmd === 'openTokenEditor') msg.section = value;
+      else if (cmd === 'previewScreen') msg.screen = value;
+      else if (cmd === 'initSystem') msg.system = value;
+      else if (cmd === 'openChat') msg.prompt = value;
       vscode.postMessage(msg);
-    }
+    });
   </script>
 
 </body>
