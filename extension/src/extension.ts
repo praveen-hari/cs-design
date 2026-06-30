@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import { SidebarViewProvider } from "./providers/sidebar-view.js";
-import { openWelcomeTab } from "./providers/welcome-view.js";
+
 import { openTokenEditor } from "./providers/token-editor.js";
 import { CliBridge } from "./services/cli-bridge.js";
 import { createDesignWatcher } from "./services/file-watcher.js";
@@ -52,10 +52,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   // ── Commands ──
 
-  // Welcome Tab
+  // Welcome (opens sidebar focus)
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.openWelcome, () => {
-      openWelcomeTab(extensionUri);
+      vscode.commands.executeCommand("csDesign.explorer.focus");
     })
   );
 
@@ -174,14 +174,7 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  // ── Auto-open Welcome Tab if no project ──
-  if (workspaceFolder) {
-    const project = getDesignProject(workspaceFolder);
-    if (!project.exists) {
-      // Small delay to let the UI settle
-      setTimeout(() => openWelcomeTab(extensionUri), 500);
-    }
-  }
+
 }
 
 export function deactivate() {}
