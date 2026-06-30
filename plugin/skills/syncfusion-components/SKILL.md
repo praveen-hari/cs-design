@@ -99,6 +99,14 @@ Read only the skills you need for the current screen.
 
 Use the design tokens from `.designs/DESIGN.md` for styling, and the component skill instructions for Syncfusion API usage.
 
+### Step 5 — Preview in the Integrated Browser
+
+After generating production code, open the running app in the **Code Studio integrated browser** so the user can review it without leaving the editor.
+
+Open the dev server URL in the integrated browser (e.g. `http://localhost:5173`, `http://localhost:4200`). If no server is running, start it first (`npm run dev`, `ng serve`, `dotnet run`, etc.) and wait for it to be ready before opening.
+
+**When to trigger:** Automatically after generating or updating production components — don't wait to be asked. Also when the user says "preview", "open", "show me", "run it", or "view in browser".
+
 ## Component Catalog
 
 ### Data & Lists

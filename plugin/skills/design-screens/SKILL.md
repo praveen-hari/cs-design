@@ -213,6 +213,30 @@ cs-design screens list            # Human-readable
 cs-design screens list --json     # Machine-readable
 ```
 
+### A6 — Preview in the Integrated Browser
+
+Once a screen is generated, open it directly in the **Code Studio integrated browser** so the user can review the design without leaving the editor.
+
+Resolve the absolute `file://` path for the screen and open it:
+
+```
+file:///absolute/path/to/.designs/screens/<screen-name>.html
+```
+
+**When to trigger this step:**
+- After generating a new HTML screen (run automatically — don't wait to be asked)
+- After `cs-design apply` updates tokens and screens change
+- After the user asks to "preview", "open", "show me", or "view" any screen
+
+**Multiple screens:** If multiple screens were generated or updated in one task, open them sequentially — one tab per screen — so the user can review each.
+
+**Checklist before opening:**
+- Confirm the file exists at `.designs/screens/<name>.html`
+- Confirm `tokens.css` is exported and present at `.designs/tokens.css`
+- Confirm `cs-design validate` passes (no blocking errors)
+
+> The integrated browser renders live HTML+CSS. The user can inspect, scroll, and interact with the page directly inside Code Studio.
+
 ---
 
 ## Path B — Production Code (framework components)
@@ -255,6 +279,16 @@ cs-design apply
 
 Re-exports `tokens.css`. Since production components also reference CSS variables, they update automatically.
 
+### B5 — Preview HTML prototypes in the Integrated Browser (optional)
+
+If HTML mockups exist alongside production code (e.g. for reference during development), open them in the Code Studio integrated browser using the `file://` URI:
+
+```
+file:///absolute/path/to/.designs/screens/<screen-name>.html
+```
+
+> Use this to let the user compare the HTML prototype side-by-side with the production implementation.
+
 ---
 
 ## Switching Design Systems
@@ -294,6 +328,7 @@ If the DESIGN.md has a `colors-dark` section, the design system supports dark mo
 - [ ] Interactive states: hover, focus, active, disabled
 - [ ] If `colors-dark` exists, screens work in both light and dark modes
 - [ ] Cross-page consistency: header, nav, footer identical across all screens
+- [ ] **Screen opened in the integrated browser** for user review (Path A — always do this)
 
 ## Cross-Page Consistency Rules
 
