@@ -116,7 +116,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     const typographyCount = countTokens(project.typography);
     const spacingCount = countTokens(project.spacing);
     const roundedCount = countTokens(project.rounded);
-    const componentCount = countTokens(project.components);
+
     const screenCount = project.screens?.length ?? 0;
     const systemName = project.name ?? "Untitled";
 
@@ -255,11 +255,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           <span class="tree-item__label">Rounded</span>
           <span class="tree-item__detail tree-item__detail--hide">${roundedCount}</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" data-cmd="openTokenEditor" data-value="components">
-          <div class="tree-item__icon icon--accent"><i class="codicon codicon-symbol-class"></i></div>
-          <span class="tree-item__label">Components</span>
-          <span class="tree-item__detail tree-item__detail--hide">${componentCount}</span>
-        </div>
+
       </div>
     </div>
   </div>

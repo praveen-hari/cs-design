@@ -59,7 +59,7 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
   const typography = project.typography ?? {};
   const spacing = project.spacing ?? {};
   const rounded = project.rounded ?? {};
-  const components = project.components ?? {};
+
 
   // ── Build color swatches ──
   const colorEntries = Object.entries(colors);
@@ -110,71 +110,8 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
       <div class="rounded-item__value">${v}</div>
     </div>`).join("");
 
-  // ── Resolve token references ──
-  // Resolves "{colors.accent}" → "#2563EB", "{rounded.md}" → "8px"
-  const allTokens: Record<string, any> = { colors, typography, spacing, rounded, components };
-  function resolveRef(ref: string): string {
-    if (!ref) return "transparent";
-    // If it's a direct value (hex, px, etc.), return as-is
-    if (!ref.startsWith("{")) return ref;
-    // Parse {section.key} format
-    const match = ref.match(/^\{(\w+)\.(.+)\}$/);
-    if (!match) return ref;
-    const [, section, key] = match;
-    const sectionData = allTokens[section];
-    if (sectionData && typeof sectionData === "object" && key in sectionData) {
-      const val = sectionData[key];
-      return typeof val === "string" ? val : String(val);
-    }
-    return ref; // Return unresolved if not found
-  }
-
-  // ── Build component cards ──
-  const compEntries = Object.entries(components);
-  const compCards = compEntries.map(([k, v]: [string, any]) => {
-    const bgRef = v.backgroundColor ?? "transparent";
-    const textRef = v.textColor ?? "#FFFFFF";
-    const rRef = v.rounded ?? "4px";
-    const p = v.padding ?? "4px 8px";
-
-    const bgResolved = resolveRef(bgRef);
-    const textResolved = resolveRef(textRef);
-    const rResolved = resolveRef(rRef);
-
-    // Determine component type for better preview
-    const isButton = k.toLowerCase().includes("button");
-    const isCard = k.toLowerCase().includes("card");
-    const isInput = k.toLowerCase().includes("input");
-    const isBadge = k.toLowerCase().includes("badge");
-
-    let previewHtml = "";
-    if (isInput) {
-      previewHtml = `<input type="text" placeholder="Placeholder text" style="background:${bgResolved};color:${textResolved};border:1px solid var(--vscode-panel-border);border-radius:${rResolved};padding:${p};font-family:inherit;font-size:13px;outline:none;width:240px;" />`;
-    } else if (isCard) {
-      previewHtml = `<div style="background:${bgResolved};color:${textResolved};border:1px solid var(--vscode-panel-border);border-radius:${rResolved};padding:${p};max-width:260px;">
-        <div style="font-weight:600;margin-bottom:4px;">Card Title</div>
-        <div style="font-size:12px;opacity:0.7;">Card description text goes here with some content.</div>
-      </div>`;
-    } else if (isBadge) {
-      previewHtml = `
-        <span style="background:${bgResolved};color:${textResolved};border-radius:${rResolved};padding:${p};font-size:11px;font-weight:600;display:inline-block;">3</span>
-        <span style="background:${bgResolved};color:${textResolved};border-radius:${rResolved};padding:${p};font-size:11px;font-weight:600;display:inline-block;">12</span>
-        <span style="background:${bgResolved};color:${textResolved};border-radius:${rResolved};padding:${p};font-size:11px;font-weight:600;display:inline-block;">New</span>`;
-    } else {
-      // Button or generic
-      previewHtml = `
-        <div style="background:${bgResolved};color:${textResolved};border-radius:${rResolved};padding:${p};font-size:13px;display:inline-block;cursor:pointer;font-family:inherit;">Primary</div>
-        <div style="background:transparent;color:var(--vscode-foreground);border:1px solid var(--vscode-panel-border);border-radius:${rResolved};padding:${p};font-size:13px;display:inline-block;cursor:pointer;font-family:inherit;">Secondary</div>
-        <div style="background:${bgResolved};color:${textResolved};border-radius:${rResolved};padding:${p};font-size:13px;display:inline-block;opacity:0.4;font-family:inherit;">Disabled</div>`;
-    }
-
-    return `
-    <div class="component-card">
-      <div class="component-card__title">${k}</div>
-      <div class="component-card__preview">${previewHtml}</div>
-      <div class="component-card__tokens">bg: ${bgRef} → ${bgResolved} · text: ${textRef} → ${textResolved} · radius: ${rRef} → ${rResolved} · padding: ${p}</div>
-    </div>`;
-  }).join("");
+  // Components section removed — too complex to preview generically.
+  // Users see components in action via screen previews in the browser.
 
   return /* html */ `<!DOCTYPE html>
 <html lang="en">
@@ -253,11 +190,7 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
     .rounded-item__label { font-size: 11px; font-weight: 500; text-align: center; }
     .rounded-item__value { font-size: 10px; color: var(--vscode-descriptionForeground); font-family: 'Cascadia Code', Menlo, monospace; }
 
-    /* Components */
-    .component-card { background: var(--vscode-sideBar-background); border: 1px solid var(--vscode-panel-border); border-radius: 6px; padding: 16px; margin-bottom: 12px; }
-    .component-card__title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
-    .component-card__preview { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
-    .component-card__tokens { font-size: 11px; color: var(--vscode-descriptionForeground); line-height: 1.6; font-family: 'Cascadia Code', Menlo, monospace; padding-top: 8px; border-top: 1px solid var(--vscode-panel-border); }
+
   </style>
 </head>
 <body>
@@ -278,8 +211,6 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
       <span>${countTokens(project.spacing)} spacing</span>
       <span class="header__meta-sep">·</span>
       <span>${countTokens(project.rounded)} rounded</span>
-      <span class="header__meta-sep">·</span>
-      <span>${countTokens(project.components)} components</span>
     </div>
   </div>
 
@@ -319,14 +250,7 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
     <div class="rounded-grid">${roundedBoxes}</div>
   </div>
 
-  <!-- Components -->
-  <div class="section" id="components">
-    <div class="section__header">
-      <h2 class="section__title">Components</h2>
-      <span class="section__count">${compEntries.length} defined</span>
-    </div>
-    ${compCards}
-  </div>
+
 
 </div>
 
