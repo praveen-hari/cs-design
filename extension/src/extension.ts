@@ -142,7 +142,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.newScreen, () => {
       vscode.commands.executeCommand("workbench.action.chat.open", {
-        query: "Generate a new UI screen using the cs-design CLI and DESIGN.md tokens. What kind of screen? (e.g., dashboard, landing page, settings, form, data table)",
+        query: "Generate a new UI screen using the DESIGN.md design tokens. Save it to .designs/screens/. What kind of screen? (e.g., dashboard, landing page, settings, form, data table)",
         isPartialQuery: true,
       });
     })

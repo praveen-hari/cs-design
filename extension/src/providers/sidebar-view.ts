@@ -299,7 +299,7 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-file"></i></div>
           <span class="tree-item__label">Open DESIGN.md</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" data-cmd="openChat" data-value="Convert the HTML design screens to production code using Syncfusion UI components. Install Syncfusion component skills and generate framework code.">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openChat" data-value="Convert the HTML design screens in .designs/screens/ to production code using Syncfusion UI components for the detected framework.">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-code"></i></div>
           <span class="tree-item__label">Generate Production Code</span>
         </div>
