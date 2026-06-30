@@ -237,7 +237,8 @@ export function registerTools(context: vscode.ExtensionContext): void {
       async invoke(_options, _token) {
         try {
           const sdk = await getSDK();
-          const spec = sdk.getSpec();
+          // getFullSpec() returns a plain string, getSpec() returns an object
+          const spec = sdk.getFullSpec();
           return new vscode.LanguageModelToolResult([
             new vscode.LanguageModelTextPart(spec)
           ]);
