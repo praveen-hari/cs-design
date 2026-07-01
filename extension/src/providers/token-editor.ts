@@ -82,7 +82,7 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
     const isCode = k === "code";
     const fontStyle = isCode
       ? `font-family:'Cascadia Code','Fira Code',Menlo,monospace;font-size:${size};font-weight:${weight};line-height:${lh};background:var(--vscode-textCodeBlock-background);padding:8px 10px;border-radius:4px;`
-      : `font-size:${size};font-weight:${weight};line-height:${lh};`;
+      : `font-family:${family};font-size:${size};font-weight:${weight};line-height:${lh};`;
     const sample = isCode ? "const result = await fetchData({ limit: 20 });" : "The quick brown fox jumps over the lazy dog";
     return `
     <div class="type-item">
@@ -118,8 +118,11 @@ function buildTokenEditorHtml(webview: vscode.Webview, extensionUri: vscode.Uri,
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline'; font-src ${cspSource}; script-src 'nonce-${nonce}';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${cspSource} 'unsafe-inline' https://fonts.googleapis.com; font-src ${cspSource} https://fonts.gstatic.com data:; script-src 'nonce-${nonce}';" />
   <link rel="stylesheet" href="${codiconCssUri}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&family=Delius+Swash+Caps&family=Figtree:wght@400;500;600;700&family=Gabriela&family=Geist:wght@400;500;600;700&family=Hind:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Lato:wght@400;700&family=Manrope:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&family=Nunito:wght@400;500;600;700&family=Nunito+Sans:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&family=Oxanium:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Public+Sans:wght@400;500;600;700&family=Raleway:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Source+Code+Pro:wght@400;500;600&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
     @font-face { font-family: "codicon"; font-display: block; src: url("${codiconFontUri}") format("truetype"); }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }

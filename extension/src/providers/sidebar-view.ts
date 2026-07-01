@@ -1,7 +1,9 @@
 import * as vscode from "vscode";
+import * as fs from "fs";
+import * as path from "path";
 import { getDesignProject, countTokens, DesignProject } from "../services/design-project.js";
 import { getWebviewContent, getNonce } from "../utils/webview-utils.js";
-import { CMD, CTX } from "../utils/constants.js";
+import { CMD, CTX, PATHS } from "../utils/constants.js";
 
 /**
  * Provides the sidebar webview — shows either the empty state
@@ -150,7 +152,9 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
 
     // Project exists — generate dynamic sidebar with real data
     vscode.commands.executeCommand("setContext", CTX.projectExists, true);
-    this._view.webview.html = this._buildProjectHtml(this._view.webview, project);
+    this._buildProjectHtml(this._view.webview, project).then((html) => {
+      if (this._view) this._view.webview.html = html;
+    });
   }
 
   /**
@@ -230,7 +234,7 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
   /**
    * Build the sidebar HTML dynamically from real project data.
    */
-  private _buildProjectHtml(webview: vscode.Webview, project: DesignProject): string {
+  private async _buildProjectHtml(webview: vscode.Webview, project: DesignProject): Promise<string> {
     const codiconFontUri = webview.asWebviewUri(
       vscode.Uri.joinPath(this._extensionUri, "webview", "shared", "codicon.ttf")
     );
@@ -246,12 +250,52 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
     const screenCount = project.screens?.length ?? 0;
     const systemName = project.name ?? "Untitled";
 
-    // Build screen list items
+    // ── Validation status (runs real SDK validate) ──
+    let validIcon = "codicon-pass-filled";
+    let validLabel = "Valid";
+    let validColor = "var(--vscode-testing-iconPassed)";
+    try {
+      const ws = vscode.workspace.workspaceFolders?.[0];
+      if (ws) {
+        const designMdPath = path.join(ws.uri.fsPath, PATHS.designMd);
+        if (fs.existsSync(designMdPath)) {
+          const content = fs.readFileSync(designMdPath, "utf-8");
+          // Dynamic import to avoid loading SDK at startup
+          const sdk = await import("@syncfusion/cs-design/sdk");
+          const result = sdk.validate(content);
+          if (result.ok) {
+            const { errorCount, warningCount } = result.data;
+            if (errorCount > 0) {
+              validIcon = "codicon-error";
+              validLabel = `${errorCount} error${errorCount > 1 ? "s" : ""}`;
+              validColor = "var(--vscode-errorForeground)";
+            } else if (warningCount > 0) {
+              validIcon = "codicon-warning";
+              validLabel = `${warningCount} warning${warningCount > 1 ? "s" : ""}`;
+              validColor = "var(--vscode-editorWarning-foreground)";
+            }
+          } else {
+            validIcon = "codicon-error";
+            validLabel = "Parse error";
+            validColor = "var(--vscode-errorForeground)";
+          }
+        }
+      }
+    } catch {
+      // If SDK fails to load, fall back to basic check
+      if (colorCount === 0 || typographyCount === 0) {
+        validIcon = "codicon-error";
+        validLabel = "Incomplete";
+        validColor = "var(--vscode-errorForeground)";
+      }
+    }
+
+    // ── Screen list items ──
     const screenItems = (project.screens ?? [])
       .map(
         (s) => `
         <div class="tree-item" role="button" tabindex="0" data-cmd="previewScreen" data-value="${s}">
-          <div class="tree-item__icon icon--warning"><i class="codicon codicon-browser"></i></div>
+          <div class="tree-item__icon icon--accent"><i class="codicon codicon-browser"></i></div>
           <span class="tree-item__label">${s}</span>
         </div>`
       )
@@ -259,7 +303,10 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
 
     const noScreensMsg =
       screenCount === 0
-        ? `<div class="empty-hint">No screens yet. Ask the agent to design one.</div>`
+        ? `<div class="empty-hint">
+            <span>No screens yet.</span>
+            <a class="empty-hint__link" role="button" tabindex="0" data-cmd="newScreen">Create one →</a>
+          </div>`
         : "";
 
     const nonce = getNonce();
@@ -285,42 +332,48 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Validation Bar */
+    /* ── Validation Bar ── */
     .validation-bar {
       display: flex; align-items: center; gap: 8px;
-      padding: 4px 12px;
+      padding: 6px 12px;
       background: var(--vscode-editor-background);
       border-bottom: 1px solid var(--vscode-panel-border);
       font-size: 11px;
     }
-    .validation-bar__status { display: flex; align-items: center; gap: 5px; color: var(--vscode-testing-iconPassed); }
+    .validation-bar__status { display: flex; align-items: center; gap: 5px; }
     .validation-bar__status .codicon { font-size: 14px; }
-    .validation-bar__system { margin-left: auto; color: var(--vscode-descriptionForeground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .validation-bar__system { margin-left: auto; color: var(--vscode-descriptionForeground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 140px; }
 
-    /* Section */
-    .section { border-bottom: 1px solid var(--vscode-panel-border); }
+    /* ── Section ── */
+    .section { border-bottom: 1px solid var(--vscode-panel-border); padding: 4px 0; }
     .section:last-child { border-bottom: none; }
 
     .section-header {
       display: flex; align-items: center; justify-content: space-between;
-      height: 22px; padding: 0 10px 0 0; cursor: pointer; user-select: none;
+      height: 28px; padding: 0 12px 0 0; cursor: pointer; user-select: none;
       transition: background 0.1s;
     }
     .section-header:hover { background: var(--vscode-list-hoverBackground); }
-    .section-header__left { display: flex; align-items: center; gap: 4px; min-width: 0; flex: 1; }
-    .section-header__chevron { width: 20px; height: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+    .section-header__left { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; }
+    .section-header__chevron {
+      width: 22px; height: 28px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 16px; transition: transform 0.15s ease;
+    }
+    .section.is-collapsed .section-header__chevron { transform: rotate(-90deg); }
+    .section.is-collapsed .section-body { display: none; }
     .section-header__label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; white-space: nowrap; }
     .section-header__badge { font-size: 10px; font-weight: 600; color: var(--vscode-badge-foreground); background: var(--vscode-badge-background); border-radius: 9999px; padding: 0 5px; height: 16px; line-height: 16px; flex-shrink: 0; margin-left: 6px; }
+    .section-header__actions { display: flex; gap: 2px; flex-shrink: 0; }
 
-    /* Tree Items */
-    .tree { padding: 2px 0; }
+    /* ── Tree Items ── */
+    .tree { padding: 4px 0; }
     .tree-item {
-      display: flex; align-items: center; height: 22px; padding: 0 10px 0 20px;
-      cursor: pointer; user-select: none; transition: background 0.1s; gap: 6px;
+      display: flex; align-items: center; height: 28px; padding: 0 12px 0 22px;
+      cursor: pointer; user-select: none; transition: background 0.1s; gap: 8px;
     }
     .tree-item:hover { background: var(--vscode-list-hoverBackground); }
     .tree-item:focus-visible { outline: 1px solid var(--vscode-focusBorder); outline-offset: -1px; }
-    .tree-item__icon { width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px; }
+    .tree-item__icon { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 18px; }
     .tree-item__label { font-size: var(--vscode-font-size); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
     .tree-item__detail { font-size: 11px; color: var(--vscode-descriptionForeground); flex-shrink: 0; margin-left: auto; }
     .tree-item__actions { display: none; gap: 2px; flex-shrink: 0; margin-left: auto; }
@@ -329,31 +382,40 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
 
     .icon-btn {
       display: flex; align-items: center; justify-content: center;
-      width: 18px; height: 18px; border: none; background: transparent;
-      color: var(--vscode-foreground); border-radius: 2px; cursor: pointer; opacity: 0.7; font-size: 14px;
+      width: 22px; height: 22px; border: none; background: transparent;
+      color: var(--vscode-foreground); border-radius: 3px; cursor: pointer; opacity: 0.6; font-size: 16px;
     }
     .icon-btn:hover { background: var(--vscode-list-hoverBackground); opacity: 1; }
 
     .icon--accent { color: var(--vscode-textLink-foreground); }
-    .icon--warning { color: var(--vscode-editorWarning-foreground); }
     .icon--secondary { color: var(--vscode-descriptionForeground); }
 
-    .empty-hint { padding: 6px 20px; font-size: 11px; color: var(--vscode-descriptionForeground); font-style: italic; }
+    /* ── Empty Hint ── */
+    .empty-hint {
+      padding: 8px 22px; font-size: 12px; color: var(--vscode-descriptionForeground);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .empty-hint__link {
+      color: var(--vscode-textLink-foreground); cursor: pointer;
+      text-decoration: none;
+    }
+    .empty-hint__link:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
 
+  <!-- Validation Bar -->
   <div class="validation-bar">
-    <div class="validation-bar__status">
-      <i class="codicon codicon-pass-filled"></i>
-      <span>Valid</span>
+    <div class="validation-bar__status" style="color: ${validColor};">
+      <i class="codicon ${validIcon}"></i>
+      <span>${validLabel}</span>
     </div>
-    <span class="validation-bar__system">${systemName}</span>
+    <span class="validation-bar__system" title="${systemName}">${systemName}</span>
   </div>
 
   <!-- Design System -->
-  <div class="section">
-    <div class="section-header" role="button" tabindex="0">
+  <div class="section" data-section="design-system">
+    <div class="section-header" role="button" tabindex="0" data-toggle-section>
       <div class="section-header__left">
         <div class="section-header__chevron"><i class="codicon codicon-chevron-down"></i></div>
         <span class="section-header__label">Design System</span>
@@ -381,18 +443,20 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
           <span class="tree-item__label">Rounded</span>
           <span class="tree-item__detail tree-item__detail--hide">${roundedCount}</span>
         </div>
-
       </div>
     </div>
   </div>
 
   <!-- Screens -->
-  <div class="section">
-    <div class="section-header" role="button" tabindex="0">
+  <div class="section" data-section="screens">
+    <div class="section-header" role="button" tabindex="0" data-toggle-section>
       <div class="section-header__left">
         <div class="section-header__chevron"><i class="codicon codicon-chevron-down"></i></div>
         <span class="section-header__label">Screens</span>
         ${screenCount > 0 ? `<span class="section-header__badge">${screenCount}</span>` : ""}
+      </div>
+      <div class="section-header__actions">
+        <button class="icon-btn" title="New Screen" data-cmd="newScreen"><i class="codicon codicon-add"></i></button>
       </div>
     </div>
     <div class="section-body">
@@ -404,8 +468,8 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
   </div>
 
   <!-- Quick Actions -->
-  <div class="section">
-    <div class="section-header" role="button" tabindex="0">
+  <div class="section" data-section="quick-actions">
+    <div class="section-header" role="button" tabindex="0" data-toggle-section>
       <div class="section-header__left">
         <div class="section-header__chevron"><i class="codicon codicon-chevron-down"></i></div>
         <span class="section-header__label">Quick Actions</span>
@@ -417,15 +481,11 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-export"></i></div>
           <span class="tree-item__label">Export Tokens</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" data-cmd="initSystem">
-          <div class="tree-item__icon icon--secondary"><i class="codicon codicon-arrow-swap"></i></div>
-          <span class="tree-item__label">Switch Design System</span>
-        </div>
         <div class="tree-item" role="button" tabindex="0" data-cmd="openDesignMd">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-file"></i></div>
           <span class="tree-item__label">Open DESIGN.md</span>
         </div>
-        <div class="tree-item" role="button" tabindex="0" data-cmd="openChat" data-value="Convert the HTML design screens in .designs/screens/ to production code using Syncfusion UI components for the detected framework.">
+        <div class="tree-item" role="button" tabindex="0" data-cmd="openChat" data-value="Convert the HTML design screens in .designs/screens/ to production code. Detect the framework from package.json and use the appropriate UI component library.">
           <div class="tree-item__icon icon--secondary"><i class="codicon codicon-code"></i></div>
           <span class="tree-item__label">Generate Production Code</span>
         </div>
@@ -435,8 +495,19 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
 
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
-    document.addEventListener('click', (e) => {
-      const item = e.target.closest('[data-cmd]');
+
+    // ── Section collapse/expand ──
+    document.querySelectorAll('[data-toggle-section]').forEach(header => {
+      header.addEventListener('click', (e) => {
+        // Don't toggle if clicking an action button inside the header
+        if (e.target.closest('.icon-btn')) return;
+        const section = header.closest('.section');
+        if (section) section.classList.toggle('is-collapsed');
+      });
+    });
+
+    // ── Command handler (click + keyboard) ──
+    function handleCommand(item) {
       if (!item) return;
       const cmd = item.dataset.cmd;
       const value = item.dataset.value;
@@ -446,6 +517,30 @@ Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
       else if (cmd === 'initSystem') msg.system = value;
       else if (cmd === 'openChat') msg.prompt = value;
       vscode.postMessage(msg);
+    }
+
+    // Click handler
+    document.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-cmd]');
+      handleCommand(item);
+    });
+
+    // Keyboard handler (Enter / Space on role="button" elements)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const target = e.target;
+        if (target.getAttribute('role') === 'button') {
+          e.preventDefault();
+          // Check if it's a section toggle
+          if (target.hasAttribute('data-toggle-section')) {
+            const section = target.closest('.section');
+            if (section) section.classList.toggle('is-collapsed');
+          }
+          // Check if it's a command
+          const item = target.closest('[data-cmd]');
+          handleCommand(item);
+        }
+      }
     });
   </script>
 

@@ -208,11 +208,11 @@ async function scaffoldFromGenerator(
     // Non-fatal — tokens.css can be regenerated
   }
 
-  // Open chat with a focused, contextual prompt
+  // Open chat with a focused, contextual prompt — auto-send
   const prompt = buildChatPrompt(preset, state);
   await vscode.commands.executeCommand("workbench.action.chat.open", {
     query: prompt,
-    isPartialQuery: true,
+    isPartialQuery: false,
   });
 }
 

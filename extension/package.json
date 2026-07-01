@@ -13,8 +13,7 @@
     "Visualization"
   ],
   "activationEvents": [
-    "workspaceContains:.designs/DESIGN.md",
-    "onView:csDesign.explorer"
+    "workspaceContains:.designs/DESIGN.md"
   ],
   "main": "./dist/extension.js",
   "contributes": {

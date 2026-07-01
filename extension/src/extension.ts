@@ -146,12 +146,63 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
-  // New Screen (opens chat)
+  // New Screen — ask user what screen to create, then auto-send to agent
   context.subscriptions.push(
-    vscode.commands.registerCommand(CMD.newScreen, () => {
+    vscode.commands.registerCommand(CMD.newScreen, async () => {
+      const screenType = await vscode.window.showQuickPick(
+        [
+          { label: "$(layout) Dashboard", description: "Charts, stats, KPIs, data overview", detail: "dashboard" },
+          { label: "$(table) Data Table", description: "Sortable table with filters, pagination", detail: "data-table" },
+          { label: "$(edit) Form", description: "Input form with validation, labels, submit", detail: "form" },
+          { label: "$(gear) Settings", description: "Settings page with sections, toggles, inputs", detail: "settings" },
+          { label: "$(account) Login / Auth", description: "Login, signup, or forgot password screen", detail: "auth" },
+          { label: "$(home) Landing Page", description: "Hero section, features, CTA, testimonials", detail: "landing" },
+          { label: "$(list-flat) List / Feed", description: "Card list, feed, or timeline view", detail: "list" },
+          { label: "$(preview) Detail Page", description: "Single item detail with sidebar or tabs", detail: "detail" },
+          { label: "$(error) Error / Empty", description: "404, error state, or empty state screen", detail: "error" },
+          { label: "$(pencil) Custom", description: "Describe your own screen", detail: "custom" },
+        ],
+        {
+          placeHolder: "What kind of screen do you want to create?",
+          title: "New Screen",
+        }
+      );
+
+      if (!screenType) return;
+
+      let screenDesc = screenType.label.replace(/\$\([^)]+\)\s*/, "");
+
+      if (screenType.detail === "custom") {
+        const custom = await vscode.window.showInputBox({
+          prompt: "Describe the screen you want to create",
+          placeHolder: "e.g., User profile page with avatar, bio, and activity feed",
+        });
+        if (!custom) return;
+        screenDesc = custom;
+      }
+
       vscode.commands.executeCommand("workbench.action.chat.open", {
-        query: "Generate a new UI screen using the DESIGN.md design tokens. Save it to .designs/screens/. What kind of screen? (e.g., dashboard, landing page, settings, form, data table)",
-        isPartialQuery: true,
+        query: `I want to create a new UI screen: **${screenDesc}**
+
+Follow the **design-screens** skill workflow. Before you start designing:
+
+1. **Ask me 3–4 quick questions** to understand what I need:
+   - What data or content should this screen show?
+   - What actions should the user be able to take?
+   - Any specific layout preference (sidebar, tabs, cards, split view)?
+   - Should it match an existing screen or be standalone?
+
+2. **Don't start designing until I've answered.**
+
+After I answer, follow the skill procedure:
+- Read \`.designs/DESIGN.md\` for design tokens
+- Run \`cs-design_validate\` to check the design system
+- Export tokens with \`cs-design_exportTokens\` (format: css)
+- Generate the HTML screen following the skill's Path A rules
+- Save to \`.designs/screens/${screenType.detail === "custom" ? "custom-screen" : screenType.detail}.html\`
+- Link to \`../tokens.css\` — never hardcode colors, fonts, or spacing
+- Use semantic HTML, realistic content, responsive (375px–1440px)`,
+        isPartialQuery: false,
       });
     })
   );

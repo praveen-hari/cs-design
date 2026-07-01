@@ -35,7 +35,11 @@ export function generateCss(yaml: DesignYaml): string {
   if (yaml.typography) {
     lines.push("  /* Typography */");
     for (const [key, token] of Object.entries(yaml.typography)) {
-      lines.push(`  --font-${key}-family: '${token.fontFamily}', sans-serif;`);
+      // If fontFamily already contains a comma, it's a full stack — use as-is
+      const family = token.fontFamily.includes(",")
+        ? token.fontFamily
+        : `'${token.fontFamily}', sans-serif`;
+      lines.push(`  --font-${key}-family: ${family};`);
       lines.push(`  --font-${key}-size: ${token.fontSize};`);
       if (token.fontWeight !== undefined) {
         lines.push(`  --font-${key}-weight: ${token.fontWeight};`);
@@ -117,8 +121,13 @@ export function generateTailwind(yaml: DesignYaml): string {
 
     for (const [key, token] of Object.entries(yaml.typography)) {
       if (!seenFamilies.has(token.fontFamily)) {
-        const familyKey = token.fontFamily.toLowerCase().replace(/\s+/g, "-");
-        fontFamily[familyKey] = [token.fontFamily, "sans-serif"];
+        const familyKey = token.fontFamily.split(",")[0].replace(/['"/]/g, "").trim().toLowerCase().replace(/\s+/g, "-");
+        // If fontFamily is already a full stack, split it into parts
+        if (token.fontFamily.includes(",")) {
+          fontFamily[familyKey] = token.fontFamily.split(",").map((s: string) => s.replace(/['"/]/g, "").trim());
+        } else {
+          fontFamily[familyKey] = [token.fontFamily, "sans-serif"];
+        }
         seenFamilies.add(token.fontFamily);
       }
 
