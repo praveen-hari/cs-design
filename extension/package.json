@@ -81,6 +81,11 @@
         "command": "csDesign.refresh",
         "title": "CS Design: Refresh",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "csDesign.createDesignSystem",
+        "title": "CS Design: Create Design System",
+        "icon": "$(add)"
       }
     ],
     "menus": {

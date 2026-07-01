@@ -1,0 +1,102 @@
+{
+  "id": "corporate-clean",
+  "name": "Corporate Clean",
+  "description": "Enterprise · Source Sans · Teal accent · Light",
+  "category": "light",
+  "swatches": [
+    "#1B2A4A",
+    "#0F766E",
+    "#FFFFFF",
+    "#F1F5F9",
+    "#CBD5E1"
+  ],
+  "designMd": {
+    "name": "Corporate Clean",
+    "description": "Professional, structured design system for enterprise dashboards, admin panels, and B2B SaaS.",
+    "colors": {
+      "primary": "#1B2A4A",
+      "secondary": "#64748B",
+      "accent": "#0F766E",
+      "background": "#FFFFFF",
+      "surface": "#F1F5F9",
+      "border": "#CBD5E1",
+      "error": "#B91C1C",
+      "warning": "#D97706",
+      "success": "#059669",
+      "info": "#0EA5E9"
+    },
+    "colors-dark": {
+      "primary": "#E2E8F0",
+      "secondary": "#94A3B8",
+      "accent": "#2DD4BF",
+      "background": "#0F172A",
+      "surface": "#1E293B",
+      "border": "#334155"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Source Sans 3', sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2
+      },
+      "h2": {
+        "fontFamily": "'Source Sans 3', sans-serif",
+        "fontSize": "28px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "h3": {
+        "fontFamily": "'Source Sans 3', sans-serif",
+        "fontSize": "22px",
+        "fontWeight": 600,
+        "lineHeight": 1.4
+      },
+      "body": {
+        "fontFamily": "'Source Sans 3', sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      },
+      "small": {
+        "fontFamily": "'Source Sans 3', sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Source Sans 3', sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Source Sans 3"
+}

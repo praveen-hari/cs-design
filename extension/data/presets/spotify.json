@@ -1,0 +1,108 @@
+{
+  "id": "spotify",
+  "name": "Spotify",
+  "description": "Converted from spotify.css",
+  "category": "light",
+  "swatches": [
+    "#313E38",
+    "#00B262",
+    "#FCFCFC",
+    "#FFFFFF",
+    "#E5ECF1"
+  ],
+  "designMd": {
+    "name": "Spotify",
+    "description": "Design system converted from spotify.css",
+    "colors": {
+      "primary": "#313E38",
+      "secondary": "#5C6375",
+      "accent": "#00B262",
+      "background": "#FCFCFC",
+      "surface": "#FFFFFF",
+      "border": "#E5ECF1",
+      "error": "#F1113E",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#00B262"
+    },
+    "colors-dark": {
+      "primary": "#E9F0F5",
+      "secondary": "#798093",
+      "accent": "#00B262",
+      "background": "#080B14",
+      "surface": "#12161F",
+      "border": "#2A2D36",
+      "error": "#FF1648",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#00B262"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Lato', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Lato', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Lato', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Roboto Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Lato"
+}

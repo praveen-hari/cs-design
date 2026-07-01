@@ -1,0 +1,108 @@
+{
+  "id": "marvel",
+  "name": "Marvel",
+  "description": "Converted from marvel.css",
+  "category": "light",
+  "swatches": [
+    "#3A0608",
+    "#D40C1A",
+    "#FFF6F5",
+    "#FCEAE8",
+    "#F2D7D4"
+  ],
+  "designMd": {
+    "name": "Marvel",
+    "description": "Design system converted from marvel.css",
+    "colors": {
+      "primary": "#3A0608",
+      "secondary": "#605151",
+      "accent": "#D40C1A",
+      "background": "#FFF6F5",
+      "surface": "#FCEAE8",
+      "border": "#F2D7D4",
+      "error": "#DB0000",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#0F68A2"
+    },
+    "colors-dark": {
+      "primary": "#F5ECEB",
+      "secondary": "#A59C9B",
+      "accent": "#D40C1A",
+      "background": "#140F0E",
+      "surface": "#1D1918",
+      "border": "#383232",
+      "error": "#DB0000",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#0362AC"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Outfit', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Outfit', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Outfit', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Geist Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "6px",
+      "md": "8px",
+      "lg": "10px",
+      "xl": "14px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Outfit"
+}

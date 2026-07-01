@@ -1,0 +1,102 @@
+{
+  "id": "dark-editor",
+  "name": "Dark Editor",
+  "description": "VS Code-style · JetBrains Mono · Blue accent · Compact",
+  "category": "dark",
+  "swatches": [
+    "#CCCCCC",
+    "#0078D4",
+    "#1E1E1E",
+    "#252526",
+    "#3C3C3C"
+  ],
+  "designMd": {
+    "name": "Dark Editor",
+    "description": "Dark, technical design system inspired by VS Code / Code Studio for editor extensions, webview panels, and developer tooling.",
+    "colors": {
+      "primary": "#CCCCCC",
+      "secondary": "#858585",
+      "accent": "#0078D4",
+      "background": "#1E1E1E",
+      "surface": "#252526",
+      "border": "#3C3C3C",
+      "error": "#F14C4C",
+      "warning": "#CCA700",
+      "success": "#4EC9B0",
+      "info": "#3794FF"
+    },
+    "colors-dark": {
+      "primary": "#CCCCCC",
+      "secondary": "#858585",
+      "accent": "#0078D4",
+      "background": "#1E1E1E",
+      "surface": "#252526",
+      "border": "#3C3C3C"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "32px",
+        "fontWeight": 700,
+        "lineHeight": 1.2
+      },
+      "h2": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "h3": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "18px",
+        "fontWeight": 600,
+        "lineHeight": 1.4
+      },
+      "body": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      },
+      "small": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "11px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "4px",
+      "sm": "8px",
+      "md": "12px",
+      "lg": "16px",
+      "xl": "24px"
+    },
+    "rounded": {
+      "sm": "0px",
+      "md": "2px",
+      "lg": "4px",
+      "xl": "6px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "none",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "JetBrains Mono"
+}

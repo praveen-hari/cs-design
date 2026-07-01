@@ -1,0 +1,102 @@
+{
+  "id": "warm-friendly",
+  "name": "Warm Friendly",
+  "description": "Approachable · Poppins · Coral accent · Rounded",
+  "category": "playful",
+  "swatches": [
+    "#1F2937",
+    "#FF6B6B",
+    "#FFFFFF",
+    "#FFF5F5",
+    "#FECACA"
+  ],
+  "designMd": {
+    "name": "Warm Friendly",
+    "description": "Warm, approachable design system for consumer apps, community platforms, and friendly products.",
+    "colors": {
+      "primary": "#1F2937",
+      "secondary": "#6B7280",
+      "accent": "#FF6B6B",
+      "background": "#FFFFFF",
+      "surface": "#FFF5F5",
+      "border": "#FECACA",
+      "error": "#F43F5E",
+      "warning": "#FB923C",
+      "success": "#10B981",
+      "info": "#F97316"
+    },
+    "colors-dark": {
+      "primary": "#F9FAFB",
+      "secondary": "#9CA3AF",
+      "accent": "#FB7185",
+      "background": "#1F2937",
+      "surface": "#374151",
+      "border": "#4B5563"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "Poppins, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2
+      },
+      "h2": {
+        "fontFamily": "Poppins, sans-serif",
+        "fontSize": "28px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "h3": {
+        "fontFamily": "Poppins, sans-serif",
+        "fontSize": "22px",
+        "fontWeight": 600,
+        "lineHeight": 1.4
+      },
+      "body": {
+        "fontFamily": "Poppins, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      },
+      "small": {
+        "fontFamily": "Poppins, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "Poppins, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 500,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'JetBrains Mono', monospace",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "8px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Poppins"
+}

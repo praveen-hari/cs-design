@@ -1,0 +1,108 @@
+{
+  "id": "neo-brutalism",
+  "name": "Neo Brutalism",
+  "description": "Converted from neo_brutalism.css",
+  "category": "light",
+  "swatches": [
+    "#000000",
+    "#FF3132",
+    "#FFFFFF",
+    "#FFFFFF",
+    "#000000"
+  ],
+  "designMd": {
+    "name": "Neo Brutalism",
+    "description": "Design system converted from neo_brutalism.css",
+    "colors": {
+      "primary": "#000000",
+      "secondary": "#333333",
+      "accent": "#FF3132",
+      "background": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "border": "#000000",
+      "error": "#000000",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#FF3132"
+    },
+    "colors-dark": {
+      "primary": "#FFFFFF",
+      "secondary": "#CECECE",
+      "accent": "#FF6364",
+      "background": "#000000",
+      "surface": "#333333",
+      "border": "#FFFFFF",
+      "error": "#FFFFFF",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#FF6364"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'DM Sans', system-ui, sans-serif",
+        "fontSize": "40px",
+        "fontWeight": 700,
+        "lineHeight": 1.1,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'DM Sans', system-ui, sans-serif",
+        "fontSize": "32px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'DM Sans', system-ui, sans-serif",
+        "fontSize": "28px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'DM Sans', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      },
+      "small": {
+        "fontFamily": "'DM Sans', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'DM Sans', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Space Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "6px",
+      "md": "8px",
+      "lg": "10px",
+      "xl": "14px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "DM Sans"
+}

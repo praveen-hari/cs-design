@@ -1,0 +1,108 @@
+{
+  "id": "sunset-horizon",
+  "name": "Sunset Horizon",
+  "description": "Converted from sunset_horizon.css",
+  "category": "light",
+  "swatches": [
+    "#3D3637",
+    "#FF8163",
+    "#FFFAF5",
+    "#FFFFFF",
+    "#FFE0D5"
+  ],
+  "designMd": {
+    "name": "Sunset Horizon",
+    "description": "Design system converted from sunset_horizon.css",
+    "colors": {
+      "primary": "#3D3637",
+      "secondary": "#7A5651",
+      "accent": "#FF8163",
+      "background": "#FFFAF5",
+      "surface": "#FFFFFF",
+      "border": "#FFE0D5",
+      "error": "#E63745",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#FF8163"
+    },
+    "colors-dark": {
+      "primary": "#F1E9E5",
+      "secondary": "#D6C7BF",
+      "accent": "#FF8163",
+      "background": "#2C2025",
+      "surface": "#3A2F36",
+      "border": "#453940",
+      "error": "#E63745",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#FF8163"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Montserrat', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Montserrat', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Montserrat', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Ubuntu Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Montserrat"
+}

@@ -107,8 +107,8 @@ export function registerTools(context: vscode.ExtensionContext): void {
           if (result.ok) {
             const report = result.data;
             const findings = report.findings || [];
-            const errors = findings.filter((f: any) => f.severity === "error");
-            const warnings = findings.filter((f: any) => f.severity === "warning");
+            const errors = findings.filter((f: any) => !f.passed && f.severity === "error");
+            const warnings = findings.filter((f: any) => !f.passed && f.severity === "warning");
 
             if (errors.length === 0) {
               return new vscode.LanguageModelToolResult([

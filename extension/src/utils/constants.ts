@@ -12,11 +12,13 @@ export const CMD = {
   newScreen: "csDesign.newScreen",
   switchSystem: "csDesign.switchSystem",
   refresh: "csDesign.refresh",
+  createDesignSystem: "csDesign.createDesignSystem",
 } as const;
 
 /** Context keys */
 export const CTX = {
   projectExists: "csDesign.projectExists",
+  wizardActive: "csDesign.wizardActive",
 } as const;
 
 /** File paths relative to workspace */

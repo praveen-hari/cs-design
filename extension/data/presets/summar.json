@@ -1,0 +1,108 @@
+{
+  "id": "summar",
+  "name": "Summar",
+  "description": "Converted from summar.css",
+  "category": "light",
+  "swatches": [
+    "#4A4037",
+    "#F66E60",
+    "#FCF8F1",
+    "#FEF7F0",
+    "#FAD6B3"
+  ],
+  "designMd": {
+    "name": "Summar",
+    "description": "Design system converted from summar.css",
+    "colors": {
+      "primary": "#4A4037",
+      "secondary": "#8C6F59",
+      "accent": "#F66E60",
+      "background": "#FCF8F1",
+      "surface": "#FEF7F0",
+      "border": "#FAD6B3",
+      "error": "#D43030",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#F66E60"
+    },
+    "colors-dark": {
+      "primary": "#F9CA9C",
+      "secondary": "#D3B591",
+      "accent": "#F66E60",
+      "background": "#2B221A",
+      "surface": "#3C2D21",
+      "border": "#5A4A3E",
+      "error": "#B71A1B",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#F66E60"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Nunito', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Nunito', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Nunito', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Lora', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Lora', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Lora', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Fira Code', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Nunito"
+}

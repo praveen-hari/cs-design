@@ -1,0 +1,108 @@
+{
+  "id": "claude",
+  "name": "Claude",
+  "description": "Converted from claude.css",
+  "category": "light",
+  "swatches": [
+    "#3D3826",
+    "#CB6441",
+    "#FAF8F1",
+    "#FAF8F1",
+    "#E1E1DA"
+  ],
+  "designMd": {
+    "name": "Claude",
+    "description": "Design system converted from claude.css",
+    "colors": {
+      "primary": "#3D3826",
+      "secondary": "#85837D",
+      "accent": "#CB6441",
+      "background": "#FAF8F1",
+      "surface": "#FAF8F1",
+      "border": "#E1E1DA",
+      "error": "#141414",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#1B7EDE"
+    },
+    "colors-dark": {
+      "primary": "#C3C1BA",
+      "secondary": "#B7B5A6",
+      "accent": "#D87757",
+      "background": "#262626",
+      "surface": "#262626",
+      "border": "#3E3E38",
+      "error": "#F14444",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#1B7EDE"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Geist', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.15,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Geist', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Geist', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Source Serif 4', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Source Serif 4', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Source Serif 4', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Jetbrains Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Geist"
+}

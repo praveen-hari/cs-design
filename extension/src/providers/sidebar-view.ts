@@ -9,6 +9,7 @@ import { CMD, CTX } from "../utils/constants.js";
  */
 export class SidebarViewProvider implements vscode.WebviewViewProvider {
   private _view?: vscode.WebviewView;
+  private _wizardActive = false;
 
   constructor(private readonly _extensionUri: vscode.Uri) {}
 
@@ -42,11 +43,56 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
           if (message.prompt) {
             vscode.commands.executeCommand("workbench.action.chat.open", {
               query: message.prompt,
-              isPartialQuery: true,
+              isPartialQuery: false,
             });
+            vscode.commands.executeCommand("workbench.action.closeSidebar");
           } else {
             vscode.commands.executeCommand("workbench.action.chat.open");
           }
+          break;
+        case "createDesignSystem":
+          vscode.commands.executeCommand(CMD.createDesignSystem);
+          break;
+        case "importFromWorkspace":
+          vscode.commands.executeCommand("workbench.action.chat.open", {
+            query: `Scan this workspace and extract a DESIGN.md design system from existing files.
+
+Look for:
+1. **CSS/SCSS files** — extract color variables, font stacks, spacing values, border-radius
+2. **Tailwind config** (tailwind.config.js/ts) — extract theme colors, fonts, spacing, borderRadius
+3. **Package.json** — detect UI framework (React, Vue, Angular) and component libraries (shadcn, MUI, Ant Design)
+4. **Existing theme files** — any tokens.json, theme.ts, variables.css, globals.css
+
+Then create a complete \`.designs/DESIGN.md\` with:
+- All discovered color tokens mapped to primary/secondary/accent/background/surface/border/error/warning/success
+- Typography scale extracted from the existing fonts and sizes
+- Spacing and radius scales
+- A colors-dark section if dark mode variables exist
+
+Use \`cs-design_validate\` to confirm the generated DESIGN.md is valid.`,
+            isPartialQuery: false,
+          });
+          vscode.commands.executeCommand("workbench.action.closeSidebar");
+          break;
+        case "designFromUrl":
+          vscode.window.showInputBox({
+            prompt: "Enter the website URL to extract a design system from",
+            placeHolder: "https://example.com",
+            validateInput: (v) => {
+              const trimmed = v.trim();
+              if (!trimmed) return "URL cannot be empty";
+              if (!trimmed.startsWith("http://") && !trimmed.startsWith("https://")) return "URL must start with http:// or https://";
+              return undefined;
+            },
+          }).then((url) => {
+            if (url) {
+              vscode.commands.executeCommand("workbench.action.chat.open", {
+                query: `Extract a DESIGN.md design system from this website: ${url.trim()}\n\nAnalyze the site's colors, typography, spacing, and overall visual style. Create a complete DESIGN.md with all tokens.`,
+                isPartialQuery: false,
+              });
+              vscode.commands.executeCommand("workbench.action.closeSidebar");
+            }
+          });
           break;
         case "initSystem":
           vscode.commands.executeCommand(CMD.switchSystem, message.system);
@@ -72,6 +118,12 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
    */
   refresh(): void {
     if (!this._view) return;
+
+    // If the wizard is active, show a loading state instead of the empty/project view
+    if (this._wizardActive) {
+      this._view.webview.html = this._buildWizardActiveHtml();
+      return;
+    }
 
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     if (!workspaceFolder) {
@@ -99,6 +151,80 @@ export class SidebarViewProvider implements vscode.WebviewViewProvider {
     // Project exists — generate dynamic sidebar with real data
     vscode.commands.executeCommand("setContext", CTX.projectExists, true);
     this._view.webview.html = this._buildProjectHtml(this._view.webview, project);
+  }
+
+  /**
+   * Set the wizard-active state.
+   *
+   * When active, the sidebar shows a "Creating…" loading state instead
+   * of the empty state — so the user doesn't see two conflicting UIs
+   * (the empty sidebar + the wizard panel) at the same time.
+   */
+  setWizardActive(active: boolean): void {
+    this._wizardActive = active;
+    vscode.commands.executeCommand("setContext", CTX.wizardActive, active);
+    this.refresh();
+  }
+
+  /**
+   * Build the "wizard active" loading state HTML.
+   *
+   * Shown in the sidebar while the visual wizard panel is open.
+   */
+  private _buildWizardActiveHtml(): string {
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--vscode-sideBar-background);
+      color: var(--vscode-foreground);
+      font-family: var(--vscode-font-family);
+      font-size: var(--vscode-font-size);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+    }
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    .loading-state__spinner {
+      width: 28px;
+      height: 28px;
+      border: 2px solid var(--vscode-panel-border);
+      border-top-color: var(--vscode-textLink-foreground);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-state__title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    .loading-state__desc {
+      font-size: 12px;
+      color: var(--vscode-descriptionForeground);
+      line-height: 1.5;
+      max-width: 220px;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading-state">
+    <div class="loading-state__spinner"></div>
+    <div class="loading-state__title">Creating design system…</div>
+    <div class="loading-state__desc">The wizard is open in the editor. Complete the steps to generate your design system.</div>
+  </div>
+</body>
+</html>`;
   }
 
   /**

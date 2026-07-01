@@ -1,0 +1,108 @@
+{
+  "id": "art-deco",
+  "name": "Art Deco",
+  "description": "Converted from art_deco.css",
+  "category": "light",
+  "swatches": [
+    "#564614",
+    "#D5B036",
+    "#F4F4DD",
+    "#FFF9DB",
+    "#E0C670"
+  ],
+  "designMd": {
+    "name": "Art Deco",
+    "description": "Design system converted from art_deco.css",
+    "colors": {
+      "primary": "#564614",
+      "secondary": "#333333",
+      "accent": "#D5B036",
+      "background": "#F4F4DD",
+      "surface": "#FFF9DB",
+      "border": "#E0C670",
+      "error": "#FF6246",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#DAA415"
+    },
+    "colors-dark": {
+      "primary": "#F4F4DD",
+      "secondary": "#F4F4DD",
+      "accent": "#FFBE14",
+      "background": "#333333",
+      "surface": "#4A4A4A",
+      "border": "#8A4515",
+      "error": "#FF4400",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#B78612"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "40px",
+        "fontWeight": 400,
+        "lineHeight": 1.15,
+        "letterSpacing": "0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "32px",
+        "fontWeight": 400,
+        "lineHeight": 1.2,
+        "letterSpacing": "0.015em"
+      },
+      "h3": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "28px",
+        "fontWeight": 400,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.6
+      },
+      "small": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Delius Swash Caps', cursive",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 400,
+    "bodyWeight": 400
+  },
+  "previewFont": "Delius Swash Caps"
+}

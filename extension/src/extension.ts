@@ -6,6 +6,7 @@ import { registerTools } from "./tools/index.js";
 import { createDesignWatcher } from "./services/file-watcher.js";
 import { previewScreen, openDesignMd } from "./services/preview.js";
 import { getDesignProject } from "./services/design-project.js";
+import { runCreateDesignWizard } from "./services/create-design-wizard.js";
 import { CMD, CTX, VIEW_ID } from "./utils/constants.js";
 
 export function activate(context: vscode.ExtensionContext) {
@@ -57,6 +58,13 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
 
+  // Create Design System — guided wizard
+  context.subscriptions.push(
+    vscode.commands.registerCommand(CMD.createDesignSystem, async () => {
+      await runCreateDesignWizard(sidebarProvider);
+    })
+  );
+
   // Token Editor
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.openTokenEditor, (section?: string) => {
@@ -77,7 +85,7 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand(CMD.validate, async () => {
       try {
-        const result = await vscode.lm.invokeTool("cs-design_validate", { input: {} });
+        const result = await vscode.lm.invokeTool("cs-design_validate", { toolInvocationToken: undefined, input: {} });
         const text = (result as any).content?.[0]?.value ?? "Validation complete";
         if (text.includes("✅")) {
           vscode.window.showInformationMessage(text.split("\n")[0]);
@@ -109,7 +117,7 @@ export function activate(context: vscode.ExtensionContext) {
       );
       if (!format) return;
       try {
-        const result = await vscode.lm.invokeTool("cs-design_exportTokens", { input: { format: format.detail } });
+        const result = await vscode.lm.invokeTool("cs-design_exportTokens", { toolInvocationToken: undefined, input: { format: format.detail } });
         const text = (result as any).content?.[0]?.value ?? "Export complete";
         vscode.window.showInformationMessage(text);
       } catch {
@@ -159,14 +167,23 @@ export function activate(context: vscode.ExtensionContext) {
       }
       if (!system) return;
       const name = workspaceFolder?.name || "My Project";
-      try {
-        const result = await vscode.lm.invokeTool("cs-design_init", { input: { name, system } });
-        const text = (result as any).content?.[0]?.value ?? "Done";
-        vscode.window.showInformationMessage(text.split("\n")[0]);
-        sidebarProvider.refresh();
-      } catch {
-        vscode.window.showErrorMessage("Failed to switch design system");
-      }
+      await vscode.window.withProgress(
+        {
+          location: vscode.ProgressLocation.Notification,
+          title: `Creating "${name}" with ${system}…`,
+          cancellable: false,
+        },
+        async () => {
+          try {
+            const result = await vscode.lm.invokeTool("cs-design_init", { toolInvocationToken: undefined, input: { name, system } });
+            const text = (result as any).content?.[0]?.value ?? "Done";
+            vscode.window.showInformationMessage(text.split("\n")[0]);
+            sidebarProvider.refresh();
+          } catch {
+            vscode.window.showErrorMessage("Failed to switch design system");
+          }
+        }
+      );
     })
   );
 

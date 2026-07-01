@@ -1,0 +1,108 @@
+{
+  "id": "nature",
+  "name": "Nature",
+  "description": "Converted from nature.css",
+  "category": "light",
+  "swatches": [
+    "#2A332B",
+    "#307B34",
+    "#F8F5EE",
+    "#F8F5EE",
+    "#D7D7D7"
+  ],
+  "designMd": {
+    "name": "Nature",
+    "description": "Design system converted from nature.css",
+    "colors": {
+      "primary": "#2A332B",
+      "secondary": "#5F6561",
+      "accent": "#307B34",
+      "background": "#F8F5EE",
+      "surface": "#F8F5EE",
+      "border": "#D7D7D7",
+      "error": "#C52C2A",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#307B34"
+    },
+    "colors-dark": {
+      "primary": "#C7CCC7",
+      "secondary": "#939F95",
+      "accent": "#4DAE50",
+      "background": "#253528",
+      "surface": "#303F32",
+      "border": "#3C493B",
+      "error": "#C52C2A",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#4DAE50"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Montserrat', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Montserrat', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Montserrat', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Merriweather', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Source Code Pro', 'JetBrains Mono', monospace",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Montserrat"
+}

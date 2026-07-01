@@ -1,0 +1,108 @@
+{
+  "id": "perplexity",
+  "name": "Perplexity",
+  "description": "Converted from perplexity.css",
+  "category": "light",
+  "swatches": [
+    "#0F4B55",
+    "#1DB8CE",
+    "#ECF4F4",
+    "#F5F9F9",
+    "#E3E8EF"
+  ],
+  "designMd": {
+    "name": "Perplexity",
+    "description": "Design system converted from perplexity.css",
+    "colors": {
+      "primary": "#0F4B55",
+      "secondary": "#637389",
+      "accent": "#1DB8CE",
+      "background": "#ECF4F4",
+      "surface": "#F5F9F9",
+      "border": "#E3E8EF",
+      "error": "#F14444",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#1DB8CE"
+    },
+    "colors-dark": {
+      "primary": "#A7C7D5",
+      "secondary": "#687F88",
+      "accent": "#1DB8CE",
+      "background": "#0E1A1F",
+      "surface": "#0A2026",
+      "border": "#334043",
+      "error": "#F14444",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#1DB8CE"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Inter', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Inter', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Inter', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Lora', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Lora', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Lora', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Roboto Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Inter"
+}

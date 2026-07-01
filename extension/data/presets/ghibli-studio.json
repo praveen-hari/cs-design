@@ -1,0 +1,108 @@
+{
+  "id": "ghibli-studio",
+  "name": "Ghibli Studio",
+  "description": "Converted from ghibli_studio.css",
+  "category": "light",
+  "swatches": [
+    "#61440A",
+    "#A3A85C",
+    "#F2DFBC",
+    "#F1E3C7",
+    "#BFA780"
+  ],
+  "designMd": {
+    "name": "Ghibli Studio",
+    "description": "Design system converted from ghibli_studio.css",
+    "colors": {
+      "primary": "#61440A",
+      "secondary": "#815F2D",
+      "accent": "#A3A85C",
+      "background": "#F2DFBC",
+      "surface": "#F1E3C7",
+      "border": "#BFA780",
+      "error": "#F9281D",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#815F2D"
+    },
+    "colors-dark": {
+      "primary": "#E9D4B3",
+      "secondary": "#BFA780",
+      "accent": "#8B906E",
+      "background": "#1A1512",
+      "surface": "#26201D",
+      "border": "#3D332B",
+      "error": "#F9281D",
+      "warning": "#EAB308",
+      "success": "#16A34A",
+      "focusBorder": "#8B906E"
+    },
+    "typography": {
+      "h1": {
+        "fontFamily": "'Nunito', system-ui, sans-serif",
+        "fontSize": "36px",
+        "fontWeight": 700,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.02em"
+      },
+      "h2": {
+        "fontFamily": "'Nunito', system-ui, sans-serif",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.25,
+        "letterSpacing": "-0.01em"
+      },
+      "h3": {
+        "fontFamily": "'Nunito', system-ui, sans-serif",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.3
+      },
+      "body": {
+        "fontFamily": "'Pt Serif', system-ui, sans-serif",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.65
+      },
+      "small": {
+        "fontFamily": "'Pt Serif', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "caption": {
+        "fontFamily": "'Pt Serif', system-ui, sans-serif",
+        "fontSize": "12px",
+        "fontWeight": 400,
+        "lineHeight": 1.4
+      },
+      "code": {
+        "fontFamily": "'Jetbrains Mono', system-ui, sans-serif",
+        "fontSize": "14px",
+        "fontWeight": 400,
+        "lineHeight": 1.5
+      }
+    },
+    "spacing": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px"
+    },
+    "rounded": {
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px",
+      "xl": "12px",
+      "full": "9999px"
+    }
+  },
+  "styleTraits": {
+    "shadows": "subtle",
+    "borderWeight": "thin",
+    "headingWeight": 700,
+    "bodyWeight": 400
+  },
+  "previewFont": "Nunito"
+}
